@@ -7,7 +7,8 @@ module Decidim
     subject { described_class }
 
     it "has version" do
-      expect(subject.version).to eq("0.1.0")
+      expect(subject::VERSION).to eq("0.1.0")
+      expect(subject::COMPAT_DECIDIM_VERSION).to eq([">= 0.30.0", "< 0.31"])
     end
   end
 end

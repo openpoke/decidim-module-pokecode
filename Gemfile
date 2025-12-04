@@ -15,7 +15,6 @@ gem "decidim", DECIDIM_VERSION
 gem "decidim-pokecode", path: "."
 
 gem "bootsnap"
-gem "deface"
 
 group :development, :test do
   gem "byebug", "~> 11.0", platform: :mri
@@ -23,7 +22,7 @@ group :development, :test do
   gem "decidim-dev", DECIDIM_VERSION
   gem "faker"
 
-  gem "brakeman", "~> 7.1"
+  gem "brakeman"
 end
 
 group :development do
