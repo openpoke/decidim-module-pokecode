@@ -1,5 +1,4 @@
-<!-- surround ".mini-footer__content" -->
-<% if Decidim::Env.new("POKECODE_FOOTER", "false").present? %>
+<% if Decidim::Pokecode.pokecode_footer_enabled %>
   <div class="mini-footer__content">
     <div>
       <div class="footer-logos">
