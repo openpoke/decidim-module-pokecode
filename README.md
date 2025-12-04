@@ -11,7 +11,12 @@ A Decidim module that adds Pokecode functionality to your Decidim application.
 
 ## Usage
 
-...
+This plugin relies on the command `decidim:upgrade` to make sure common files are installed in the Decidim application. It is possible to customize which features are activated through ENV vars:
+
+| ENV Variable | Description | Default |
+|---|---|---|
+| `DISABLE_HEALTH_CHECK` | Disables the gem `health_check` and the endpoint `/health_check` | `false` |
+| `DISABLE_SEMANTIC_LOGGER` | Disables the gem `rails_semantic_logger` and the configuration for production logging that this gem provides. Note that this feature will override the existing `config/puma.rb` file after a `decidim:upgrade` command. | `false` |
 
 ## Installation
 
@@ -25,6 +30,7 @@ And then execute:
 
 ```bash
 bundle install
+bin/rails decidim:upgrade
 ```
 
 Depending on your Decidim version, choose the corresponding Awesome version to ensure compatibility:
