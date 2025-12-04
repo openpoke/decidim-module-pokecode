@@ -1,0 +1,4 @@
+example_id                                       | status | run_time        |
+------------------------------------------------ | ------ | --------------- |
+./spec/lib/decidim/pokecode/version_spec.rb[1:1] | passed | 0.01083 seconds |
+./spec/lib/overrides_spec.rb[1:1]                | failed | 0.00634 seconds |
