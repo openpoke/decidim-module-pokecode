@@ -6,18 +6,16 @@ require "spec_helper"
 # as the expected. If this test fails, it means that the overriden
 # file should be updated to match any change/bug fix introduced in the core
 checksums = [
-  {
-    package: "decidim-core",
-    files: {
-      "/app/views/layouts/decidim/header/_main.html.erb" => "2cda0f82a0ac644c1ba89f84d5c60b97"
-    }
+  package: "decidim-core",
+  files: {
+    "/app/views/layouts/decidim/header/_main.html.erb" => "2cda0f82a0ac644c1ba89f84d5c60b97",
+    "/lib/tasks/decidim_tasks.rake" => "9408028d3075c93e6eb2e94131c108d0"
   }
 ]
 
 describe "Overriden files", type: :view do
   checksums.each do |item|
     spec = Gem::Specification.find_by_name(item[:package])
-
     item[:files].each do |file, signature|
       it "#{spec.gem_dir}#{file} matches checksum" do
         expect(md5("#{spec.gem_dir}#{file}")).to eq(signature)
