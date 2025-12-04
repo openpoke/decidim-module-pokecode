@@ -1,26 +1,29 @@
-<!-- replace ".mini-footer__content" -->
-
-<div class="mini-footer__content">
-  <div>
-    <div class="footer-logos">
-      <a rel="decidim noopener" href="https://pokecode.net/" target="_blank" data-external-link="text-only" title="PokeCode - Decidim Makers">
-        <%= external_icon("media/images/logo_pokecode.svg") %>
-        <div class="text-xs mt-2">
-          Made with ❤️
-        </div>
-      </a>
-      <a rel="decidim noopener noreferrer" href="https://decidim.org/" title="<%= t('layouts.decidim.footer.decidim_logo') %>" target="_blank" data-external-link="text-only">
-        <%= external_icon("media/images/logo_decidim.svg") %>
-        <div class="text-xs mt-2">
-          <%= strip_tags(t("layouts.decidim.footer.made_with_open_source")) %>
-        </div>
-      </a>
+<!-- surround ".mini-footer__content" -->
+<% if Decidim::Env.new("POKECODE_FOOTER", "false").present? %>
+  <div class="mini-footer__content">
+    <div>
+      <div class="footer-logos">
+        <a rel="decidim noopener" href="https://pokecode.net/" target="_blank" data-external-link="text-only" title="PokeCode - Decidim Makers">
+          <%= external_icon("media/images/logo_pokecode.svg") %>
+          <div class="text-xs mt-2">
+            Made with ❤️
+          </div>
+        </a>
+        <a rel="decidim noopener noreferrer" href="https://decidim.org/" title="<%= t('layouts.decidim.footer.decidim_logo') %>" target="_blank" data-external-link="text-only">
+          <%= external_icon("media/images/logo_decidim.svg") %>
+          <div class="text-xs mt-2">
+            <%= strip_tags(t("layouts.decidim.footer.made_with_open_source")) %>
+          </div>
+        </a>
+      </div>
     </div>
+    <a class="flex gap-1 hover:opacity-50" rel="license noopener noreferrer" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" data-external-link="text-only">
+      <span class="sr-only"><%= t("layouts.decidim.footer.cc_by_license") %></span>
+      <%= icon "creative-commons-line", class: "w-6 h-6 fill-current" %>
+      <%= icon "creative-commons-by-line", class: "w-6 h-6 fill-current" %>
+      <%= icon "creative-commons-sa-line", class: "w-6 h-6 fill-current" %>
+    </a>
   </div>
-  <a class="flex gap-1 hover:opacity-50" rel="license noopener noreferrer" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" data-external-link="text-only">
-    <span class="sr-only"><%= t("layouts.decidim.footer.cc_by_license") %></span>
-    <%= icon "creative-commons-line", class: "w-6 h-6 fill-current" %>
-    <%= icon "creative-commons-by-line", class: "w-6 h-6 fill-current" %>
-    <%= icon "creative-commons-sa-line", class: "w-6 h-6 fill-current" %>
-  </a>
-</div>
+<% else %>
+  <%= render_original %>
+<% end %>
