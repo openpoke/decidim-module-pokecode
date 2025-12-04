@@ -10,6 +10,18 @@ describe "Homepage" do
     visit decidim_admin.root_path
   end
 
+  context "when footer" do
+    it "includes custom logos" do
+      expect(page).to have_css(".main-footer__down")
+
+      within ".mini-footer__content" do
+        expect(page).to have_css(".footer-logos")
+        expect(page).to have_link("PokeCode - Decidim Makers")
+        expect(page).to have_link("Decidim")
+      end
+    end
+  end
+
   context "when header" do
     it "includes additional language chooser" do
       within ".main-bar__links-desktop" do

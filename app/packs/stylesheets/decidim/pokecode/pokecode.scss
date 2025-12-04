@@ -26,3 +26,20 @@
     }
   }
 }
+
+// Pokecode logos
+.footer-logos {
+  @apply block;
+
+  a {
+    @apply inline-block mr-8;
+  }
+
+  svg {
+    @apply w-auto h-6;
+
+    path {
+      fill: white;
+    }
+  }
+}
