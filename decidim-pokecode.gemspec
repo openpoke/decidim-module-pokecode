@@ -5,7 +5,7 @@ $LOAD_PATH.push File.expand_path("lib", __dir__)
 require "decidim/pokecode/version"
 
 Gem::Specification.new do |s|
-  s.version = Decidim::pokecode.version
+  s.version = Decidim::Pokecode.version
   s.authors = ["Ivan Vergés"]
   s.email = ["ivan@pokecode.net"]
   s.license = "AGPL-3.0-or-later"
@@ -27,5 +27,6 @@ Gem::Specification.new do |s|
     end
   end
 
-  s.add_dependency "decidim-core", Decidim::Pokecode.version
+  s.add_dependency "decidim-core", Decidim::Pokecode::COMPAT_DECIDIM_VERSION
+  s.add_dependency "deface", ">= 1.5"
 end
