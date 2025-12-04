@@ -8,6 +8,12 @@ def install_module(path)
   end
 end
 
+def seed_db(path)
+  Dir.chdir(path) do
+    system("bundle exec rails db:seed")
+  end
+end
+
 desc "Generates a dummy app for testing"
 task test_app: "decidim:generate_external_test_app" do
   ENV["RAILS_ENV"] = "test"

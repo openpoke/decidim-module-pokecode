@@ -12,7 +12,7 @@ namespace :pokecode do
       puts "Checking #{full_path}"
 
       content = File.read(full_path)
-      if checks.any? { |line| content.include?(line) }
+      if checks.all? { |line| content.include?(line) }
         puts "  - Skipped (checks found)"
         next
       else

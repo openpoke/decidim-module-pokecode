@@ -9,7 +9,22 @@ module Decidim
       attr_accessor :config_files
     end
 
-    Pokecode.config_files = {}
+    Pokecode.config_files = {
+      ".gitignore" => [
+        "/app/static/api/docs"
+      ],
+      "config/sidekiq.yml" => [
+        '<%= ENV.fetch("SIDEKIQ_CONCURRENCY", 5) %>'
+      ],
+      "config/schedule.yml" => [
+        'class: "InvokeRakeTaskJob"'
+      ],
+      "Dockerfile" => [
+        "decidim_api:generate_docs"
+      ]
+    }
+
+    Pokecode.config_files["Dockerfile"] << "curl -sS http://localhost:3000/health_check | grep success" if Pokecode.health_check_enabled
 
     if Pokecode.semantic_logger_enabled
       Pokecode.config_files["config/puma.rb"] = [
