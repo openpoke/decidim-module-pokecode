@@ -1,5 +1,10 @@
 # Decidim::Pokecode
 
+[![[CI] Lint](https://github.com/openpoke/decidim-module-pokecode/actions/workflows/lint.yml/badge.svg)](https://github.com/openpoke/decidim-module-pokecode/actions/workflows/lint.yml)
+[![[CI] Test](https://github.com/openpoke/decidim-module-pokecode/actions/workflows/test.yml/badge.svg)](https://github.com/openpoke/decidim-module-pokecode/actions/workflows/test.yml)
+[![Maintainability](https://qlty.sh/gh/openpoke/projects/decidim-module-pokecode/maintainability.svg)](https://qlty.sh/gh/openpoke/projects/decidim-module-pokecode)
+[![codecov](https://codecov.io/gh/openpoke/decidim-module-pokecode/graph/badge.svg?token=2pG5xs2PE7)](https://codecov.io/gh/openpoke/decidim-module-pokecode)
+
 A Decidim module that adds Pokecode functionality to your Decidim application.
 
 > This module is not meant to be used outside Pokecode Decidim instance.
@@ -19,7 +24,7 @@ gem "decidim-pokecode", github: "openpoke/decidim-module-pokecode"
 And then execute:
 
 ```bash
-bundle
+bundle install
 ```
 
 Depending on your Decidim version, choose the corresponding Awesome version to ensure compatibility:

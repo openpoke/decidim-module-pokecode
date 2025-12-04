@@ -77,7 +77,10 @@ jobs:
         name: RSpec
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: openpoke/decidim-module-pokecode
 
       - uses: actions/upload-artifact@v4
         if: always()
