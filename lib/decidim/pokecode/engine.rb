@@ -1,14 +1,5 @@
 # frozen_string_literal: true
 
-require "rails"
-require "decidim/core"
-require "health_check" if Decidim::Pokecode.health_check_enabled
-require "rails_semantic_logger" if Decidim::Pokecode.semantic_logger_enabled
-require "deface" if Decidim::Pokecode.deface_enabled?
-
-require "sidekiq"
-require "sidekiq-cron"
-
 module Decidim
   module Pokecode
     # This is the engine that runs on the public interface of Pokecode.
@@ -25,11 +16,30 @@ module Decidim
         if Decidim::Pokecode.assembly_members_visible_enabled
           Decidim::Assembly.include(Decidim::Pokecode::AssemblyOverride)
           Decidim::Assemblies::Permissions.include(Decidim::Pokecode::AssembliesPermissionsOverride)
+          Rails.logger.info "[Decidim::Pokecode] Assembly members visibility override enabled."
+        else
+          Rails.logger.info "[Decidim::Pokecode] Assembly members visibility override disabled."
         end
       end
 
       initializer "pokecode.zeitwerk_ignore_deface" do
         Rails.autoloaders.main.ignore(Pokecode::Engine.root.join("app/overrides"))
+      end
+
+      initializer "pokecode.sentry" do
+        if Decidim::Pokecode.sentry_enabled?
+          Sentry.init do |config|
+            config.dsn = Decidim::Pokecode.sentry_dsn
+            # get breadcrumbs from logs
+            config.breadcrumbs_logger = [:active_support_logger, :http_logger]
+            # Add data like request headers and IP for users, if applicable;
+            # see https://docs.sentry.io/platforms/ruby/data-management/data-collected/ for more info
+            config.send_default_pii = true
+          end
+          Rails.logger.info "[Decidim::Pokecode] Sentry enabled to DSN #{Decidim::Pokecode.sentry_dsn}."
+        else
+          Rails.logger.info "[Decidim::Pokecode] Sentry disabled."
+        end
       end
 
       initializer "pokecode.health_check" do
@@ -45,6 +55,10 @@ module Decidim
               config.standard_checks -= exclude.split
             end
           end
+
+          Rails.logger.info "[Decidim::Pokecode] HealthCheck enabled."
+        else
+          Rails.logger.info "[Decidim::Pokecode] HealthCheck disabled."
         end
       end
 
@@ -54,11 +68,15 @@ module Decidim
             $stdout.sync = true
             config.rails_semantic_logger.add_file_appender = false
             config.semantic_logger.add_appender(io: $stdout, formatter: config.rails_semantic_logger.format)
+            Rails.logger.info "[Decidim::Pokecode] SemanticLogger logging to STDOUT enabled."
           else
             logger = ActiveSupport::Logger.new($stdout)
             logger.formatter = config.log_formatter
             config.logger = ActiveSupport::TaggedLogging.new(logger)
+            Rails.logger.info "[Decidim::Pokecode] ActiveSupport::Logger logging to STDOUT enabled."
           end
+        else
+          Rails.logger.info "[Decidim::Pokecode] Logging to STDOUT disabled."
         end
       end
 

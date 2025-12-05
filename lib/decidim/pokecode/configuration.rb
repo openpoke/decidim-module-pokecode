@@ -12,6 +12,10 @@ module Decidim
       Decidim::Env.new("DISABLE_SEMANTIC_LOGGER", false).blank?
     end
 
+    config_accessor :sentry_dsn do
+      Decidim::Env.new("SENTRY_DSN", "").value
+    end
+
     config_accessor :pokecode_footer_enabled do
       Decidim::Env.new("DISABLE_POKECODE_FOOTER", false).blank?
     end
@@ -26,6 +30,10 @@ module Decidim
 
     def self.deface_enabled?
       Pokecode.pokecode_footer_enabled || Decidim::Pokecode.language_menu_enabled
+    end
+
+    def self.sentry_enabled?
+      Pokecode.sentry_dsn.present?
     end
   end
 end

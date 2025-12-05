@@ -3,6 +3,7 @@
     "env-config": "default",
     "DISABLE_HEALTH_CHECK": "",
     "DISABLE_SEMANTIC_LOGGER": "",
+    "SENTRY_DSN": "https://example.com/12345",
     "DISABLE_POKECODE_FOOTER": "",
     "DISABLE_LANGUAGE_MENU": "",
     "DISABLE_ASSEMBLY_MEMBERS_VISIBLE": ""
@@ -11,6 +12,7 @@
     "env-config": "all-disabled",
     "DISABLE_HEALTH_CHECK": "1",
     "DISABLE_SEMANTIC_LOGGER": "1",
+    "SENTRY_DSN": "",
     "DISABLE_POKECODE_FOOTER": "1",
     "DISABLE_LANGUAGE_MENU": "1",
     "DISABLE_ASSEMBLY_MEMBERS_VISIBLE": "1"
@@ -19,6 +21,7 @@
     "env-config": "footer-only",
     "DISABLE_HEALTH_CHECK": "1",
     "DISABLE_SEMANTIC_LOGGER": "1",
+    "SENTRY_DSN": "",
     "DISABLE_POKECODE_FOOTER": "",
     "DISABLE_LANGUAGE_MENU": "1",
     "DISABLE_ASSEMBLY_MEMBERS_VISIBLE": "1"
@@ -27,6 +30,7 @@
     "env-config": "language-menu-only",
     "DISABLE_HEALTH_CHECK": "1",
     "DISABLE_SEMANTIC_LOGGER": "1",
+    "SENTRY_DSN": "",
     "DISABLE_POKECODE_FOOTER": "1",
     "DISABLE_LANGUAGE_MENU": "",
     "DISABLE_ASSEMBLY_MEMBERS_VISIBLE": "1"
@@ -35,6 +39,7 @@
     "env-config": "assembly-members-visible-only",
     "DISABLE_HEALTH_CHECK": "1",
     "DISABLE_SEMANTIC_LOGGER": "1",
+    "SENTRY_DSN": "",
     "DISABLE_POKECODE_FOOTER": "1",
     "DISABLE_LANGUAGE_MENU": "1",
     "DISABLE_ASSEMBLY_MEMBERS_VISIBLE": ""
