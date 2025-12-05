@@ -3,7 +3,7 @@
 require "spec_helper"
 require_relative "../shared/pokecode_footer_examples"
 
-describe "Homepage" do
+describe "Assemblies" do
   let!(:organization) { create(:organization) }
   let!(:assembly) { create(:assembly, :with_content_blocks, :published, blocks_manifests: [:main_data], organization:) }
   let!(:user) { create(:user, :confirmed, :admin, organization:) }
