@@ -5,6 +5,7 @@ require "decidim/core"
 require "health_check" if Decidim::Pokecode.health_check_enabled
 require "rails_semantic_logger" if Decidim::Pokecode.semantic_logger_enabled
 require "deface" if Decidim::Pokecode.deface_enabled?
+
 require "sidekiq"
 require "sidekiq-cron"
 
@@ -18,6 +19,10 @@ module Decidim
         # Add engine routes here
         # resources :pokecode
         # root to: "pokecode#index"
+      end
+
+      initializer "pokecode.zeitwerk_ignore_deface" do
+        Rails.autoloaders.main.ignore(Pokecode::Engine.root.join("app/overrides"))
       end
 
       initializer "pokecode.health_check" do

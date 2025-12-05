@@ -53,9 +53,6 @@ jobs:
         with:
           fetch-depth: 1
 
-      - run: |
-          sudo apt-get update; sudo apt-get -f install imagemagick
-
       - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
@@ -97,6 +94,9 @@ jobs:
       DATABASE_PASSWORD: postgres
       DATABASE_HOST: localhost
     steps:
+      - run: |
+          sudo apt-get update; sudo apt-get -f install imagemagick 7zip
+
       - uses: actions/checkout@v4
         with:
           fetch-depth: 1
@@ -111,7 +111,7 @@ jobs:
         with:
           bundler-cache: true
 
-      - run: bundle exec rails db:create db:migrate
+      - run: bundle exec rails db:create db:load_schema
         name: Create database
         working-directory: ./spec/decidim_dummy_app/
         env:
