@@ -24,7 +24,7 @@ module Decidim
       end
     end
 
-    if Decidim::Pokecode.sentry_enabled?
+    if Decidim::Pokecode.sentry_enabled
       it "loads Sentry" do
         expect(defined?(Sentry)).to be_truthy
       end
@@ -34,7 +34,17 @@ module Decidim
       end
     end
 
-    if Decidim::Pokecode.deface_enabled?
+    if Decidim::Pokecode.sidekiq_enabled
+      it "loads Sidekiq" do
+        expect(defined?(Sidekiq)).to be_truthy
+      end
+    else
+      it "does not load Sidekiq" do
+        expect(defined?(Sidekiq)).to be_falsey
+      end
+    end
+
+    if Decidim::Pokecode.deface_enabled
       it "loads Deface" do
         expect(defined?(Deface)).to be_truthy
       end

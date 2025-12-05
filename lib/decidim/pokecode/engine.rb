@@ -12,6 +12,21 @@ module Decidim
         # root to: "pokecode#index"
       end
 
+      initializer "pokecode.sidekiq" do
+        if Decidim::Pokecode.sidekiq_enabled
+          Decidim::Core::Engine.routes do
+            require "sidekiq/web"
+            require "sidekiq/cron/web"
+            authenticate :user, ->(u) { u.admin? } do
+              mount Sidekiq::Web => "/sidekiq"
+            end
+          end
+          Rails.logger.info "[Decidim::Pokecode] Sidekiq Web UI enabled."
+        else
+          Rails.logger.info "[Decidim::Pokecode] Sidekiq Web UI disabled."
+        end
+      end
+
       config.to_prepare do
         if Decidim::Pokecode.assembly_members_visible_enabled
           Decidim::Assembly.include(Decidim::Pokecode::AssemblyOverride)
@@ -27,7 +42,7 @@ module Decidim
       end
 
       initializer "pokecode.sentry" do
-        if Decidim::Pokecode.sentry_enabled?
+        if Decidim::Pokecode.sentry_enabled
           Sentry.init do |config|
             config.dsn = Decidim::Pokecode.sentry_dsn
             # get breadcrumbs from logs
