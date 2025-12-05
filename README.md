@@ -16,7 +16,9 @@ This plugin relies on the command `decidim:upgrade` to make sure common files ar
 | ENV Variable | Description | Default |
 |---|---|---|
 | `DISABLE_HEALTH_CHECK` | Disables the gem `health_check` and the endpoint `/health_check` | `false` |
-| `DISABLE_SEMANTIC_LOGGER` | Disables the gem `rails_semantic_logger` and the configuration for production logging that this gem provides. Note that this feature will override the existing `config/puma.rb` file after a `decidim:upgrade` command. | `false` |
+| `DISABLE_SEMANTIC_LOGGER` | Disables the gem `rails_semantic_logger` and the configuration for production logging that this gem provides.<br>Note that this feature will override the existing `config/puma.rb` file after a `decidim:upgrade` command. | `false` |
+| `DISABLE_POKECODE_FOOTER` | Disables the Pokecode footer deface override so the footer stays unchanged. | `false` |
+| `DISABLE_LANGUAGE_MENU` | Disables the language switcher deface override in the header. | `false` |
 
 ## Installation
 

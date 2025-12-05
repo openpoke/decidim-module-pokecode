@@ -65,6 +65,7 @@ npm_debug.log
 tailwind.config.js
 # default test application
 spec/decidim_dummy_app*
+.rspec-failures
 
 # default development application
 development_app
