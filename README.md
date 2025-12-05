@@ -20,7 +20,7 @@ This plugin relies on the command `decidim:upgrade` to make sure common files ar
 | `DISABLE_POKECODE_FOOTER` | Disables the Pokecode footer deface override so the footer stays unchanged. | `false` | |
 | `DISABLE_LANGUAGE_MENU` | Disables the language switcher deface override in the header. | `false` | |
 | `DISABLE_ASSEMBLY_MEMBERS_VISIBLE` | Disables the assembly members visibility feature (public assemblies won't have members page). | `false` | [#9](https://github.com/openpoke/decidim-module-pokecode/pull/9) |
-| `SENTRY_DSN` | Enables Sentry error tracking integration. Provide the DSN URL from your Sentry project. | `""` (disabled) | |
+| `SENTRY_DSN` | Enables Sentry error tracking integration. Provide the DSN URL from your Sentry project. | `""` (disabled) | [#10](https://github.com/openpoke/decidim-module-pokecode/pull/10) |
 
 ## Installation
 
