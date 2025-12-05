@@ -20,6 +20,10 @@ module Decidim
       Decidim::Env.new("DISABLE_LANGUAGE_MENU", false).blank?
     end
 
+    config_accessor :assembly_members_visible_enabled do
+      Decidim::Env.new("DISABLE_ASSEMBLY_MEMBERS_VISIBLE", false).blank?
+    end
+
     def self.deface_enabled?
       Pokecode.pokecode_footer_enabled || Decidim::Pokecode.language_menu_enabled
     end
