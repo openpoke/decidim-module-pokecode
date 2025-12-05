@@ -4,7 +4,8 @@
   "description": "A Decidim module that adds Pokecode functionality to your Decidim application.",
   "scripts": {
     "lint": "eslint -c .eslintrc.json --no-error-on-unmatched-pattern --ignore-pattern app/packs/vendor --ext .js app/packs",
-    "stylelint": "stylelint app/packs/**/*.scss"
+    "stylelint": "stylelint app/packs/**/*.scss",
+    "stylelint-fix": "stylelint **/*.scss --fix"
   },
   "repository": {
     "type": "git",
