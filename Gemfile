@@ -14,7 +14,6 @@ gem "decidim", Decidim::Pokecode::COMPAT_DECIDIM_VERSION
 gem "decidim-pokecode", path: "."
 
 gem "bootsnap"
-gem "deface"
 
 group :development, :test do
   gem "byebug", "~> 11.0", platform: :mri

@@ -939,7 +939,6 @@ DEPENDENCIES
   decidim (>= 0.30.0, < 0.31)
   decidim-dev (>= 0.30.0, < 0.31)
   decidim-pokecode!
-  deface
   faker
   letter_opener_web
   web-console

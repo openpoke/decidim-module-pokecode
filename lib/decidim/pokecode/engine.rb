@@ -4,6 +4,7 @@ require "rails"
 require "decidim/core"
 require "health_check" if Decidim::Pokecode.health_check_enabled
 require "rails_semantic_logger" if Decidim::Pokecode.semantic_logger_enabled
+require "deface" if Decidim::Pokecode.deface_enabled?
 require "sidekiq"
 require "sidekiq-cron"
 

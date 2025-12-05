@@ -15,5 +15,13 @@ module Decidim
     config_accessor :pokecode_footer_enabled do
       Decidim::Env.new("DISABLE_POKECODE_FOOTER", false).blank?
     end
+
+    config_accessor :language_menu_enabled do
+      Decidim::Env.new("DISABLE_LANGUAGE_MENU", false).blank?
+    end
+
+    def self.deface_enabled?
+      Pokecode.pokecode_footer_enabled || Decidim::Pokecode.language_menu_enabled
+    end
   end
 end

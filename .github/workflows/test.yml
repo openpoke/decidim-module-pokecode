@@ -19,8 +19,8 @@ env:
   DISABLE_SPRING: 1
 
 jobs:
-  test-report:
-    name: Tests
+  setup:
+    name: Setup test app
     runs-on: ubuntu-latest
     timeout-minutes: 30
     services:
@@ -72,6 +72,56 @@ jobs:
         name: Precompile assets
         working-directory: ./spec/decidim_dummy_app/
         shell: "bash"
+
+      - name: Cache test app
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            spec/decidim_dummy_app/
+          key: test-app-${{ github.sha }}
+
+  test-report:
+    name: Tests - ${{ matrix.env-config }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: setup
+    strategy:
+      matrix:
+        include: ${{ fromJson(readFile('.github/test-env-configs.json')) }}
+    services:
+      postgres:
+        image: postgres:14
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        env:
+          POSTGRES_PASSWORD: postgres
+    env:
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_HOST: localhost
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Restore test app cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            spec/decidim_dummy_app/
+          key: test-app-${{ github.sha }}
+
+      - name: Set environment variables from config
+        run: |
+          cat .github/test-env-configs.json | jq -r --arg config "${{ matrix.env-config }}" '.[] | select(.["env-config"] == $config) | to_entries | .[] | select(.key != "env-config") | "\(.key)=\(.value)"' >> $GITHUB_ENV
 
       - run: bundle exec rspec spec
         name: RSpec
