@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 shared_examples "footer is enabled" do
   it "includes custom logos" do
     expect(page).to have_css(".main-footer__down")
