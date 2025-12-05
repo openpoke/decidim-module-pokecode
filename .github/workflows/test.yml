@@ -19,6 +19,16 @@ env:
   DISABLE_SPRING: 1
 
 jobs:
+  matrix-config:
+    name: Generate matrix config
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: set-matrix
+        run: echo "matrix=$(cat .github/test-env-configs.json | jq -c .)" >> $GITHUB_OUTPUT
+
   setup:
     name: Setup test app
     runs-on: ubuntu-latest
@@ -84,10 +94,10 @@ jobs:
     name: Tests - ${{ matrix.env-config }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    needs: setup
+    needs: [matrix-config, setup]
     strategy:
       matrix:
-        include: ${{ fromJson(readFile('.github/test-env-configs.json')) }}
+        include: ${{ fromJson(needs.matrix-config.outputs.matrix) }}
     services:
       postgres:
         image: postgres:14
