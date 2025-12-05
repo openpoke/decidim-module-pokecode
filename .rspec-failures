@@ -1,7 +1,7 @@
 example_id                                       | status | run_time        |
 ------------------------------------------------ | ------ | --------------- |
-./spec/lib/decidim/pokecode/version_spec.rb[1:1] | passed | 0.00189 seconds |
-./spec/lib/overrides_spec.rb[1:1]                | passed | 0.0176 seconds  |
-./spec/lib/overrides_spec.rb[1:2]                | passed | 0.00167 seconds |
-./spec/system/homepage_spec.rb[1:1:1]            | passed | 0.60922 seconds |
-./spec/system/homepage_spec.rb[1:2]              | passed | 1.78 seconds    |
+./spec/lib/decidim/pokecode/version_spec.rb[1:1] | passed | 0.01364 seconds |
+./spec/lib/overrides_spec.rb[1:1]                | passed | 0.00266 seconds |
+./spec/lib/overrides_spec.rb[1:2]                | passed | 0.00351 seconds |
+./spec/system/homepage_spec.rb[1:1:1]            | passed | 0.59933 seconds |
+./spec/system/homepage_spec.rb[1:2]              | passed | 1.74 seconds    |

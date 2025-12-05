@@ -111,6 +111,12 @@ jobs:
         with:
           bundler-cache: true
 
+      - run: bundle exec rails db:create db:migrate
+        name: Create database
+        working-directory: ./spec/decidim_dummy_app/
+        env:
+          BUNDLE_GEMFILE: ../../Gemfile
+
       - uses: nanasess/setup-chromedriver@v2
         with:
           chromedriver-version: 126.0.6478.182
