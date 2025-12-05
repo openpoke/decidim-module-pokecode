@@ -31,6 +31,8 @@ Gem::Specification.new do |s|
   s.add_dependency "deface", ">= 1.5"
   s.add_dependency "health_check"
   s.add_dependency "rails_semantic_logger"
+  s.add_dependency "sentry-rails"
+  s.add_dependency "sentry-ruby"
   s.add_dependency "sidekiq"
   s.add_dependency "sidekiq-cron"
 end
