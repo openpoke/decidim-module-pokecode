@@ -6,5 +6,6 @@ example_id                            | status | run_time        |
 ./spec/lib/loaded_gems.rb[1:4]        | passed | 0.00186 seconds |
 ./spec/lib/overrides_spec.rb[1:1]     | passed | 0.00418 seconds |
 ./spec/lib/overrides_spec.rb[1:2]     | passed | 0.00163 seconds |
+./spec/system/assemblies_spec.rb[1:1] | passed | 3.93 seconds    |
 ./spec/system/homepage_spec.rb[1:1:1] | passed | 0.48425 seconds |
 ./spec/system/homepage_spec.rb[1:2]   | passed | 1.82 seconds    |
