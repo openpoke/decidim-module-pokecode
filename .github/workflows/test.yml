@@ -60,17 +60,6 @@ jobs:
         with:
           bundler-cache: true
 
-      - uses: nanasess/setup-chromedriver@v2
-        with:
-          chromedriver-version: 126.0.6478.182
-
-      - name: Remove Chrome
-        run: sudo apt remove google-chrome-stable
-
-      - uses: browser-actions/setup-chrome@v1
-        with:
-          chrome-version: 126.0.6478.182
-
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
@@ -78,16 +67,10 @@ jobs:
       - run: bundle exec rake test_app
         name: Create test app
 
-      - run: bundle exec rails assets:precompile
-        name: Precompile assets
-        working-directory: ./spec/decidim_dummy_app/
-        shell: "bash"
-
       - name: Cache test app
         uses: actions/cache/save@v4
         with:
-          path: |
-            spec/decidim_dummy_app/
+          path: spec/decidim_dummy_app
           key: test-app-${{ github.sha }}
 
   test-report:
@@ -118,16 +101,26 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Restore test app cache
+        uses: actions/cache/restore@v4
+        with:
+          path: spec/decidim_dummy_app
+          key: test-app-${{ github.sha }}
+
       - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
 
-      - name: Restore test app cache
-        uses: actions/cache/restore@v4
+      - uses: nanasess/setup-chromedriver@v2
         with:
-          path: |
-            spec/decidim_dummy_app/
-          key: test-app-${{ github.sha }}
+          chromedriver-version: 126.0.6478.182
+
+      - name: Remove Chrome
+        run: sudo apt remove google-chrome-stable
+
+      - uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: 126.0.6478.182
 
       - name: Set environment variables from config
         run: |
