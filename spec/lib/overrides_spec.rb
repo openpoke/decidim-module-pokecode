@@ -6,10 +6,19 @@ require "spec_helper"
 # as the expected. If this test fails, it means that the overriden
 # file should be updated to match any change/bug fix introduced in the core
 checksums = [
-  package: "decidim-core",
-  files: {
-    "/app/views/layouts/decidim/header/_main.html.erb" => "2cda0f82a0ac644c1ba89f84d5c60b97",
-    "/lib/tasks/decidim_tasks.rake" => "9408028d3075c93e6eb2e94131c108d0"
+  {
+    package: "decidim-core",
+    files: {
+      "/app/views/layouts/decidim/header/_main.html.erb" => "2cda0f82a0ac644c1ba89f84d5c60b97",
+      "/lib/tasks/decidim_tasks.rake" => "9408028d3075c93e6eb2e94131c108d0"
+    }
+  },
+  {
+    package: "decidim-assemblies",
+    files: {
+      "/app/models/decidim/assembly.rb" => "b1f3f3f3e2f4c6e4d5e8f7a9b0c1d2e3",
+      "/app/permissions/decidim/permission.rb" => "d4e5f6a7b8c9d0e1f2a3b4c5d6e7f809"
+    }
   }
 ]
 

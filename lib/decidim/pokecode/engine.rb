@@ -21,6 +21,13 @@ module Decidim
         # root to: "pokecode#index"
       end
 
+      config.to_prepare do
+        if Decidim::Pokecode.assembly_members_visible_enabled
+          Decidim::Assembly.include(Decidim::Pokecode::AssemblyOverride)
+          Decidim::Assemblies::Permissions.include(Decidim::Pokecode::AssembliesPermissionsOverride)
+        end
+      end
+
       initializer "pokecode.zeitwerk_ignore_deface" do
         Rails.autoloaders.main.ignore(Pokecode::Engine.root.join("app/overrides"))
       end
