@@ -12,6 +12,10 @@ module Decidim
       Decidim::Env.new("DISABLE_SEMANTIC_LOGGER", false).blank?
     end
 
+    config_accessor :sidekiq_enabled do
+      Decidim::Env.new("DISABLE_SIDEKIQ", false).blank?
+    end
+
     config_accessor :sentry_dsn do
       Decidim::Env.new("SENTRY_DSN", "").value
     end
@@ -28,11 +32,11 @@ module Decidim
       Decidim::Env.new("DISABLE_ASSEMBLY_MEMBERS_VISIBLE", false).blank?
     end
 
-    def self.deface_enabled?
+    def self.deface_enabled
       Pokecode.pokecode_footer_enabled || Decidim::Pokecode.language_menu_enabled
     end
 
-    def self.sentry_enabled?
+    def self.sentry_enabled
       Pokecode.sentry_dsn.present?
     end
   end
