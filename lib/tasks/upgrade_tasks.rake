@@ -9,7 +9,9 @@ namespace :decidim do
     :"railties:install:migrations",
     :"decidim:upgrade:migrations",
     :"decidim:upgrade:webpacker",
-    # :"decidim_api:generate_docs"
+    # it would be nice to remove this task in the future
+    # but for now we keep it to as it requires access to a database
+    :"decidim_api:generate_docs",
     :"pokecode:copy_config_files"
   ]
 end
