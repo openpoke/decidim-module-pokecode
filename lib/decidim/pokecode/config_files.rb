@@ -20,7 +20,9 @@ module Decidim
         'class: "InvokeRakeTaskJob"'
       ],
       "Dockerfile" => [
-        "decidim_api:generate_docs"
+        "curl -fsSL https://deb.nodesource.com/setup_18.x",
+        "npm install yarn -g",
+        "rm -rf node_modules packages/*/node_modules tmp/cache vendor/bundle test spec app/packs .git"
       ]
     }
 
