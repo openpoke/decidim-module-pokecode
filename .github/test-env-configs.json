@@ -6,6 +6,8 @@
     "DISABLE_SIDEKIQ": "",
     "SENTRY_DSN": "https://example.com/12345",
     "ADMIN_IFRAME_URL": "https://admin.example.com/iframe",
+    "UMAMI_ANALYTICS_ID": "umami-test-id",
+    "UMAMI_ANALYTICS_URL": "https://analytics.pokecode.net/script.js",
     "DISABLE_POKECODE_FOOTER": "",
     "DISABLE_LANGUAGE_MENU": "",
     "DISABLE_ASSEMBLY_MEMBERS_VISIBLE": ""
@@ -17,6 +19,8 @@
     "DISABLE_SIDEKIQ": "1",
     "SENTRY_DSN": "",
     "ADMIN_IFRAME_URL": "",
+    "UMAMI_ANALYTICS_ID": "",
+    "UMAMI_ANALYTICS_URL": "",
     "DISABLE_POKECODE_FOOTER": "1",
     "DISABLE_LANGUAGE_MENU": "1",
     "DISABLE_ASSEMBLY_MEMBERS_VISIBLE": "1"
@@ -28,6 +32,8 @@
     "DISABLE_SIDEKIQ": "1",
     "SENTRY_DSN": "",
     "ADMIN_IFRAME_URL": "",
+    "UMAMI_ANALYTICS_ID": "",
+    "UMAMI_ANALYTICS_URL": "",
     "DISABLE_POKECODE_FOOTER": "",
     "DISABLE_LANGUAGE_MENU": "1",
     "DISABLE_ASSEMBLY_MEMBERS_VISIBLE": "1"
@@ -39,6 +45,8 @@
     "DISABLE_SIDEKIQ": "1",
     "SENTRY_DSN": "",
     "ADMIN_IFRAME_URL": "",
+    "UMAMI_ANALYTICS_ID": "",
+    "UMAMI_ANALYTICS_URL": "",
     "DISABLE_POKECODE_FOOTER": "1",
     "DISABLE_LANGUAGE_MENU": "",
     "DISABLE_ASSEMBLY_MEMBERS_VISIBLE": "1"
@@ -50,6 +58,8 @@
     "DISABLE_SIDEKIQ": "1",
     "SENTRY_DSN": "",
     "ADMIN_IFRAME_URL": "",
+    "UMAMI_ANALYTICS_ID": "",
+    "UMAMI_ANALYTICS_URL": "",
     "DISABLE_POKECODE_FOOTER": "1",
     "DISABLE_LANGUAGE_MENU": "1",
     "DISABLE_ASSEMBLY_MEMBERS_VISIBLE": ""
@@ -61,6 +71,8 @@
     "DISABLE_SIDEKIQ": "1",
     "SENTRY_DSN": "",
     "ADMIN_IFRAME_URL": "https://admin.example.com/iframe",
+    "UMAMI_ANALYTICS_ID": "",
+    "UMAMI_ANALYTICS_URL": "",
     "DISABLE_POKECODE_FOOTER": "1",
     "DISABLE_LANGUAGE_MENU": "1",
     "DISABLE_ASSEMBLY_MEMBERS_VISIBLE": "1"
