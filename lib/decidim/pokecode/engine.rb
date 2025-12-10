@@ -6,12 +6,6 @@ module Decidim
     class Engine < ::Rails::Engine
       isolate_namespace Decidim::Pokecode
 
-      routes do
-        # Add engine routes here
-        # resources :pokecode
-        # root to: "pokecode#index"
-      end
-
       initializer "pokecode.sidekiq" do
         if Decidim::Pokecode.sidekiq_enabled
           Decidim::Core::Engine.routes do
@@ -34,6 +28,13 @@ module Decidim
           Rails.logger.info "[Decidim::Pokecode] Assembly members visibility override enabled."
         else
           Rails.logger.info "[Decidim::Pokecode] Assembly members visibility override disabled."
+        end
+
+        if Decidim::Pokecode.analytics_enabled
+          Decidim::ApplicationController.include(Decidim::Pokecode::NeedsAnalyticsOverride)
+          Rails.logger.info "[Decidim::Pokecode] Analytics override enabled."
+        else
+          Rails.logger.info "[Decidim::Pokecode] Analytics override disabled."
         end
       end
 
@@ -59,6 +60,9 @@ module Decidim
 
       initializer "pokecode.health_check" do
         if defined?(HealthCheck)
+          # Allow Docker healthchecks to bypass SSL redirection
+          config.ssl_options = { redirect: { exclude: ->(request) { request.path =~ /health_check/ } } }
+
           if (additional = ENV.fetch("HEALTHCHECK_ADDITIONAL_CHECKS", nil))
             HealthCheck.setup do |config|
               config.standard_checks += additional.split
@@ -75,6 +79,10 @@ module Decidim
         else
           Rails.logger.info "[Decidim::Pokecode] HealthCheck disabled."
         end
+      end
+
+      initializer "pokecode.deface_enabled" do
+        config.deface.enabled = ENV["DB_ADAPTER"].blank? || ENV.fetch("DB_ADAPTER", nil) == "postgresql" if config.respond_to?(:deface)
       end
 
       initializer "pokecode.logger" do

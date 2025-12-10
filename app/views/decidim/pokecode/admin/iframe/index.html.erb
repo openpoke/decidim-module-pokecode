@@ -1,0 +1,19 @@
+<iframe
+src="<%= Decidim::Pokecode.admin_iframe_url %>"
+title="<%= Decidim::Pokecode.admin_iframe_title %>"
+sandbox="allow-scripts allow-same-origin"
+loading="lazy"
+scrolling="auto"
+allowfullscreen></iframe>
+
+<style type="text/css">
+  iframe {
+    width: 100%;
+    height: calc(100vh - 88px);
+    border: 0;
+  }
+
+  .layout-content__container {
+    padding: 0;
+  }
+</style>
