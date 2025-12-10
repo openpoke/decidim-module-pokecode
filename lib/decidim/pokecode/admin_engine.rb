@@ -13,7 +13,7 @@ module Decidim
         nil
       end
 
-      initializer "pokecode.admin_iframe" do |app|
+      initializer "pokecode.admin_iframe" do |_app|
         if Decidim::Pokecode.admin_iframe_enabled
           Decidim::Admin::Engine.routes do
             # authenticate :user, ->(u) { u.admin? } do
