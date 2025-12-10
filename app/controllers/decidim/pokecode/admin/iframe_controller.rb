@@ -14,10 +14,16 @@ module Decidim
         def add_additional_csp_directives
           return unless Decidim::Pokecode.admin_iframe_enabled
 
-          iframe_host = URI.parse(Decidim::Pokecode.admin_iframe_url)&.host
-          return if iframe_host.blank?
+          iframe_uri = begin
+            URI.parse(Decidim::Pokecode.admin_iframe_url)
+          rescue URI::InvalidURIError
+            nil
+          end
+          return if iframe_uri.host.blank? || iframe_uri.scheme.blank?
 
-          content_security_policy.append_csp_directive("frame-src", iframe_host)
+          origin = "#{iframe_uri.scheme}://#{iframe_uri.host}"
+          origin += ":#{iframe_uri.port}" if iframe_uri.port && [80, 443].exclude?(iframe_uri.port)
+          content_security_policy.append_csp_directive("frame-src", origin)
         end
       end
     end

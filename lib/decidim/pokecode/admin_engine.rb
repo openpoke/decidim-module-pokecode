@@ -16,9 +16,7 @@ module Decidim
       initializer "pokecode.admin_iframe" do |_app|
         if Decidim::Pokecode.admin_iframe_enabled
           Decidim::Admin::Engine.routes do
-            # authenticate :user, ->(u) { u.admin? } do
             get :iframe, to: "/decidim/pokecode/admin/iframe#index", as: :admin_iframe
-            # end
           end
           Decidim.menu :admin_menu do |menu|
             menu.add_item :custom_iframe,
