@@ -78,6 +78,10 @@ module Decidim
         end
       end
 
+      initializer "pokecode.health_check_ssl_exclusion" do
+        config.ssl_options = { redirect: { exclude: ->(request) { request.path =~ /health_check/ } } }
+      end
+
       initializer "pokecode.logger" do
         if ENV["RAILS_LOG_TO_STDOUT"].present?
           if defined?(SemanticLogger) && Rails.env.production?
