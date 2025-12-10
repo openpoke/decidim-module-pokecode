@@ -7,10 +7,12 @@ module Decidim
     if Decidim::Pokecode.health_check_enabled
       it "loads HealthCheck" do
         expect(defined?(HealthCheck)).to be_truthy
+        expect(Rails.application.config.ssl_options[:redirect][:exclude].call(OpenStruct.new(path: "/health_check"))).to be_truthy
       end
     else
       it "does not load HealthCheck" do
         expect(defined?(HealthCheck)).to be_falsey
+        expect(Rails.application.config.ssl_options[:redirect]).to be_nil
       end
     end
 
@@ -56,11 +58,11 @@ module Decidim
 
     if Decidim::Pokecode.analytics_enabled
       it "loads NeedsAnalyticsOverride" do
-        expect(Decidim::Needs::NeedsController.included_modules).to include(Decidim::Pokecode::NeedsAnalyticsOverride)
+        expect(Decidim::ApplicationController.included_modules).to include(Decidim::Pokecode::NeedsAnalyticsOverride)
       end
     else
       it "does not load NeedsAnalyticsOverride" do
-        expect(Decidim::Needs::NeedsController.included_modules).not_to include(Decidim::Pokecode::NeedsAnalyticsOverride)
+        expect(Decidim::ApplicationController.included_modules).not_to include(Decidim::Pokecode::NeedsAnalyticsOverride)
       end
     end
 

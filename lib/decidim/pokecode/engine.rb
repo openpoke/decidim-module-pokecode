@@ -38,6 +38,13 @@ module Decidim
         end
       end
 
+      config.after_initialize do |app|
+        if defined?(HealthCheck)
+          # Allow Docker healthchecks to bypass SSL redirection
+          app.config.ssl_options = { redirect: { exclude: ->(request) { request.path =~ /health_check/ } } }
+        end
+      end
+
       initializer "pokecode.zeitwerk_ignore_deface" do
         Rails.autoloaders.main.ignore(Pokecode::Engine.root.join("app/overrides"))
       end
@@ -60,9 +67,6 @@ module Decidim
 
       initializer "pokecode.health_check" do
         if defined?(HealthCheck)
-          # Allow Docker healthchecks to bypass SSL redirection
-          config.ssl_options = { redirect: { exclude: ->(request) { request.path =~ /health_check/ } } }
-
           if (additional = ENV.fetch("HEALTHCHECK_ADDITIONAL_CHECKS", nil))
             HealthCheck.setup do |config|
               config.standard_checks += additional.split
