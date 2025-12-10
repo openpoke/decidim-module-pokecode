@@ -24,6 +24,10 @@ module Decidim
       Decidim::Env.new("ADMIN_IFRAME_URL", "").value
     end
 
+    config_accessor :admin_iframe_title do
+      Decidim::Env.new("ADMIN_IFRAME_TITLE", "Web Stats").value
+    end
+
     config_accessor :pokecode_footer_enabled do
       Decidim::Env.new("DISABLE_POKECODE_FOOTER", false).blank?
     end

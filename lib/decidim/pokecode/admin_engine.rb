@@ -22,7 +22,7 @@ module Decidim
           end
           Decidim.menu :admin_menu do |menu|
             menu.add_item :custom_iframe,
-                          ENV.fetch("ADMIN_IFRAME_TITLE", "Web Stats"),
+                          Decidim::Pokecode.admin_iframe_title,
                           Decidim::Admin::Engine.routes.url_helpers.admin_iframe_path,
                           icon_name: "bar-chart-2-line",
                           position: 10
