@@ -20,6 +20,10 @@ module Decidim
       Decidim::Env.new("SENTRY_DSN", "").value
     end
 
+    config_accessor :admin_iframe_url do
+      Decidim::Env.new("ADMIN_IFRAME_URL", "").value
+    end
+
     config_accessor :pokecode_footer_enabled do
       Decidim::Env.new("DISABLE_POKECODE_FOOTER", false).blank?
     end
@@ -38,6 +42,10 @@ module Decidim
 
     def self.sentry_enabled
       Pokecode.sentry_dsn.present?
+    end
+
+    def self.admin_iframe_enabled
+      Pokecode.admin_iframe_url.present?
     end
   end
 end

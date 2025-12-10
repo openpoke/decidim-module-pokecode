@@ -6,12 +6,6 @@ module Decidim
     class Engine < ::Rails::Engine
       isolate_namespace Decidim::Pokecode
 
-      routes do
-        # Add engine routes here
-        # resources :pokecode
-        # root to: "pokecode#index"
-      end
-
       initializer "pokecode.sidekiq" do
         if Decidim::Pokecode.sidekiq_enabled
           Decidim::Core::Engine.routes do

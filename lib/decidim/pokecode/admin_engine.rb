@@ -9,18 +9,28 @@ module Decidim
       paths["db/migrate"] = nil
       paths["lib/tasks"] = nil
 
-      routes do
-        # Add admin engine routes here
-        # resources :Pokecode do
-        #   collection do
-        #     resources :exports, only: [:create]
-        #   end
-        # end
-        # root to: "Pokecode#index"
-      end
-
       def load_seed
         nil
+      end
+
+      initializer "pokecode.admin_iframe" do |app|
+        if Decidim::Pokecode.admin_iframe_enabled
+          Decidim::Admin::Engine.routes do
+            # authenticate :user, ->(u) { u.admin? } do
+            get :iframe, to: "/decidim/pokecode/admin/iframe#index", as: :admin_iframe
+            # end
+          end
+          Decidim.menu :admin_menu do |menu|
+            menu.add_item :custom_iframe,
+                          ENV.fetch("ADMIN_IFRAME_TITLE", "Web Stats"),
+                          Decidim::Admin::Engine.routes.url_helpers.admin_iframe_path,
+                          icon_name: "bar-chart-2-line",
+                          position: 10
+          end
+          Rails.logger.info "[Decidim::Pokecode] Admin Iframe enabled."
+        else
+          Rails.logger.info "[Decidim::Pokecode] Admin Iframe disabled."
+        end
       end
     end
   end
