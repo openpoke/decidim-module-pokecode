@@ -5,6 +5,7 @@ module Decidim
     module Admin
       class IframeController < Decidim::Admin::ApplicationController
         before_action :add_additional_csp_directives
+
         def index
           enforce_permission_to :read, :admin_dashboard
         end

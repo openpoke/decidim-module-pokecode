@@ -30,4 +30,14 @@ describe "Homepage" do
       end
     end
   end
+
+  if Decidim::Pokecode.analytics_enabled
+    it "includes Umami analytics script" do
+      expect(page).to have_css("script[data-website-id='#{Decidim::Pokecode.umami_analytics_id}'][src='#{Decidim::Pokecode.umami_analytics_url}']", visible: :all)
+    end
+  else
+    it "does not include Umami analytics script" do
+      expect(page).to have_no_css("script[data-website-id]", visible: :all)
+    end
+  end
 end

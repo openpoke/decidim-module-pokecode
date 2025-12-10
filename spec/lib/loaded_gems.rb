@@ -54,6 +54,16 @@ module Decidim
       end
     end
 
+    if Decidim::Pokecode.analytics_enabled
+      it "loads NeedsAnalyticsOverride" do
+        expect(Decidim::Needs::NeedsController.included_modules).to include(Decidim::Pokecode::NeedsAnalyticsOverride)
+      end
+    else
+      it "does not load NeedsAnalyticsOverride" do
+        expect(Decidim::Needs::NeedsController.included_modules).not_to include(Decidim::Pokecode::NeedsAnalyticsOverride)
+      end
+    end
+
     if Decidim::Pokecode.assembly_members_visible_enabled
       it "loads AssemblyOverride" do
         expect(Decidim::Assembly.included_modules).to include(Decidim::Pokecode::AssemblyOverride)

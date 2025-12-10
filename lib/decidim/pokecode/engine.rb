@@ -29,6 +29,13 @@ module Decidim
         else
           Rails.logger.info "[Decidim::Pokecode] Assembly members visibility override disabled."
         end
+
+        if Decidim::Pokecode.analytics_enabled
+          Decidim::ApplicationController.include(Decidim::Pokecode::NeedsAnalyticsOverride)
+          Rails.logger.info "[Decidim::Pokecode] Analytics override enabled."
+        else
+          Rails.logger.info "[Decidim::Pokecode] Analytics override disabled."
+        end
       end
 
       initializer "pokecode.zeitwerk_ignore_deface" do

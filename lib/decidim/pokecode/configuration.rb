@@ -40,6 +40,14 @@ module Decidim
       Decidim::Env.new("DISABLE_ASSEMBLY_MEMBERS_VISIBLE", false).blank?
     end
 
+    config_accessor :umami_analytics_id do
+      Decidim::Env.new("UMAMI_ANALYTICS_ID", "").value
+    end
+
+    config_accessor :umami_analytics_url do
+      Decidim::Env.new("UMAMI_ANALYTICS_URL", "https://analytics.pokecode.net/script.js").value
+    end
+
     def self.deface_enabled
       Pokecode.pokecode_footer_enabled || Decidim::Pokecode.language_menu_enabled
     end
@@ -50,6 +58,10 @@ module Decidim
 
     def self.admin_iframe_enabled
       Pokecode.admin_iframe_url.present?
+    end
+
+    def self.analytics_enabled
+      Pokecode.umami_analytics_id.present? && Pokecode.umami_analytics_url.present?
     end
   end
 end
