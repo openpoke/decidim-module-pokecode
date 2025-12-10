@@ -21,6 +21,16 @@ module Decidim
         end
       end
 
+      initializer "pokecode.health_check_ssl_exclusion", before: :build_middleware_stack do |app|
+        if defined?(HealthCheck)
+          # Ensure health_check endpoints bypass SSL redirection for Docker/load balancer health checks
+          app.config.ssl_options ||= {}
+          app.config.ssl_options[:redirect] ||= {}
+          app.config.ssl_options[:redirect][:exclude] = ->(request) { request.path =~ /health_check/ }
+          Rails.logger.info "[Decidim::Pokecode] SSL exclusion for health_check enabled."
+        end
+      end
+
       config.to_prepare do
         if Decidim::Pokecode.assembly_members_visible_enabled
           Decidim::Assembly.include(Decidim::Pokecode::AssemblyOverride)
@@ -35,13 +45,6 @@ module Decidim
           Rails.logger.info "[Decidim::Pokecode] Analytics override enabled."
         else
           Rails.logger.info "[Decidim::Pokecode] Analytics override disabled."
-        end
-      end
-
-      config.after_initialize do |app|
-        if defined?(HealthCheck)
-          # Allow Docker healthchecks to bypass SSL redirection
-          app.config.ssl_options = { redirect: { exclude: ->(request) { request.path =~ /health_check/ } } }
         end
       end
 
