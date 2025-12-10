@@ -60,6 +60,9 @@ module Decidim
 
       initializer "pokecode.health_check" do
         if defined?(HealthCheck)
+          # Allow Docker healthchecks to bypass SSL redirection
+          config.ssl_options = { redirect: { exclude: ->(request) { request.path =~ /health_check/ } } }
+
           if (additional = ENV.fetch("HEALTHCHECK_ADDITIONAL_CHECKS", nil))
             HealthCheck.setup do |config|
               config.standard_checks += additional.split
@@ -78,8 +81,8 @@ module Decidim
         end
       end
 
-      initializer "pokecode.health_check_ssl_exclusion" do
-        config.ssl_options = { redirect: { exclude: ->(request) { request.path =~ /health_check/ } } }
+      initializer "pokecode.deface_enabled" do
+        config.deface.enabled = ENV["DB_ADAPTER"].blank? || ENV.fetch("DB_ADAPTER", nil) == "postgresql" if config.respond_to?(:deface)
       end
 
       initializer "pokecode.logger" do
