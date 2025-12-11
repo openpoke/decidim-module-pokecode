@@ -30,7 +30,7 @@ This plugin relies on the command `decidim:upgrade` to make sure common files ar
 | `RACK_ATTACK_ALLOWED_IPS` | Comma or space-separated list of IP addresses to safelist from Rack::Attack rate limiting. If not set, no IPs are safelisted by default. | none (empty) | |
 | `HEALTHCHECK_ADDITIONAL_CHECKS` | Additional healthcheck checks to run (space-separated list). Appends to the standard health checks when `health_check` gem is enabled. | `""` (none) | |
 | `HEALTHCHECK_EXCLUDE_CHECKS` | Health check names to exclude from the standard checks (space-separated, default excludes `emailconf`). | `"emailconf"` | |
-| `AWS_CDN_HOST` | Optional CDN host (https://...) used to serve uploaded assets; when set, it's added to ActiveStorage S3 URLs and whitelisted in CSP. This is required for alternative S3 providers that do not use the name of the bucket as the fully qualified CDN name (ie: Cloudflare). | `""` (disabled) | |
+| `AWS_CDN_HOST` | Optional CDN host (https://...) used to serve uploaded assets; when set, it's added to ActiveStorage S3 URLs and safelisted in CSP. This is required for alternative S3 providers that do not use the name of the bucket as the fully qualified CDN name (ie: Cloudflare). | `""` (disabled) | |
 | `AWS_PUBLIC` | Usually, to be used in combination with the previous option. This generates assets without signatures, which basically means they don't expire. | `true` | |
 | `AWS_FORCE_PATH_STYLE` | Certain providers do not support the bucket name as the subdomain of the AWS endpoint (ie: Contabo). Set to `true` if that's the case. | `false` | |
 | `CONTENT_SECURITY_POLICY` | Sets custom Content Security Policy headers for enhanced security. When set, it is added to the default CSP configuration. | `""` (disabled) | |

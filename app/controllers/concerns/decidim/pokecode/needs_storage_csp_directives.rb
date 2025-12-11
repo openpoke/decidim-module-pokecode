@@ -2,9 +2,9 @@
 
 module Decidim
   module Pokecode
-    # Concern to provide a small, safe override / helpers for storage related to Needs.
-    # Include this in controllers that handle Decidim::Need resources to build
-    # consistent payloads and to send events with pokecode metadata.
+    # Concern to add Content Security Policy (CSP) directives for Active Storage S3 URLs.
+    # Include this in controllers (such as ApplicationController) that need to allow S3-hosted assets
+    # by appending the appropriate CSP directives for those storage URLs.
     module NeedsStorageCspDirectives
       extend ActiveSupport::Concern
 

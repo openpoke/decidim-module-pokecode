@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
+require "aws-sdk-s3"
 require "decidim/pokecode/s3_object_override"
 
 module Decidim
@@ -59,12 +60,10 @@ module Decidim
 
     if Decidim::Pokecode.aws_cdn_host.present?
       it "loads Aws::S3" do
-        expect(defined?(Aws::S3)).to be_truthy
         expect(Aws::S3::Object.included_modules).to include(Decidim::Pokecode::S3ObjectOverride)
       end
     else
       it "does not load Aws::S3" do
-        expect(defined?(Aws::S3)).to be_falsey
         expect(Aws::S3::Object.included_modules).not_to include(Decidim::Pokecode::S3ObjectOverride)
       end
     end

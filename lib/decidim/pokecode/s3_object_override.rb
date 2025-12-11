@@ -7,7 +7,7 @@ module Decidim
 
       # AWS public_url can generate public url if the parameter virtual_host: true
       # However it only works for AWS as you have to name the bucket like a domain name in order to work
-      # Others providers let you create CDN that have nothing to do with the bucket name
+      # Other providers let you create CDN that have nothing to do with the bucket name
       included do
         def public_url(options = {})
           bucket_url = Decidim::Pokecode.aws_cdn_host.presence || bucket.url(options)
