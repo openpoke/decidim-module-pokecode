@@ -134,11 +134,6 @@ module Decidim
             request.path.start_with?("/rails/active_storage")
           end
 
-          Rack::Attack.safelist("bypass authenticated users") do |request|
-            # skip logged users
-            request.env.dig("rack.session", "warden.user.user.key").present?
-          end
-
           if Decidim::Pokecode.rack_attack_skip
             Rack::Attack.safelist("bypass with secret param") do |request|
               # Requests are allowed if the return value is truthy

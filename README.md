@@ -26,7 +26,7 @@ This plugin relies on the command `decidim:upgrade` to make sure common files ar
 | `UMAMI_ANALYTICS_URL` | URL to the Umami `script.js` file. Defaults to the hosted Pokecode analytics script. | `"https://analytics.pokecode.net/script.js"` | |
 | `ADMIN_IFRAME_URL` | Enables the admin iframe feature and embeds the specified URL in the admin dashboard. When set, a new iframe page becomes available at `/admin/iframe`. | `""` (disabled) | [#12](https://github.com/openpoke/decidim-module-pokecode/pull/12) |
 | `ADMIN_IFRAME_TITLE` | Customizes the label of the admin iframe menu item in the admin sidebar. | `"Web Stats"` | [#12](https://github.com/openpoke/decidim-module-pokecode/pull/12) |
-| `RACK_ATTACK_SKIP_PARAM` | When set, allows bypassing Rack::Attack rate limiting by passing this secret value in the `skip_rack_attack` request parameter. Useful for performance testing. | `""` (disabled) | |
+| `RACK_ATTACK_SKIP_PARAM` | Secret value compared against the `skip_rack_attack` request parameter to bypass Rack::Attack rate limiting (useful for performance testing). If unset, defaults to the first 6 characters of `Rails.application.secrets.secret_key_base`. If empty, it will be disabled. | first 6 chars of Rails secret | |
 | `RACK_ATTACK_ALLOWED_IPS` | Comma or space-separated list of IP addresses to safelist from Rack::Attack rate limiting. If not set, no IPs are safelisted by default. | none (empty) | |
 | `HEALTHCHECK_ADDITIONAL_CHECKS` | Additional healthcheck checks to run (space-separated list). Appends to the standard health checks when `health_check` gem is enabled. | `""` (none) | |
 | `HEALTHCHECK_EXCLUDE_CHECKS` | Health check names to exclude from the standard checks (space-separated, default excludes `emailconf`). | `"emailconf"` | |

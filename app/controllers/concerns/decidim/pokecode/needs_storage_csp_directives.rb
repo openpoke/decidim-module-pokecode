@@ -15,12 +15,12 @@ module Decidim
       private
 
       def add_storage_csp_directives
-        return unless Decidim::Pokecode.active_storage_s3_urls.present?
+        return if Decidim::Pokecode.active_storage_s3_urls.blank?
 
         Decidim::Pokecode.active_storage_s3_urls.each do |url|
           uri = begin
             URI.parse(url)
-          rescue URI::InvalidURIError => e
+          rescue URI::InvalidURIError
             Rails.logger.warn "[Decidim::Pokecode] Invalid Active Storage S3 URL for CSP directives (#{url})."
             nil
           end
