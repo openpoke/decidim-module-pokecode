@@ -56,6 +56,11 @@ module Decidim
       Decidim::Env.new("RACK_ATTACK_ALLOWED_IPS", nil).value
     end
 
+    config_accessor :aws_cdn_host do
+      host = Decidim::Env.new("AWS_CDN_HOST", "").value
+      host.present? && host.starts_with?("https://") ? host : ""
+    end
+
     def self.rack_attack_skip
       Pokecode.rack_attack_skip_param.presence || Rails.application.secrets.secret_key_base.first(6)
     end
@@ -78,6 +83,17 @@ module Decidim
 
     def self.analytics_enabled
       Pokecode.umami_analytics_id.present? && Pokecode.umami_analytics_url.present?
+    end
+
+    def self.active_storage_s3_urls
+      @active_storage_s3_urls ||= begin
+        urls = []
+        urls << Pokecode.aws_cdn_host if Pokecode.aws_cdn_host.present?
+        urls << ActiveStorage::Blob.service.bucket.url if ActiveStorage::Blob.service.is_a?(ActiveStorage::Service::S3Service)
+        urls
+      rescue StandardError
+        []
+      end
     end
   end
 end

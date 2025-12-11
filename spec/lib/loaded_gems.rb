@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
+require "decidim/pokecode/s3_object_override"
 
 module Decidim
   describe Pokecode do
@@ -56,13 +57,35 @@ module Decidim
       end
     end
 
-    if Decidim::Pokecode.analytics_enabled
-      it "loads NeedsAnalyticsOverride" do
-        expect(Decidim::ApplicationController.included_modules).to include(Decidim::Pokecode::NeedsAnalyticsOverride)
+    if Decidim::Pokecode.aws_cdn_host.present?
+      it "loads Aws::S3" do
+        expect(defined?(Aws::S3)).to be_truthy
+        expect(Aws::S3::Object.included_modules).to include(Decidim::Pokecode::S3ObjectOverride)
       end
     else
-      it "does not load NeedsAnalyticsOverride" do
-        expect(Decidim::ApplicationController.included_modules).not_to include(Decidim::Pokecode::NeedsAnalyticsOverride)
+      it "does not load Aws::S3" do
+        expect(defined?(Aws::S3)).to be_falsey
+        expect(Aws::S3::Object.included_modules).not_to include(Decidim::Pokecode::S3ObjectOverride)
+      end
+    end
+
+    if Decidim::Pokecode.analytics_enabled
+      it "loads NeedsAnalyticsCspDirectives" do
+        expect(Decidim::ApplicationController.included_modules).to include(Decidim::Pokecode::NeedsAnalyticsCspDirectives)
+      end
+    else
+      it "does not load NeedsAnalyticsCspDirectives" do
+        expect(Decidim::ApplicationController.included_modules).not_to include(Decidim::Pokecode::NeedsAnalyticsCspDirectives)
+      end
+    end
+
+    if Decidim::Pokecode.active_storage_s3_urls.present?
+      it "loads NeedsStorageCspDirectives" do
+        expect(Decidim::ApplicationController.included_modules).to include(Decidim::Pokecode::NeedsStorageCspDirectives)
+      end
+    else
+      it "does not load NeedsStorageCspDirectives" do
+        expect(Decidim::ApplicationController.included_modules).not_to include(Decidim::Pokecode::NeedsStorageCspDirectives)
       end
     end
 

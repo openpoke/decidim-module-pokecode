@@ -28,6 +28,11 @@ This plugin relies on the command `decidim:upgrade` to make sure common files ar
 | `ADMIN_IFRAME_TITLE` | Customizes the label of the admin iframe menu item in the admin sidebar. | `"Web Stats"` | [#12](https://github.com/openpoke/decidim-module-pokecode/pull/12) |
 | `RACK_ATTACK_SKIP_PARAM` | When set, allows bypassing Rack::Attack rate limiting by passing this secret value in the `skip_rack_attack` request parameter. Useful for performance testing. | `""` (disabled) | |
 | `RACK_ATTACK_ALLOWED_IPS` | Comma or space-separated list of IP addresses to safelist from Rack::Attack rate limiting. Defaults to the first 6 characters of `Rails.application.secrets.secret_key_base` if not explicitly set. | first 6 chars of Rails secret | |
+| `HEALTHCHECK_ADDITIONAL_CHECKS` | Additional healthcheck checks to run (space-separated list). Appends to the standard health checks when `health_check` gem is enabled. | `""` (none) | |
+| `HEALTHCHECK_EXCLUDE_CHECKS` | Health check names to exclude from the standard checks (space-separated, default excludes `emailconf`). | `"emailconf"` | |
+| `AWS_CDN_HOST` | Optional CDN host (https://...) used to serve uploaded assets; when set, it's added to ActiveStorage S3 URLs and whitelisted in CSP. This is required for alternative S3 providers that do not use the name of the bucket as the fully qualified CDN name (ie: Cloudflare). | `""` (disabled) | |
+| `AWS_PUBLIC` | Usually, to be used in combination with the previous option. This generates assets without signatures, which basically means they don't expire. | `true` | |
+| `AWS_FORCE_PATH_STYLE` | Certain providers do not support the bucket name as the subdomain of the AWS endpoint (ie: Contabo). Set to `true` if that's the case. | `false` | |
 
 ## Installation
 
