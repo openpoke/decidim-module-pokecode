@@ -71,20 +71,24 @@ module Decidim
     if Decidim::Pokecode.analytics_enabled
       it "loads NeedsAnalyticsCspDirectives" do
         expect(Decidim::ApplicationController.included_modules).to include(Decidim::Pokecode::NeedsAnalyticsCspDirectives)
+        expect(Decidim::Admin::ApplicationController.included_modules).to include(Decidim::Pokecode::NeedsAnalyticsCspDirectives)
       end
     else
       it "does not load NeedsAnalyticsCspDirectives" do
         expect(Decidim::ApplicationController.included_modules).not_to include(Decidim::Pokecode::NeedsAnalyticsCspDirectives)
+        expect(Decidim::Admin::ApplicationController.included_modules).not_to include(Decidim::Pokecode::NeedsAnalyticsCspDirectives)
       end
     end
 
     if Decidim::Pokecode.active_storage_s3_urls.present?
       it "loads NeedsStorageCspDirectives" do
         expect(Decidim::ApplicationController.included_modules).to include(Decidim::Pokecode::NeedsStorageCspDirectives)
+        expect(Decidim::Admin::ApplicationController.included_modules).to include(Decidim::Pokecode::NeedsStorageCspDirectives)
       end
     else
       it "does not load NeedsStorageCspDirectives" do
         expect(Decidim::ApplicationController.included_modules).not_to include(Decidim::Pokecode::NeedsStorageCspDirectives)
+        expect(Decidim::Admin::ApplicationController.included_modules).not_to include(Decidim::Pokecode::NeedsStorageCspDirectives)
       end
     end
 

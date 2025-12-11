@@ -49,6 +49,7 @@ module Decidim
 
         if Decidim::Pokecode.analytics_enabled
           Decidim::ApplicationController.include(Decidim::Pokecode::NeedsAnalyticsCspDirectives)
+          Decidim::Admin::ApplicationController.include(Decidim::Pokecode::NeedsAnalyticsCspDirectives)
           Rails.logger.info "[Decidim::Pokecode] Analytics override enabled."
         else
           Rails.logger.info "[Decidim::Pokecode] Analytics override disabled."
@@ -56,6 +57,7 @@ module Decidim
 
         if Decidim::Pokecode.active_storage_s3_urls.present?
           Decidim::ApplicationController.include(Decidim::Pokecode::NeedsStorageCspDirectives)
+          Decidim::Admin::ApplicationController.include(Decidim::Pokecode::NeedsStorageCspDirectives)
           Rails.logger.info "[Decidim::Pokecode] Active Storage S3 CSP directives override enabled."
         else
           Rails.logger.info "[Decidim::Pokecode] Active Storage S3 CSP directives override disabled."
