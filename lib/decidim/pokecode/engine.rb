@@ -139,7 +139,7 @@ module Decidim
             request.env.dig("rack.session", "warden.user.user.key").present?
           end
 
-          if Decidim::Pokecode.rack_attack_skip.present?
+          if Decidim::Pokecode.rack_attack_skip
             Rack::Attack.safelist("bypass with secret param") do |request|
               # Requests are allowed if the return value is truthy
               request.params["skip_rack_attack"] == Decidim::Pokecode.rack_attack_skip

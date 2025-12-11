@@ -62,7 +62,7 @@ module Decidim
     end
 
     def self.rack_attack_skip
-      Pokecode.rack_attack_skip_param.presence || Rails.application.secrets.secret_key_base.first(6)
+      Pokecode.rack_attack_skip_param || Rails.application.secrets.secret_key_base.first(6)
     end
 
     def self.rack_attack_ips
