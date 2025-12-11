@@ -29,6 +29,13 @@ module Decidim
           app.config.ssl_options[:redirect][:exclude] = ->(request) { request.path =~ /health_check/ }
           Rails.logger.info "[Decidim::Pokecode] SSL exclusion for health_check enabled."
         end
+
+        if Decidim::Pokecode.queue_adapter.present?
+          ActiveJob::Base.queue_adapter = Decidim::Pokecode.queue_adapter.to_sym
+          Rails.logger.info "[Decidim::Pokecode] ActiveJob queue adapter set to #{Decidim::Pokecode.queue_adapter}."
+        else
+          Rails.logger.info "[Decidim::Pokecode] ActiveJob queue adapter not set."
+        end
       end
 
       config.to_prepare do
