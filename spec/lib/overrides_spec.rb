@@ -19,6 +19,12 @@ checksums = [
       "/app/models/decidim/assembly.rb" => "f44461dcbc95371a00feb69077b61355",
       "/app/permissions/decidim/assemblies/permissions.rb" => "115853e2f3a2cef7904fb3d36504a47e"
     }
+  },
+  {
+    package: "aws-sdk-s3",
+    files: {
+      "/lib/aws-sdk-s3/customizations/object.rb" => "916a7ede54078548dc78c4be9a8ae192"
+    }
   }
 ]
 

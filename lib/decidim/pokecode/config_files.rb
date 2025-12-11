@@ -19,6 +19,11 @@ module Decidim
       "config/schedule.yml" => [
         'class: "InvokeRakeTaskJob"'
       ],
+      "config/storage.yml" => [
+        "public:",
+        "force_path_style:",
+        "request_checksum_calculation:"
+      ],
       "Dockerfile" => [
         "curl -fsSL https://deb.nodesource.com/setup_18.x",
         "npm install yarn -g",

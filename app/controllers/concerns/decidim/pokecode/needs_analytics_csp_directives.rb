@@ -5,7 +5,7 @@ module Decidim
     # Concern to provide a small, safe override / helpers for analytics related to Needs.
     # Include this in controllers that handle Decidim::Need resources to build
     # consistent payloads and to send events with pokecode metadata.
-    module NeedsAnalyticsOverride
+    module NeedsAnalyticsCspDirectives
       extend ActiveSupport::Concern
 
       included do

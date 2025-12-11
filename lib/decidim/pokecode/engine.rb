@@ -41,10 +41,24 @@ module Decidim
         end
 
         if Decidim::Pokecode.analytics_enabled
-          Decidim::ApplicationController.include(Decidim::Pokecode::NeedsAnalyticsOverride)
+          Decidim::ApplicationController.include(Decidim::Pokecode::NeedsAnalyticsCspDirectives)
           Rails.logger.info "[Decidim::Pokecode] Analytics override enabled."
         else
           Rails.logger.info "[Decidim::Pokecode] Analytics override disabled."
+        end
+
+        if Decidim::Pokecode.active_storage_s3_urls.present?
+          Decidim::ApplicationController.include(Decidim::Pokecode::NeedsStorageCspDirectives)
+          Rails.logger.info "[Decidim::Pokecode] Active Storage S3 CSP directives override enabled."
+        else
+          Rails.logger.info "[Decidim::Pokecode] Active Storage S3 CSP directives override disabled."
+        end
+
+        if Decidim::Pokecode.aws_cdn_host.present?
+          Aws::S3::Object.include(Decidim::Pokecode::S3ObjectOverride)
+          Rails.logger.info "[Decidim::Pokecode] Active Storage CDN override enabled."
+        else
+          Rails.logger.info "[Decidim::Pokecode] Active Storage CDN override disabled."
         end
       end
 
@@ -92,6 +106,13 @@ module Decidim
         config.deface.enabled = ENV["DB_ADAPTER"].blank? || ENV.fetch("DB_ADAPTER", nil) == "postgresql" if config.respond_to?(:deface)
       end
 
+      initializer "pokecode.content_security_policies_extra" do
+        Decidim.configure do |config|
+          config.content_security_policies_extra ||= {}
+          config.content_security_policies_extra.merge!(Decidim::Pokecode.content_security_policies_extra)
+        end
+      end
+
       initializer "pokecode.logger" do
         if ENV["RAILS_LOG_TO_STDOUT"].present?
           if defined?(SemanticLogger) && Rails.env.production?
@@ -107,6 +128,31 @@ module Decidim
           end
         else
           Rails.logger.info "[Decidim::Pokecode] Logging to STDOUT disabled."
+        end
+      end
+
+      initializer "pokecode.rack_attack" do
+        if Rails.env.production? || Rails.env.test?
+          # Provided that trusted users use an HTTP request param named skip_rack_attack
+          # with this you can perform apache benchmark test like this:
+          # ab -n 2000 -c 20 'https://decidim.url/?skip_rack_attack=some-secret'
+          Rack::Attack.safelist("bypass active storage") do |request|
+            # skip rails active storage routes
+            request.path.start_with?("/rails/active_storage")
+          end
+
+          if Decidim::Pokecode.rack_attack_skip
+            Rack::Attack.safelist("bypass with secret param") do |request|
+              # Requests are allowed if the return value is truthy
+              request.params["skip_rack_attack"] == Decidim::Pokecode.rack_attack_skip
+            end
+          end
+
+          if Decidim::Pokecode.rack_attack_ips.present?
+            Decidim::Pokecode.rack_attack_ips.each do |ip|
+              Rack::Attack.safelist_ip(ip)
+            end
+          end
         end
       end
 
