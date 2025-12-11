@@ -48,6 +48,22 @@ module Decidim
       Decidim::Env.new("UMAMI_ANALYTICS_URL", "https://analytics.pokecode.net/script.js").value
     end
 
+    config_accessor :rack_attack_skip_param do
+      Decidim::Env.new("RACK_ATTACK_SKIP_PARAM", "").value
+    end
+
+    config_accessor :rack_attack_allowed_ips do
+      Decidim::Env.new("RACK_ATTACK_ALLOWED_IPS", nil).value
+    end
+
+    def self.rack_attack_skip
+      Pokecode.rack_attack_skip_param.presence || Rails.application.secrets.secret_key_base.first(6)
+    end
+
+    def self.rack_attack_ips
+      Pokecode.rack_attack_allowed_ips&.split(/[,\s]+/)&.reject(&:blank?) || []
+    end
+
     def self.deface_enabled
       Pokecode.pokecode_footer_enabled || Decidim::Pokecode.language_menu_enabled
     end
