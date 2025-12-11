@@ -106,6 +106,13 @@ module Decidim
         config.deface.enabled = ENV["DB_ADAPTER"].blank? || ENV.fetch("DB_ADAPTER", nil) == "postgresql" if config.respond_to?(:deface)
       end
 
+      initializer "pokecode.content_security_policies_extra" do
+        Decidim.configure do |config|
+          config.content_security_policies_extra ||= {}
+          config.content_security_policies_extra.merge!(Decidim::Pokecode.content_security_policies_extra)
+        end
+      end
+
       initializer "pokecode.logger" do
         if ENV["RAILS_LOG_TO_STDOUT"].present?
           if defined?(SemanticLogger) && Rails.env.production?
