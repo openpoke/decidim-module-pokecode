@@ -37,6 +37,7 @@
 .env
 .envrc
 .rbenv-vars
+mise.toml
 
 # Others
 .vscode
@@ -64,6 +65,4 @@ npm_debug.log
 # Ignore Tailwind configuration
 tailwind.config.js
 .rspec-failures
-
-/app/static/api/docs
 

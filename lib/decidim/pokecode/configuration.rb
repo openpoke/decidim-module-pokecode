@@ -17,7 +17,7 @@ module Decidim
     end
 
     config_accessor :queue_adapter do
-      Decidim::Env.new("QUEUE_ADAPTER", "sidekiq").value
+      Decidim::Env.new("QUEUE_ADAPTER", Decidim::Env.new("DISABLE_SIDEKIQ", false).blank? ? "sidekiq" : "").value
     end
 
     config_accessor :sentry_dsn do
