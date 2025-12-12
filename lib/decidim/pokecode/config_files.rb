@@ -10,8 +10,11 @@ module Decidim
     end
 
     Pokecode.config_files = {
+      ".ruby-version" => [
+        RUBY_VERSION
+      ],
       ".gitignore" => [
-        "/app/static/api/docs"
+        "mise.toml"
       ],
       "config/sidekiq.yml" => [
         '<%= ENV.fetch("SIDEKIQ_CONCURRENCY", 5) %>'
