@@ -11,7 +11,7 @@ module Decidim
 
     Pokecode.config_files = {
       ".ruby-version" => [
-        RUBY_VERSION
+        "3.3.10"
       ],
       ".gitignore" => [
         "mise.toml"
