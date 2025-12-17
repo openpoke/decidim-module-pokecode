@@ -19,6 +19,7 @@ group :development, :test do
   gem "byebug", "~> 11.0", platform: :mri
 
   gem "decidim-dev", Decidim::Pokecode::COMPAT_DECIDIM_VERSION
+  gem "decidim-initiatives", Decidim::Pokecode::COMPAT_DECIDIM_VERSION
   gem "faker"
 
   gem "brakeman"
