@@ -103,7 +103,6 @@ module Decidim
     end
 
     def self.active_storage_s3_urls
-      @active_storage_s3_urls ||= begin
         urls = []
         urls << Pokecode.aws_cdn_host if Pokecode.aws_cdn_host.present?
         urls << ActiveStorage::Blob.service.bucket.url if defined?(ActiveStorage::Service::S3Service) && ActiveStorage::Blob.service.is_a?(ActiveStorage::Service::S3Service)
