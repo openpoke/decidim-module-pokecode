@@ -6,12 +6,12 @@ namespace :decidim do
   task upgrade: [
     :choose_target_plugins,
     :"decidim:upgrade_app",
+    :"decidim:upgrade:shakapacker_npm",
     :"railties:install:migrations",
     :"decidim:upgrade:migrations",
-    :"decidim:upgrade:webpacker",
-    # it would be nice to remove this task in the future
-    # but for now we keep it to as it requires access to a database
-    :"decidim_api:generate_docs",
+    :"decidim:upgrade:shakapacker",
+    # We will generate the api docs in the Dockerfile build step
+    # :"decidim_api:generate_docs",
     :"pokecode:copy_config_files"
   ]
 end
