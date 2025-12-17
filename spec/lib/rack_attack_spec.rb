@@ -15,7 +15,7 @@ describe "Rack::Attack" do
 
     it "defaults to first 6 characters of Rails secret when env var not set" do
       expect(Decidim::Pokecode.rack_attack_ips).to be_an(Array)
-      expect(Decidim::Pokecode.rack_attack_skip).to include(Rails.application.secrets.secret_key_base&.first(6))
+      expect(Decidim::Pokecode.rack_attack_skip).to include(Rails.application.secret_key_base&.first(6))
       expect(Rack::Attack.safelists.keys).to include("bypass with secret param")
     end
 
