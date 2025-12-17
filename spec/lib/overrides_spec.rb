@@ -9,15 +9,15 @@ checksums = [
   {
     package: "decidim-core",
     files: {
-      "/app/views/layouts/decidim/header/_main.html.erb" => "2cda0f82a0ac644c1ba89f84d5c60b97",
-      "/lib/tasks/decidim_tasks.rake" => "9408028d3075c93e6eb2e94131c108d0"
+      "/app/views/layouts/decidim/header/_main.html.erb" => "a090eeca739613446d2eab8f4de513b1",
+      "/lib/tasks/decidim_tasks.rake" => "24289c09b9dab157eefe2aa366a4222b"
     }
   },
   {
     package: "decidim-assemblies",
     files: {
-      "/app/models/decidim/assembly.rb" => "f44461dcbc95371a00feb69077b61355",
-      "/app/permissions/decidim/assemblies/permissions.rb" => "115853e2f3a2cef7904fb3d36504a47e"
+      "/app/models/decidim/assembly.rb" => "8347a13aa324c6dce4528829f06119e3",
+      "/app/permissions/decidim/assemblies/permissions.rb" => "f26397a30c34eeb60af141b8ef0eb1bb"
     }
   },
   {
