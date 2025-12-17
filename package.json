@@ -1,6 +1,6 @@
 {
   "name": "decidim-pokecode",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A Decidim module that adds Pokecode functionality to your Decidim application.",
   "scripts": {
     "lint": "eslint -c .eslintrc.json --no-error-on-unmatched-pattern --ignore-pattern app/packs/vendor --ext .js app/packs",
@@ -17,13 +17,13 @@
   "author": "ivan@pokecode.net",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
-    "@decidim/browserslist-config": "^0.30.4",
-    "@decidim/webpacker": "^0.30.4"
+    "@decidim/browserslist-config": "^0.31.0",
+    "@decidim/webpacker": "^0.31.0"
   },
   "devDependencies": {
-    "@decidim/dev": "^0.30.4",
-    "@decidim/eslint-config": "^0.30.4",
-    "@decidim/stylelint-config": "^0.30.4"
+    "@decidim/dev": "^0.31.0",
+    "@decidim/eslint-config": "^0.31.0",
+    "@decidim/stylelint-config": "^0.31.0"
   },
   "browserslist": ["extends @decidim/browserslist-config"]
 }

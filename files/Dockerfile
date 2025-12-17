@@ -2,7 +2,7 @@ FROM ruby:3.3.10 AS builder
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y ca-certificates curl gnupg && \
     mkdir -p /etc/apt/keyrings && \
-    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
     apt-get update && apt-get install -y nodejs \
     build-essential \
     postgresql-client \
@@ -18,12 +18,13 @@ WORKDIR /app
 # Copy package dependencies files only to ensure maximum cache hit
 COPY ./package-lock.json /app/package-lock.json
 COPY ./package.json /app/package.json
+COPY ./packages /app/packages
 COPY ./Gemfile /app/Gemfile
 COPY ./Gemfile.lock /app/Gemfile.lock
-COPY ./packages /app/packages
 
 RUN gem install bundler:$(grep -A 1 'BUNDLED WITH' Gemfile.lock | tail -n 1 | xargs) && \
-    bundle config --deployment --local without 'development test' && \
+    bundle config set --deployment true && \
+    bundle config set --local without 'development test' && \
     bundle install -j4 --retry 3 && \
     npm install yarn -g && \
     # Remove unneeded gems
@@ -68,10 +69,15 @@ RUN RAILS_ENV=production \
     DB_ADAPTER=nulldb \
     bin/rails assets:precompile
 
+RUN SECRET_KEY_BASE=dummy \
+    DB_ADAPTER=nulldb \
+    RAILS_ENV=production \
+    bin/rails decidim_api:generate_docs
+
 RUN mv config/credentials.yml.enc.bak config/credentials.yml.enc 2>/dev/null || true
 RUN mv config/credentials.bak config/credentials 2>/dev/null || true
 
-RUN rm -rf node_modules packages/*/node_modules tmp/cache vendor/bundle test spec app/packs .git
+RUN rm -rf node_modules packages/*/node_modules tmp/* vendor/bundle test spec app/packs .git
 
 # This image is for production env only
 FROM ruby:3.3.10-slim AS final

@@ -1,6 +1,6 @@
 <% if available_locales.length > 1 %>
   <div class="main-header__language-container">
-    <button id="trigger-dropdown-language-top" data-component="dropdown" data-target="dropdown-menu-language-top" class="main-header__language-trigger">
+    <button id="trigger-dropdown-language-top" data-controller="dropdown" data-target="dropdown-menu-language-top" class="main-header__language-trigger">
       <div><%= icon "global-line" %> <%= icon "arrow-down-s-line" %></div>
       <div><%= t("name", scope: "locale" ) %></div>
       <span class="sr-only">

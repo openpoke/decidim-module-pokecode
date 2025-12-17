@@ -14,7 +14,8 @@ module Decidim
         "3.3.10"
       ],
       ".gitignore" => [
-        "mise.toml"
+        "mise.toml",
+        "/app/views/static/api"
       ],
       "config/sidekiq.yml" => [
         '<%= ENV.fetch("SIDEKIQ_CONCURRENCY", 5) %>'
@@ -28,9 +29,11 @@ module Decidim
         "request_checksum_calculation:"
       ],
       "Dockerfile" => [
-        "curl -fsSL https://deb.nodesource.com/setup_18.x",
+        "curl -fsSL https://deb.nodesource.com/setup_22.x",
         "npm install yarn -g",
-        "rm -rf node_modules packages/*/node_modules tmp/cache vendor/bundle test spec app/packs .git"
+        "bundle config set --deployment true",
+        "bundle config set --local without 'development test'",
+        "rm -rf node_modules packages/*/node_modules tmp/* vendor/bundle test spec app/packs .git"
       ]
     }
 
