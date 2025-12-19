@@ -31,8 +31,6 @@ module Decidim
         end
       end
 
-      private
-
       def self.allowed_recipients_empty?
         Decidim::Pokecode.allowed_recipients_list.empty?
       end
@@ -43,7 +41,7 @@ module Decidim
           allowed_lowercase = allowed.downcase
           # Check if the email matches or ends with the allowed value
           # This allows both exact email matches and domain-based matches (e.g., @pokecode.net)
-          email_lowercase == allowed_lowercase || email_lowercase.end_with?("#{allowed_lowercase}".start_with?("@") ? allowed_lowercase : "@#{allowed_lowercase}")
+          email_lowercase == allowed_lowercase || email_lowercase.end_with?(allowed_lowercase.to_s.start_with?("@") ? allowed_lowercase : "@#{allowed_lowercase}")
         end
       end
     end
