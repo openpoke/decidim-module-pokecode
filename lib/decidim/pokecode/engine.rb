@@ -170,7 +170,7 @@ module Decidim
       end
 
       initializer "pokecode.mail_interceptor" do
-        if Decidim::Pokecode.allowed_recipients_list.present?
+        if Decidim::Pokecode.allowed_recipients_list.any?
           Mail.register_interceptor(Decidim::Pokecode::MailInterceptor)
           Rails.logger.info "[Decidim::Pokecode] Email interceptor enabled. Allowed recipients: #{Decidim::Pokecode.allowed_recipients_list.join(", ")}"
         else

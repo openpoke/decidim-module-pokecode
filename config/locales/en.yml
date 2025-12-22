@@ -1,6 +1,7 @@
 ---
 en:
   decidim:
-    components:
-      Pokecode:
-        name: Pokecode
+    pokecode:
+      staging_warning:
+        title: "Warning: Staging Environment"
+        message: "Emails sent from this instance may not reach their intended recipients. Allowed destinations are: %{emails}."

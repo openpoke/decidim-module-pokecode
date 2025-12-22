@@ -21,6 +21,12 @@ checksums = [
     }
   },
   {
+    package: "decidim-admin",
+    files: {
+      "/app/views/decidim/admin/dashboard/show.html.erb" => "45558619f30212c2aa079e744c4be4ea"
+    }
+  },
+  {
     package: "aws-sdk-s3",
     files: {
       "/lib/aws-sdk-s3/customizations/object.rb" => "916a7ede54078548dc78c4be9a8ae192"
