@@ -15,6 +15,8 @@ module Decidim
               mount Sidekiq::Web => "/sidekiq"
             end
           end
+          # For queue adapter configuration
+          config.active_job.queue_adapter = :sidekiq
           Rails.logger.info "[Decidim::Pokecode] Sidekiq Web UI enabled."
         else
           Rails.logger.info "[Decidim::Pokecode] Sidekiq Web UI disabled."
@@ -171,7 +173,8 @@ module Decidim
 
       initializer "pokecode.mail_interceptor" do
         if Decidim::Pokecode.allowed_recipients_list.any?
-          Mail.register_interceptor(Decidim::Pokecode::MailInterceptor)
+          config.action_mailer.interceptors ||= []
+          config.action_mailer.interceptors << "Decidim::Pokecode::MailInterceptor"
           Rails.logger.info "[Decidim::Pokecode] Email interceptor enabled. Allowed recipients: #{Decidim::Pokecode.allowed_recipients_list.join(", ")}"
         else
           Rails.logger.info "[Decidim::Pokecode] Email interceptor disabled."

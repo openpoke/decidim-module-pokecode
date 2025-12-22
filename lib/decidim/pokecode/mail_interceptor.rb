@@ -17,7 +17,7 @@ module Decidim
 
         # Filter recipients to only those in the allowed list
         filtered_recipients = all_recipients.select { |recipient| allowed?(recipient) }
-
+        byebug
         if filtered_recipients.empty?
           Rails.logger.warn "[Decidim::Pokecode] Email delivery intercepted. No recipients matched allowed list. Original recipients: #{all_recipients.join(", ")}"
           message.perform_deliveries = false
