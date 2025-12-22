@@ -1,0 +1,6 @@
+<div class="callout alert">
+  <p>
+    <strong><%= t("decidim.pokecode.staging_warning.title") %></strong><br>
+    <%= t("decidim.pokecode.staging_warning.message", emails: Decidim::Pokecode.allowed_recipients_list.map {|email| "<code>#{email}</code>"}.join(", ")).html_safe %>
+  </p>
+</div>

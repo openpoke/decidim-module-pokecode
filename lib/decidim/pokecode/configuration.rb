@@ -65,6 +65,10 @@ module Decidim
       host.present? && host.starts_with?("https://") ? host : ""
     end
 
+    config_accessor :allowed_recipients do
+      Decidim::Env.new("ALLOWED_RECIPIENTS", "").value
+    end
+
     config_accessor :content_security_policies_extra do
       {
         "connect-src" => ENV.fetch("CONTENT_SECURITY_POLICY", "").split,
@@ -84,6 +88,10 @@ module Decidim
 
     def self.rack_attack_ips
       Pokecode.rack_attack_allowed_ips&.split(/[,\s]+/)&.reject(&:blank?) || []
+    end
+
+    def self.allowed_recipients_list
+      Pokecode.allowed_recipients&.split(/[,\s]+/)&.reject(&:blank?) || []
     end
 
     def self.deface_enabled

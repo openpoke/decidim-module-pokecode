@@ -168,6 +168,15 @@ module Decidim
       initializer "pokecode.shakapacker.assets_path" do
         Decidim.register_assets_path File.expand_path("app/packs", root)
       end
+
+      initializer "pokecode.mail_interceptor" do
+        if Decidim::Pokecode.allowed_recipients_list.any?
+          Mail.register_interceptor(Decidim::Pokecode::MailInterceptor)
+          Rails.logger.info "[Decidim::Pokecode] Email interceptor enabled. Allowed recipients: #{Decidim::Pokecode.allowed_recipients_list.join(", ")}"
+        else
+          Rails.logger.info "[Decidim::Pokecode] Email interceptor disabled."
+        end
+      end
     end
   end
 end
