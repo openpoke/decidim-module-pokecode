@@ -19,6 +19,8 @@ if Decidim::Pokecode.sidekiq_enabled
   require "sidekiq/cron"
 end
 
+require "decidim/pokecode/mail_interceptor" if Decidim::Pokecode.allowed_recipients_list.any?
+
 require "decidim/pokecode/admin"
 require "decidim/pokecode/engine"
 require "decidim/pokecode/admin_engine"
