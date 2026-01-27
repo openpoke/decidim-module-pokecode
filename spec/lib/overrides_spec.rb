@@ -10,6 +10,7 @@ checksums = [
     package: "decidim-core",
     files: {
       "/app/views/layouts/decidim/header/_main.html.erb" => "a090eeca739613446d2eab8f4de513b1",
+      "/app/models/decidim/attachment.rb" => "dfd54851cbee5b073a4b2b950b2160f5",
       "/lib/tasks/decidim_tasks.rake" => "24289c09b9dab157eefe2aa366a4222b"
     }
   },
