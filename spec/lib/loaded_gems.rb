@@ -103,5 +103,15 @@ module Decidim
         expect(Decidim::Assemblies::Permissions.included_modules).not_to include(Decidim::Pokecode::AssembliesPermissionsOverride)
       end
     end
+
+    if Decidim::Pokecode.attachment_can_participate_override_enabled
+      it "loads AttachmentOverride" do
+        expect(Decidim::Attachment.included_modules).to include(Decidim::Pokecode::AttachmentOverride)
+      end
+    else
+      it "does not load AttachmentOverride" do
+        expect(Decidim::Attachment.included_modules).not_to include(Decidim::Pokecode::AttachmentOverride)
+      end
+    end
   end
 end

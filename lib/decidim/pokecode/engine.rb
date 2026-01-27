@@ -49,6 +49,13 @@ module Decidim
           Rails.logger.info "[Decidim::Pokecode] Assembly members visibility override disabled."
         end
 
+        if Decidim::Pokecode.attachment_can_participate_override_enabled
+          Decidim::Attachment.include(Decidim::Pokecode::AttachmentOverride)
+          Rails.logger.info "[Decidim::Pokecode] Attachment can_participate? override enabled."
+        else
+          Rails.logger.info "[Decidim::Pokecode] Attachment can_participate? override disabled."
+        end
+
         if Decidim::Pokecode.analytics_enabled
           Decidim::ApplicationController.include(Decidim::Pokecode::NeedsAnalyticsCspDirectives)
           Decidim::Admin::ApplicationController.include(Decidim::Pokecode::NeedsAnalyticsCspDirectives)
