@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
+# TODO: Remove when fixed upstream
 module Decidim
   module Pokecode
-    module AttachmentOverride
+    module NotificationOverride
       extend ActiveSupport::Concern
 
       included do
         # This is due to the bug in https://github.com/decidim/decidim/issues/15949
         def can_participate?(user)
-          return true unless attached_to
-          return true unless attached_to.respond_to?(:can_participate?)
+          return resource.can_participate?(user) if resource.respond_to?(:can_participate?)
 
-          attached_to.can_participate?(user)
+          true
         end
       end
     end

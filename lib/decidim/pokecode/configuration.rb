@@ -44,10 +44,6 @@ module Decidim
       Decidim::Env.new("DISABLE_ASSEMBLY_MEMBERS_VISIBLE", false).blank?
     end
 
-    config_accessor :attachment_can_participate_override_enabled do
-      Decidim::Env.new("DISABLE_ATTACHMENT_CAN_PARTICIPATE_OVERRIDE", false).blank?
-    end
-
     config_accessor :umami_analytics_id do
       Decidim::Env.new("UMAMI_ANALYTICS_ID", "").value
     end
