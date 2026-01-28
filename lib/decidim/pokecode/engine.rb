@@ -49,6 +49,10 @@ module Decidim
           Rails.logger.info "[Decidim::Pokecode] Assembly members visibility override disabled."
         end
 
+        # TODO: remove when fixes upstream
+        Decidim::Notification.include(Decidim::Pokecode::NotificationOverride)
+        Rails.logger.info "[Decidim::Pokecode] Notification override applied."
+
         if Decidim::Pokecode.analytics_enabled
           Decidim::ApplicationController.include(Decidim::Pokecode::NeedsAnalyticsCspDirectives)
           Decidim::Admin::ApplicationController.include(Decidim::Pokecode::NeedsAnalyticsCspDirectives)
