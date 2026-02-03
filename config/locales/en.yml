@@ -5,3 +5,6 @@ en:
       staging_warning:
         title: "Warning: Staging Environment"
         message: "Emails sent from this instance may not reach their intended recipients. Allowed destinations are: %{emails}."
+      invitations_disabled_warning:
+        title: "Warning: Invitations Disabled"
+        message: "Invitation emails are currently disabled in this instance. Users will not receive invitation emails."

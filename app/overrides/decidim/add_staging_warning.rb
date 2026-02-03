@@ -6,3 +6,10 @@ if Decidim::Pokecode.allowed_recipients_list.any?
                        :insert_before => "div.content",
                        :partial => "decidim/pokecode/staging_warning")
 end
+
+if Decidim::Pokecode.disable_invitations
+  Deface::Override.new(:virtual_path => "decidim/admin/dashboard/show",
+                       :name => "add-invitations-disabled-warning",
+                       :insert_before => "div.content",
+                       :partial => "decidim/pokecode/invitations_disabled_warning")
+end
