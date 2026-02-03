@@ -35,6 +35,7 @@ This plugin relies on the command `decidim:upgrade` to make sure common files ar
 | `AWS_FORCE_PATH_STYLE` | Certain providers do not support the bucket name as the subdomain of the AWS endpoint (ie: Contabo). Set to `true` if that's the case. | `false` | |
 | `CONTENT_SECURITY_POLICY` | Sets custom Content Security Policy headers for enhanced security. When set, it is added to the default CSP configuration. | `""` (disabled) | |
 | `ALLOWED_RECIPIENTS` | A list of emails or domains that must match in order to send an email, separated by spaces. For instance `@pokecode.net johnsmith@gmail.com`. Exact email addresses (without a leading `@`) must match the full recipient email, while domain patterns starting with `@` are matched as suffixes of the recipient email. Leave empty to disable any interception. | `""` |
+| `DISABLE_INVITATIONS` | Prevents all invitation emails from being sent by intercepting emails with the `invitation-instructions` header. This is useful for development or testing environments. | `false` | |
 
 ## Installation
 
