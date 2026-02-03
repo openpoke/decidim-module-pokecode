@@ -75,6 +75,23 @@ module Decidim
         else
           Rails.logger.info "[Decidim::Pokecode] Active Storage CDN override disabled."
         end
+
+        # Register deface overrides for admin dashboard warnings
+        if Decidim::Pokecode.allowed_recipients_list.any?
+          Deface::Override.new(:virtual_path => "decidim/admin/dashboard/show",
+                               :name => "add-staging-warning",
+                               :insert_before => "div.content",
+                               :partial => "decidim/pokecode/admin/staging_warning")
+          Rails.logger.info "[Decidim::Pokecode] Staging warning deface override registered."
+        end
+
+        if Decidim::Pokecode.disable_invitations
+          Deface::Override.new(:virtual_path => "decidim/admin/dashboard/show",
+                               :name => "add-invitations-disabled-warning",
+                               :insert_before => "div.content",
+                               :partial => "decidim/pokecode/admin/invitations_disabled_warning")
+          Rails.logger.info "[Decidim::Pokecode] Invitations disabled warning deface override registered."
+        end
       end
 
       initializer "pokecode.zeitwerk_ignore_deface" do
