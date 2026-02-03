@@ -98,10 +98,6 @@ module Decidim
       Pokecode.allowed_recipients&.split(/[,\s]+/)&.reject(&:blank?) || []
     end
 
-    def self.deface_enabled
-      Pokecode.pokecode_footer_enabled || Decidim::Pokecode.language_menu_enabled
-    end
-
     def self.sentry_enabled
       Pokecode.sentry_dsn.present?
     end
