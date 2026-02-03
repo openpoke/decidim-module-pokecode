@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "decidim/pokecode/mail_interceptor"
 
 module Decidim::Pokecode
   describe AllowedRecipientsMailInterceptor do
