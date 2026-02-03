@@ -69,6 +69,10 @@ module Decidim
       Decidim::Env.new("ALLOWED_RECIPIENTS", "").value
     end
 
+    config_accessor :disable_invitations do
+      Decidim::Env.new("DISABLE_INVITATIONS", false).present?
+    end
+
     config_accessor :content_security_policies_extra do
       {
         "connect-src" => ENV.fetch("CONTENT_SECURITY_POLICY", "").split,
