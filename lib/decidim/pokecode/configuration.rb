@@ -69,6 +69,10 @@ module Decidim
       Decidim::Env.new("ALLOWED_RECIPIENTS", "").value
     end
 
+    config_accessor :disable_invitations do
+      Decidim::Env.new("DISABLE_INVITATIONS", false).present?
+    end
+
     config_accessor :content_security_policies_extra do
       {
         "connect-src" => ENV.fetch("CONTENT_SECURITY_POLICY", "").split,
@@ -92,10 +96,6 @@ module Decidim
 
     def self.allowed_recipients_list
       Pokecode.allowed_recipients&.split(/[,\s]+/)&.reject(&:blank?) || []
-    end
-
-    def self.deface_enabled
-      Pokecode.pokecode_footer_enabled || Decidim::Pokecode.language_menu_enabled
     end
 
     def self.sentry_enabled

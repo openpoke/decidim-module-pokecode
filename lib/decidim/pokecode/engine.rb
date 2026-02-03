@@ -75,6 +75,23 @@ module Decidim
         else
           Rails.logger.info "[Decidim::Pokecode] Active Storage CDN override disabled."
         end
+
+        # Register deface overrides for admin dashboard warnings
+        if Decidim::Pokecode.allowed_recipients_list.any?
+          Deface::Override.new(:virtual_path => "decidim/admin/dashboard/show",
+                               :name => "add-staging-warning",
+                               :insert_before => "div.content",
+                               :partial => "decidim/pokecode/admin/staging_warning")
+          Rails.logger.info "[Decidim::Pokecode] Staging warning deface override registered."
+        end
+
+        if Decidim::Pokecode.disable_invitations
+          Deface::Override.new(:virtual_path => "decidim/admin/dashboard/show",
+                               :name => "add-invitations-disabled-warning",
+                               :insert_before => "div.content",
+                               :partial => "decidim/pokecode/admin/invitations_disabled_warning")
+          Rails.logger.info "[Decidim::Pokecode] Invitations disabled warning deface override registered."
+        end
       end
 
       initializer "pokecode.zeitwerk_ignore_deface" do
@@ -176,12 +193,24 @@ module Decidim
       end
 
       initializer "pokecode.mail_interceptor" do
-        if Decidim::Pokecode.allowed_recipients_list.any?
-          config.action_mailer.interceptors ||= []
-          config.action_mailer.interceptors << "Decidim::Pokecode::MailInterceptor"
-          Rails.logger.info "[Decidim::Pokecode] Email interceptor enabled. Allowed recipients: #{Decidim::Pokecode.allowed_recipients_list.join(", ")}"
-        else
-          Rails.logger.info "[Decidim::Pokecode] Email interceptor disabled."
+        Rails.application.config.to_prepare do
+          if Decidim::Pokecode.allowed_recipients_list.any?
+            unless ActionMailer::Base.try(:delivery_interceptors)&.include?(Decidim::Pokecode::AllowedRecipientsMailInterceptor)
+              ActionMailer::Base.register_interceptor(Decidim::Pokecode::AllowedRecipientsMailInterceptor)
+            end
+            Rails.logger.info "[Decidim::Pokecode] Allowed recipients mail interceptor enabled. Allowed recipients: #{Decidim::Pokecode.allowed_recipients_list.join(", ")}"
+          else
+            Rails.logger.info "[Decidim::Pokecode] Allowed recipients mail interceptor disabled."
+          end
+
+          if Decidim::Pokecode.disable_invitations
+            unless ActionMailer::Base.try(:delivery_interceptors)&.include?(Decidim::Pokecode::DisableInvitationsMailInterceptor)
+              ActionMailer::Base.register_interceptor(Decidim::Pokecode::DisableInvitationsMailInterceptor)
+            end
+            Rails.logger.info "[Decidim::Pokecode] Invitations disabled via mail interceptor."
+          else
+            Rails.logger.info "[Decidim::Pokecode] Invitations not disabled via mail interceptor."
+          end
         end
       end
     end

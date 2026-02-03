@@ -48,16 +48,6 @@ module Decidim
       end
     end
 
-    if Decidim::Pokecode.deface_enabled
-      it "loads Deface" do
-        expect(defined?(Deface)).to be_truthy
-      end
-    else
-      it "does not load Deface" do
-        expect(defined?(Deface)).to be_falsey
-      end
-    end
-
     if Decidim::Pokecode.aws_cdn_host.present?
       it "loads Aws::S3" do
         expect(Aws::S3::Object.included_modules).to include(Decidim::Pokecode::S3ObjectOverride)

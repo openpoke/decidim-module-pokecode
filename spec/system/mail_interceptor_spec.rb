@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe "AllowedRecipients" do
+describe "MailInterceptor" do
   let!(:organization) { create(:organization) }
   let!(:user) { create(:user, :confirmed, :admin, organization:) }
 
@@ -22,6 +22,17 @@ describe "AllowedRecipients" do
   else
     it "does not show the staging warning in the admin dashboard" do
       expect(page).to have_no_content("Warning: Staging Environment")
+    end
+  end
+
+  if Decidim::Pokecode.disable_invitations
+    it "shows the invitations disabled warning in the admin dashboard" do
+      expect(page).to have_content("Warning: Invitations Disabled")
+      expect(page).to have_content("Invitation emails are currently disabled in this instance. Users will not receive invitation emails.")
+    end
+  else
+    it "does not show the invitations disabled warning in the admin dashboard" do
+      expect(page).to have_no_content("Warning: Invitations Disabled")
     end
   end
 end

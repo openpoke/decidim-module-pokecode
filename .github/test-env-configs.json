@@ -12,7 +12,8 @@
     "DISABLE_POKECODE_FOOTER": "",
     "DISABLE_LANGUAGE_MENU": "",
     "DISABLE_ASSEMBLY_MEMBERS_VISIBLE": "",
-    "ALLOWED_RECIPIENTS": ""
+    "ALLOWED_RECIPIENTS": "",
+    "DISABLE_INVITATIONS": ""
   },
   {
     "env-config": "all-disabled",
@@ -27,7 +28,8 @@
     "DISABLE_POKECODE_FOOTER": "1",
     "DISABLE_LANGUAGE_MENU": "1",
     "DISABLE_ASSEMBLY_MEMBERS_VISIBLE": "1",
-    "ALLOWED_RECIPIENTS": "recipient1@example.com recipient2@example.com"
+    "ALLOWED_RECIPIENTS": "recipient1@example.com recipient2@example.com",
+    "DISABLE_INVITATIONS": "true"
   },
   {
     "env-config": "footer-only",
@@ -42,7 +44,8 @@
     "DISABLE_POKECODE_FOOTER": "",
     "DISABLE_LANGUAGE_MENU": "1",
     "DISABLE_ASSEMBLY_MEMBERS_VISIBLE": "1",
-    "ALLOWED_RECIPIENTS": ""
+    "ALLOWED_RECIPIENTS": "",
+    "DISABLE_INVITATIONS": ""
   },
   {
     "env-config": "language-menu-only",
@@ -57,7 +60,8 @@
     "DISABLE_POKECODE_FOOTER": "1",
     "DISABLE_LANGUAGE_MENU": "",
     "DISABLE_ASSEMBLY_MEMBERS_VISIBLE": "1",
-    "ALLOWED_RECIPIENTS": ""
+    "ALLOWED_RECIPIENTS": "",
+    "DISABLE_INVITATIONS": ""
   },
   {
     "env-config": "assembly-members-visible-only",
@@ -72,7 +76,8 @@
     "DISABLE_POKECODE_FOOTER": "1",
     "DISABLE_LANGUAGE_MENU": "1",
     "DISABLE_ASSEMBLY_MEMBERS_VISIBLE": "",
-    "ALLOWED_RECIPIENTS": "recipient1@example.com recipient2@example.com"
+    "ALLOWED_RECIPIENTS": "recipient1@example.com recipient2@example.com",
+    "DISABLE_INVITATIONS": ""
   },
   {
     "env-config": "admin-iframe-only",
@@ -87,6 +92,7 @@
     "DISABLE_POKECODE_FOOTER": "1",
     "DISABLE_LANGUAGE_MENU": "1",
     "DISABLE_ASSEMBLY_MEMBERS_VISIBLE": "1",
-    "ALLOWED_RECIPIENTS": "recipient1@example.com recipient2@example.com"
+    "ALLOWED_RECIPIENTS": "recipient1@example.com recipient2@example.com",
+    "DISABLE_INVITATIONS": ""
   }
 ]
