@@ -150,6 +150,12 @@ module Decidim
           if defined?(SemanticLogger) && Rails.env.production?
             $stdout.sync = true
             config.rails_semantic_logger.add_file_appender = false
+
+            # Remove any existing file appenders
+            SemanticLogger.appenders.each do |appender|
+              SemanticLogger.remove_appender(appender) if appender.is_a?(SemanticLogger::Appender::File)
+            end
+
             config.semantic_logger.add_appender(io: $stdout, formatter: config.rails_semantic_logger.format)
             Rails.logger.info "[Decidim::Pokecode] SemanticLogger logging to STDOUT enabled."
           else
