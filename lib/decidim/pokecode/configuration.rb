@@ -86,6 +86,10 @@ module Decidim
       }
     end
 
+    config_accessor :email_white_header_enabled do
+      Decidim::Env.new("DISABLE_EMAIL_WHITE_HEADER", false).blank?
+    end
+
     def self.rack_attack_skip
       Pokecode.rack_attack_skip_param || Rails.application.secret_key_base&.first(6)
     end

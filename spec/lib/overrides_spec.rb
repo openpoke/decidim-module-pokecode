@@ -11,7 +11,9 @@ checksums = [
     files: {
       "/app/views/layouts/decidim/header/_main.html.erb" => "a090eeca739613446d2eab8f4de513b1",
       "/app/models/decidim/notification.rb" => "c771f2277c1e4bdfdef6425fb726c78d", # TODO: remove when fixed upstream
-      "/lib/tasks/decidim_tasks.rake" => "24289c09b9dab157eefe2aa366a4222b"
+      "/lib/tasks/decidim_tasks.rake" => "24289c09b9dab157eefe2aa366a4222b",
+      "/app/views/layouts/decidim/mailer.html.erb" => "6a08103c75e5db737a38cd365428a177",
+      "/app/views/layouts/decidim/newsletter_base.html.erb" => "28111c73d348ec8d1cdc1180d3ff5d21"
     }
   },
   {
