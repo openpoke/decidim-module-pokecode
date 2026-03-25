@@ -11,6 +11,9 @@ module Decidim
           Decidim::Core::Engine.routes do
             get "/locale", to: "locales#create", as: :set_locale
           end
+          Rails.logger.info "[Decidim::Pokecode] Locale setting via GET enabled."
+        else
+          Rails.logger.info "[Decidim::Pokecode] Locale setting via GET disabled."
         end
       end
 
