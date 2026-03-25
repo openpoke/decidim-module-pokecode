@@ -10,16 +10,17 @@ checksums = [
     package: "decidim-core",
     files: {
       "/app/views/layouts/decidim/header/_main.html.erb" => "a090eeca739613446d2eab8f4de513b1",
-      "/app/models/decidim/notification.rb" => "c771f2277c1e4bdfdef6425fb726c78d", # TODO: remove when fixed upstream
+      "/app/models/decidim/notification.rb" => "4510aadea1546d3590a768eddf8a172c", # TODO: remove when fixed upstream
       "/lib/tasks/decidim_tasks.rake" => "24289c09b9dab157eefe2aa366a4222b",
       "/app/views/layouts/decidim/mailer.html.erb" => "6a08103c75e5db737a38cd365428a177",
-      "/app/views/layouts/decidim/newsletter_base.html.erb" => "28111c73d348ec8d1cdc1180d3ff5d21"
+      "/app/views/layouts/decidim/newsletter_base.html.erb" => "28111c73d348ec8d1cdc1180d3ff5d21",
+      "/app/controllers/decidim/locales_controller.rb" => "59642cefd266b6648986ba6368ad75e8"
     }
   },
   {
     package: "decidim-assemblies",
     files: {
-      "/app/models/decidim/assembly.rb" => "8347a13aa324c6dce4528829f06119e3",
+      "/app/models/decidim/assembly.rb" => "0a821e89a6f470d1cf370fa7eb474236",
       "/app/permissions/decidim/assemblies/permissions.rb" => "f26397a30c34eeb60af141b8ef0eb1bb"
     }
   },

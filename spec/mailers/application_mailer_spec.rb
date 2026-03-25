@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
+require_relative "../shared/mailer_examples"
 
 module Decidim
   describe BlockUserMailer do
@@ -16,10 +17,6 @@ module Decidim
     let(:resource) { user }
     let(:event_class_name) { "Decidim::ProfileUpdatedEvent" }
     let(:event) { "decidim.events.users.profile_updated" }
-    let(:event_instance) do
-      event_class_name.constantize.new(resource:, event_name: event, user:, user_role: :follower)
-    end
-
     let(:mail) { described_class.event_received(event, event_class_name, resource, user, :follower, {}) }
 
     it_behaves_like "conditionally applies white background to email"
