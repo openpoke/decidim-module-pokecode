@@ -6,6 +6,14 @@ module Decidim
     class Engine < ::Rails::Engine
       isolate_namespace Decidim::Pokecode
 
+      initializer "pokecode.locales_by_get" do
+        if Decidim::Pokecode.locale_get_path_enabled
+          Decidim::Core::Engine.routes do
+            get "/locale", to: "locales#create", as: :set_locale
+          end
+        end
+      end
+
       initializer "pokecode.sidekiq" do
         if Decidim::Pokecode.sidekiq_enabled
           Decidim::Core::Engine.routes do

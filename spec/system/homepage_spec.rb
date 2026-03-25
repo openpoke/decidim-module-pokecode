@@ -40,4 +40,31 @@ describe "Homepage" do
       expect(page).to have_no_css("script[data-website-id]", visible: :all)
     end
   end
+
+  if Decidim::Pokecode.locale_get_path_enabled
+    it "locale can be changed through GET request" do
+      expect(page).to have_content("Activity")
+      within "#trigger-dropdown-language-chooser" do
+        expect(page).to have_content("English")
+      end
+
+      visit "/locale?locale=ca"
+
+      expect(page).to have_content("Activitat")
+      within "#trigger-dropdown-language-chooser" do
+        expect(page).to have_content("Català")
+      end
+    end
+  else
+    it "locale cannot be changed through GET request" do
+      expect(page).to have_content("Activity")
+      within "#trigger-dropdown-language-chooser" do
+        expect(page).to have_content("English")
+      end
+
+      visit "/locale?locale=ca"
+
+      expect(page).to have_content("Routing Error")
+    end
+  end
 end
