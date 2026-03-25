@@ -36,6 +36,8 @@ This plugin relies on the command `decidim:upgrade` to make sure common files ar
 | `CONTENT_SECURITY_POLICY` | Sets custom Content Security Policy headers for enhanced security. When set, it is added to the default CSP configuration. | `""` (disabled) | |
 | `ALLOWED_RECIPIENTS` | A list of emails or domains that must match in order to send an email, separated by spaces. For instance `@pokecode.net johnsmith@gmail.com`. Exact email addresses (without a leading `@`) must match the full recipient email, while domain patterns starting with `@` are matched as suffixes of the recipient email. Leave empty to disable any interception. | `""` |
 | `DISABLE_INVITATIONS` | Prevents all invitation emails from being sent by intercepting emails with the `invitation-instructions` header. This is useful for development or testing environments. | `false` | |
+| `DISABLE_EMAIL_WHITE_HEADER` | Disables the white header deface override injected into email and newsletter layouts (`layouts/decidim/mailer` and `layouts/decidim/newsletter_base`). | `false` | |
+| `DISABLE_LOCALE_GET_PATH` | Disables the locale-switching via GET request (`GET /locale`). When enabled, the route is registered as `set_locale` so the locale can be changed with a plain link instead of a form POST. | `false` | |
 
 ## Installation
 
