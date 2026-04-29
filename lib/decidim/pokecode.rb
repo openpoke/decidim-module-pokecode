@@ -17,6 +17,7 @@ end
 if Decidim::Pokecode.sidekiq_enabled
   require "sidekiq"
   require "sidekiq/cron"
+  require "sentry-sidekiq" if Decidim::Pokecode.sentry_enabled
 end
 
 require "decidim/pokecode/admin"

@@ -6,51 +6,6 @@ module Decidim
     class Engine < ::Rails::Engine
       isolate_namespace Decidim::Pokecode
 
-      initializer "pokecode.locales_by_get" do
-        if Decidim::Pokecode.locale_get_path_enabled
-          Decidim::Core::Engine.routes do
-            get "/locale", to: "locales#create", as: :set_locale
-          end
-          Rails.logger.info "[Decidim::Pokecode] Locale setting via GET enabled."
-        else
-          Rails.logger.info "[Decidim::Pokecode] Locale setting via GET disabled."
-        end
-      end
-
-      initializer "pokecode.sidekiq" do
-        if Decidim::Pokecode.sidekiq_enabled
-          Decidim::Core::Engine.routes do
-            require "sidekiq/web"
-            require "sidekiq/cron/web"
-            authenticate :user, ->(u) { u.admin? } do
-              mount Sidekiq::Web => "/sidekiq"
-            end
-          end
-          # For queue adapter configuration
-          config.active_job.queue_adapter = :sidekiq
-          Rails.logger.info "[Decidim::Pokecode] Sidekiq Web UI enabled."
-        else
-          Rails.logger.info "[Decidim::Pokecode] Sidekiq Web UI disabled."
-        end
-      end
-
-      initializer "pokecode.health_check_ssl_exclusion", before: :build_middleware_stack do |app|
-        if defined?(HealthCheck)
-          # Ensure health_check endpoints bypass SSL redirection for Docker/load balancer health checks
-          app.config.ssl_options ||= {}
-          app.config.ssl_options[:redirect] ||= {}
-          app.config.ssl_options[:redirect][:exclude] = ->(request) { request.path =~ /health_check/ }
-          Rails.logger.info "[Decidim::Pokecode] SSL exclusion for health_check enabled."
-        end
-
-        if Decidim::Pokecode.queue_adapter.present?
-          ActiveJob::Base.queue_adapter = Decidim::Pokecode.queue_adapter.to_sym
-          Rails.logger.info "[Decidim::Pokecode] ActiveJob queue adapter set to #{Decidim::Pokecode.queue_adapter}."
-        else
-          Rails.logger.info "[Decidim::Pokecode] ActiveJob queue adapter not set."
-        end
-      end
-
       config.to_prepare do
         if Decidim::Pokecode.assembly_members_visible_enabled
           Decidim::Assembly.include(Decidim::Pokecode::AssemblyOverride)
@@ -103,6 +58,71 @@ module Decidim
                                :partial => "decidim/pokecode/admin/invitations_disabled_warning")
           Rails.logger.info "[Decidim::Pokecode] Invitations disabled warning deface override registered."
         end
+
+        Rails.application.config.to_prepare do
+          if Decidim::Pokecode.allowed_recipients_list.any?
+            unless ActionMailer::Base.try(:delivery_interceptors)&.include?(Decidim::Pokecode::AllowedRecipientsMailInterceptor)
+              ActionMailer::Base.register_interceptor(Decidim::Pokecode::AllowedRecipientsMailInterceptor)
+            end
+            Rails.logger.info "[Decidim::Pokecode] Allowed recipients mail interceptor enabled. Allowed recipients: #{Decidim::Pokecode.allowed_recipients_list.join(", ")}"
+          else
+            Rails.logger.info "[Decidim::Pokecode] Allowed recipients mail interceptor disabled."
+          end
+
+          if Decidim::Pokecode.disable_invitations
+            unless ActionMailer::Base.try(:delivery_interceptors)&.include?(Decidim::Pokecode::DisableInvitationsMailInterceptor)
+              ActionMailer::Base.register_interceptor(Decidim::Pokecode::DisableInvitationsMailInterceptor)
+            end
+            Rails.logger.info "[Decidim::Pokecode] Invitations disabled via mail interceptor."
+          else
+            Rails.logger.info "[Decidim::Pokecode] Invitations not disabled via mail interceptor."
+          end
+        end
+      end
+
+      initializer "pokecode.locales_by_get" do
+        if Decidim::Pokecode.locale_get_path_enabled
+          Decidim::Core::Engine.routes do
+            get "/locale", to: "locales#create", as: :set_locale
+          end
+          Rails.logger.info "[Decidim::Pokecode] Locale setting via GET enabled."
+        else
+          Rails.logger.info "[Decidim::Pokecode] Locale setting via GET disabled."
+        end
+      end
+
+      initializer "pokecode.sidekiq" do
+        if Decidim::Pokecode.sidekiq_enabled
+          Decidim::Core::Engine.routes do
+            require "sidekiq/web"
+            require "sidekiq/cron/web"
+            authenticate :user, ->(u) { u.admin? } do
+              mount Sidekiq::Web => "/sidekiq"
+            end
+          end
+          # For queue adapter configuration
+          config.active_job.queue_adapter = :sidekiq
+          Rails.logger.info "[Decidim::Pokecode] Sidekiq Web UI enabled."
+        else
+          Rails.logger.info "[Decidim::Pokecode] Sidekiq Web UI disabled."
+        end
+      end
+
+      initializer "pokecode.health_check_ssl_exclusion", before: :build_middleware_stack do |app|
+        if defined?(HealthCheck)
+          # Ensure health_check endpoints bypass SSL redirection for Docker/load balancer health checks
+          app.config.ssl_options ||= {}
+          app.config.ssl_options[:redirect] ||= {}
+          app.config.ssl_options[:redirect][:exclude] = ->(request) { request.path =~ /health_check/ }
+          Rails.logger.info "[Decidim::Pokecode] SSL exclusion for health_check enabled."
+        end
+
+        if Decidim::Pokecode.queue_adapter.present?
+          ActiveJob::Base.queue_adapter = Decidim::Pokecode.queue_adapter.to_sym
+          Rails.logger.info "[Decidim::Pokecode] ActiveJob queue adapter set to #{Decidim::Pokecode.queue_adapter}."
+        else
+          Rails.logger.info "[Decidim::Pokecode] ActiveJob queue adapter not set."
+        end
       end
 
       initializer "pokecode.zeitwerk_ignore_deface" do
@@ -118,6 +138,7 @@ module Decidim
             # Add data like request headers and IP for users, if applicable;
             # see https://docs.sentry.io/platforms/ruby/data-management/data-collected/ for more info
             config.send_default_pii = true
+            config.include_local_variables = true
           end
           Rails.logger.info "[Decidim::Pokecode] Sentry enabled to DSN #{Decidim::Pokecode.sentry_dsn}."
         else
@@ -207,28 +228,6 @@ module Decidim
 
       initializer "pokecode.shakapacker.assets_path" do
         Decidim.register_assets_path File.expand_path("app/packs", root)
-      end
-
-      initializer "pokecode.mail_interceptor" do
-        Rails.application.config.to_prepare do
-          if Decidim::Pokecode.allowed_recipients_list.any?
-            unless ActionMailer::Base.try(:delivery_interceptors)&.include?(Decidim::Pokecode::AllowedRecipientsMailInterceptor)
-              ActionMailer::Base.register_interceptor(Decidim::Pokecode::AllowedRecipientsMailInterceptor)
-            end
-            Rails.logger.info "[Decidim::Pokecode] Allowed recipients mail interceptor enabled. Allowed recipients: #{Decidim::Pokecode.allowed_recipients_list.join(", ")}"
-          else
-            Rails.logger.info "[Decidim::Pokecode] Allowed recipients mail interceptor disabled."
-          end
-
-          if Decidim::Pokecode.disable_invitations
-            unless ActionMailer::Base.try(:delivery_interceptors)&.include?(Decidim::Pokecode::DisableInvitationsMailInterceptor)
-              ActionMailer::Base.register_interceptor(Decidim::Pokecode::DisableInvitationsMailInterceptor)
-            end
-            Rails.logger.info "[Decidim::Pokecode] Invitations disabled via mail interceptor."
-          else
-            Rails.logger.info "[Decidim::Pokecode] Invitations not disabled via mail interceptor."
-          end
-        end
       end
     end
   end
