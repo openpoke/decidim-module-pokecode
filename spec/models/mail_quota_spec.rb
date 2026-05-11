@@ -9,6 +9,7 @@ module Decidim::Pokecode
 
     before do
       allow(Redis).to receive(:new).and_return(redis)
+      allow(MailQuota).to receive(:redis).and_return(redis)
       allow(Time).to receive(:current).and_return(now)
     end
 

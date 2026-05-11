@@ -52,7 +52,7 @@ module Decidim
       private
 
       def redis
-        @redis ||= Redis.new(url: ENV.fetch("REDIS_URL", "redis://localhost:6379/0"))
+        self.class.redis
       end
 
       def end_of_day(time)
@@ -61,6 +61,10 @@ module Decidim
 
       def end_of_month(time)
         time.end_of_month
+      end
+
+      def self.redis
+        @redis ||= Redis.new(url: ENV.fetch("REDIS_URL", "redis://localhost:6379/0"))
       end
     end
   end

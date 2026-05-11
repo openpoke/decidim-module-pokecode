@@ -21,15 +21,11 @@ module Decidim
 
         if daily_limit_exceeded?(quota)
           skip_delivery!(message, :daily, quota.daily_count, Decidim::Pokecode.max_emails_per_day)
-          return
-        end
-
-        if monthly_limit_exceeded?(quota)
+        elsif monthly_limit_exceeded?(quota)
           skip_delivery!(message, :monthly, quota.monthly_count, Decidim::Pokecode.max_emails_per_month)
-          return
+        else
+          quota.increment!
         end
-
-        quota.increment!
       end
 
       def self.daily_limit_exceeded?(quota)
