@@ -73,6 +73,16 @@ module Decidim
       Decidim::Env.new("DISABLE_INVITATIONS", false).present?
     end
 
+    config_accessor :max_emails_per_day do
+      val = Decidim::Env.new("ACTION_MAILER_MAX_EMAILS_PER_DAY", nil).value
+      val.present? ? val.to_i : nil
+    end
+
+    config_accessor :max_emails_per_month do
+      val = Decidim::Env.new("ACTION_MAILER_MAX_EMAILS_PER_MONTH", nil).value
+      val.present? ? val.to_i : nil
+    end
+
     config_accessor :content_security_policies_extra do
       {
         "connect-src" => ENV.fetch("CONTENT_SECURITY_POLICY", "").split,
@@ -123,6 +133,10 @@ module Decidim
       urls << Pokecode.aws_cdn_host if Pokecode.aws_cdn_host.present?
       urls << ActiveStorage::Blob.service.bucket.url if defined?(ActiveStorage::Service::S3Service) && ActiveStorage::Blob.service.is_a?(ActiveStorage::Service::S3Service)
       urls
+    end
+
+    def self.rate_limit_enabled?
+      Pokecode.max_emails_per_day.present? || Pokecode.max_emails_per_month.present?
     end
   end
 end
