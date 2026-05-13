@@ -27,6 +27,7 @@ module Decidim
         origin = "#{analytics_uri.scheme}://#{analytics_uri.host}"
         origin += ":#{analytics_uri.port}" if analytics_uri.port && [80, 443].exclude?(analytics_uri.port)
         content_security_policy.append_csp_directive("script-src", origin)
+        content_security_policy.append_csp_directive("connect-src", origin)
       end
     end
   end
