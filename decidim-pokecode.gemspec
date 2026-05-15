@@ -31,6 +31,7 @@ Gem::Specification.new do |s|
   s.add_dependency "decidim-core", Decidim::Pokecode::COMPAT_DECIDIM_VERSION
   s.add_dependency "deface", ">= 1.5"
   s.add_dependency "health_check"
+  s.add_dependency "jwt", "~> 3.1.2" # there is a bug with jwt 3.2.0 that affects decidim preventing login
   s.add_dependency "rails_semantic_logger"
   s.add_dependency "sentry-rails"
   s.add_dependency "sentry-ruby"
