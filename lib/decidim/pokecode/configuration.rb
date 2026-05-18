@@ -94,6 +94,10 @@ module Decidim
       Decidim::Env.new("DISABLE_LOCALE_GET_PATH", false).blank?
     end
 
+    config_accessor :unsafe_html_blocks do
+      Decidim::Env.new("UNSAFE_HTML_BLOCKS", false).present?
+    end
+
     def self.rack_attack_skip
       Pokecode.rack_attack_skip_param || Rails.application.secret_key_base&.first(6)
     end
