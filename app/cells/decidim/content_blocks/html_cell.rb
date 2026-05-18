@@ -8,7 +8,7 @@ module Decidim
       end
 
       def html_content
-        if Decidim::Pokecode.allow_html_blocks
+        if Decidim::Pokecode.unsafe_html_blocks
           translated_attribute(model.settings.html_content).html_safe
         else
           decidim_sanitize_editor_admin(translated_attribute(model.settings.html_content))

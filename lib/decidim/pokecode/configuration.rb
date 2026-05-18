@@ -94,8 +94,8 @@ module Decidim
       Decidim::Env.new("DISABLE_LOCALE_GET_PATH", false).blank?
     end
 
-    config_accessor :allow_html_blocks do
-      Decidim::Env.new("ALLOW_HTML_BLOCKS", true).present?
+    config_accessor :unsafe_html_blocks do
+      Decidim::Env.new("UNSAFE_HTML_BLOCKS", false).present?
     end
 
     def self.rack_attack_skip

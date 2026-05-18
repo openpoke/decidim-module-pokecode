@@ -16,7 +16,7 @@
     "DISABLE_LOCALE_GET_PATH": "",
     "ALLOWED_RECIPIENTS": "",
     "DISABLE_INVITATIONS": "",
-    "ALLOW_HTML_BLOCKS": ""
+    "UNSAFE_HTML_BLOCKS": ""
   },
   {
     "env-config": "all-disabled",
@@ -35,7 +35,7 @@
     "DISABLE_LOCALE_GET_PATH": "1",
     "ALLOWED_RECIPIENTS": "recipient1@example.com recipient2@example.com",
     "DISABLE_INVITATIONS": "true",
-    "ALLOW_HTML_BLOCKS": "false"
+    "UNSAFE_HTML_BLOCKS": ""
   },
   {
     "env-config": "footer-only",
@@ -54,7 +54,7 @@
     "DISABLE_EMAIL_WHITE_HEADER": "",
     "DISABLE_LOCALE_GET_PATH": "",
     "DISABLE_INVITATIONS": "",
-    "ALLOW_HTML_BLOCKS": ""
+    "UNSAFE_HTML_BLOCKS": ""
   },
   {
     "env-config": "language-menu-only",
@@ -73,7 +73,7 @@
     "DISABLE_LOCALE_GET_PATH": "",
     "ALLOWED_RECIPIENTS": "",
     "DISABLE_INVITATIONS": "",
-    "ALLOW_HTML_BLOCKS": ""
+    "UNSAFE_HTML_BLOCKS": ""
   },
   {
     "env-config": "assembly-members-visible-only",
@@ -92,7 +92,7 @@
     "DISABLE_EMAIL_WHITE_HEADER": "",
     "DISABLE_LOCALE_GET_PATH": "",
     "DISABLE_INVITATIONS": "",
-    "ALLOW_HTML_BLOCKS": ""
+    "UNSAFE_HTML_BLOCKS": ""
   },
   {
     "env-config": "admin-iframe-only",
@@ -111,6 +111,6 @@
     "DISABLE_EMAIL_WHITE_HEADER": "",
     "DISABLE_LOCALE_GET_PATH": "",
     "DISABLE_INVITATIONS": "",
-    "ALLOW_HTML_BLOCKS": ""
+    "UNSAFE_HTML_BLOCKS": ""
   }
 ]

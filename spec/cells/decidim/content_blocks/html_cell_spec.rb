@@ -11,8 +11,8 @@ describe Decidim::ContentBlocks::HtmlCell, type: :cell do
 
   controller Decidim::PagesController
 
-  context "when ALLOW_HTML_BLOCKS is enabled (default)" do
-    before { allow(Decidim::Pokecode).to receive(:allow_html_blocks).and_return(true) }
+  context "when UNSAFE_HTML_BLOCKS is enabled" do
+    before { allow(Decidim::Pokecode).to receive(:unsafe_html_blocks).and_return(true) }
 
     context "with safe HTML" do
       let(:html_content) { "<p>Gotta catch <strong>world</strong></p>" }
@@ -32,8 +32,8 @@ describe Decidim::ContentBlocks::HtmlCell, type: :cell do
     end
   end
 
-  context "when ALLOW_HTML_BLOCKS is disabled" do
-    before { allow(Decidim::Pokecode).to receive(:allow_html_blocks).and_return(false) }
+  context "when UNSAFE_HTML_BLOCKS is disabled" do
+    before { allow(Decidim::Pokecode).to receive(:unsafe_html_blocks).and_return(false) }
 
     context "with a script tag" do
       let(:html_content) { '<p>Gotta catch me</p><script>alert("xss")</script>' }
