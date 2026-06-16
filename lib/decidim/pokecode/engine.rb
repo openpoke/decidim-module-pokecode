@@ -77,6 +77,17 @@ module Decidim
           else
             Rails.logger.info "[Decidim::Pokecode] Invitations not disabled via mail interceptor."
           end
+
+          if Decidim::Pokecode.rate_limit_enabled?
+            unless ActionMailer::Base.try(:delivery_interceptors)&.include?(Decidim::Pokecode::RateLimitMailInterceptor)
+              ActionMailer::Base.register_interceptor(Decidim::Pokecode::RateLimitMailInterceptor)
+            end
+            Rails.logger.info "[Decidim::Pokecode] Rate limit mail interceptor enabled. " \
+                              "Max per day: #{Decidim::Pokecode.max_emails_per_day || "unlimited"}, " \
+                              "Max per month: #{Decidim::Pokecode.max_emails_per_month || "unlimited"}."
+          else
+            Rails.logger.info "[Decidim::Pokecode] Rate limit mail interceptor disabled."
+          end
         end
       end
 
