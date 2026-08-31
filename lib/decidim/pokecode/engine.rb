@@ -80,17 +80,6 @@ module Decidim
         end
       end
 
-      initializer "pokecode.locales_by_get" do
-        if Decidim::Pokecode.locale_get_path_enabled
-          Decidim::Core::Engine.routes do
-            get "/locale", to: "locales#create", as: :set_locale
-          end
-          Rails.logger.info "[Decidim::Pokecode] Locale setting via GET enabled."
-        else
-          Rails.logger.info "[Decidim::Pokecode] Locale setting via GET disabled."
-        end
-      end
-
       initializer "pokecode.sidekiq" do
         if Decidim::Pokecode.sidekiq_enabled
           Decidim::Core::Engine.routes do

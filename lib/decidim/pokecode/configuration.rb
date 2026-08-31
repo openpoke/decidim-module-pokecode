@@ -90,10 +90,6 @@ module Decidim
       Decidim::Env.new("DISABLE_EMAIL_WHITE_HEADER", false).blank?
     end
 
-    config_accessor :locale_get_path_enabled do
-      Decidim::Env.new("DISABLE_LOCALE_GET_PATH", false).blank?
-    end
-
     config_accessor :unsafe_html_blocks do
       Decidim::Env.new("UNSAFE_HTML_BLOCKS", false).present?
     end
