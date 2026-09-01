@@ -82,15 +82,15 @@ module Decidim
       end
     end
 
-    unless Decidim::Pokecode.assembly_members_visible_enabled
-      it "loads AssemblyOverride" do
-        expect(Decidim::Assembly.included_modules).to include(Decidim::Pokecode::AssemblyOverride)
-        expect(Decidim::Assemblies::Permissions.included_modules).to include(Decidim::Pokecode::AssembliesPermissionsOverride)
-      end
-    else
+    if Decidim::Pokecode.assembly_members_visible_enabled
       it "does not load AssemblyOverride" do
         expect(Decidim::Assembly.included_modules).not_to include(Decidim::Pokecode::AssemblyOverride)
         expect(Decidim::Assemblies::Permissions.included_modules).not_to include(Decidim::Pokecode::AssembliesPermissionsOverride)
+      end
+    else
+      it "loads AssemblyOverride" do
+        expect(Decidim::Assembly.included_modules).to include(Decidim::Pokecode::AssemblyOverride)
+        expect(Decidim::Assemblies::Permissions.included_modules).to include(Decidim::Pokecode::AssembliesPermissionsOverride)
       end
     end
   end
