@@ -35,7 +35,7 @@ describe "Admin" do
 
     it "denies access to /sidekiq for unauthenticated users" do
       visit "/sidekiq"
-      expect(page).to have_current_path("/users/sign_in")
+      expect(page).to have_current_path("/en/users/sign_in")
     end
   else
     it "denies access to /sidekiq for all users" do

@@ -6,9 +6,9 @@ module Decidim
       extend ActiveSupport::Concern
 
       included do
-        # This is a overwrite for Decidim::HasPrivateUsers.members_public_page?
+        # This is a overwrite for Decidim::ParticipatorySpace::HasMembers.members_public_page?
         def members_public_page?
-          participatory_space_private_users.published.any?
+          members.published.any?
         end
       end
     end

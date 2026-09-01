@@ -22,7 +22,7 @@ checksums = [
     package: "decidim-assemblies",
     files: {
       "/app/models/decidim/assembly.rb" => "27eaae12c695bcbfdb708f454dfda7c3",
-      "/app/permissions/decidim/assemblies/permissions.rb" => "8bbe034150de4336d42a4deb59c7e79c"
+      "/app/permissions/decidim/assemblies/permissions.rb" => "6d4578e770574c3d3e126e38ca97ce4a"
     }
   },
   {

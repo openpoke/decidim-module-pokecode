@@ -71,3 +71,4 @@ spec/decidim_dummy_app*
 development_app
 /app/static/api/docs
 
+/public/sw.js*
