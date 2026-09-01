@@ -8,7 +8,7 @@ module Decidim
       included do
         # This is a overwrite for Decidim::ParticipatorySpace::HasMembers.members_public_page?
         def members_public_page?
-          members.published.any?
+          false
         end
       end
     end

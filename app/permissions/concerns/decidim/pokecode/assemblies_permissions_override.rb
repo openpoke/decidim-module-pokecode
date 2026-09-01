@@ -6,10 +6,10 @@ module Decidim
       extend ActiveSupport::Concern
 
       included do
-        def user_can_read_private_users?
-          return false unless permission_action.subject == :space_private_user
+        def user_can_read_members?
+          return false unless permission_action.subject == :space_member
 
-          toggle_allow(user.admin? || can_manage_assembly?(role: :admin) || can_manage_assembly?(role: :collaborator))
+          disallow!
         end
       end
     end

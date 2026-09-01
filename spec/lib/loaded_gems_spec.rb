@@ -82,7 +82,7 @@ module Decidim
       end
     end
 
-    if Decidim::Pokecode.assembly_members_visible_enabled
+    unless Decidim::Pokecode.assembly_members_visible_enabled
       it "loads AssemblyOverride" do
         expect(Decidim::Assembly.included_modules).to include(Decidim::Pokecode::AssemblyOverride)
         expect(Decidim::Assemblies::Permissions.included_modules).to include(Decidim::Pokecode::AssembliesPermissionsOverride)
