@@ -22,7 +22,7 @@ describe "Admin" do
     it "allows access to /admin/iframe for admin users" do
       login_as admin, scope: :user
       visit "/admin/iframe"
-      expect(page).to have_current_path("/admin/iframe")
+      expect(page).to have_current_path("/#{I18n.locale}/admin/iframe")
     end
 
     it "denies access to /admin/iframe for non-admin users" do
@@ -34,7 +34,7 @@ describe "Admin" do
 
     it "denies access to /admin/iframe for unauthenticated users" do
       visit "/admin/iframe"
-      expect(page).to have_current_path("/users/sign_in")
+      expect(page).to have_current_path("/#{I18n.locale}/users/sign_in")
     end
   else
     it "denies access to /admin/iframe for all users" do

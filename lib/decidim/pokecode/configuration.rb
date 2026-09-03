@@ -40,10 +40,6 @@ module Decidim
       Decidim::Env.new("DISABLE_LANGUAGE_MENU", false).blank?
     end
 
-    config_accessor :assembly_members_visible_enabled do
-      Decidim::Env.new("DISABLE_ASSEMBLY_MEMBERS_VISIBLE", false).blank?
-    end
-
     config_accessor :umami_analytics_id do
       Decidim::Env.new("UMAMI_ANALYTICS_ID", "").value
     end
@@ -88,10 +84,6 @@ module Decidim
 
     config_accessor :email_white_header_enabled do
       Decidim::Env.new("DISABLE_EMAIL_WHITE_HEADER", false).blank?
-    end
-
-    config_accessor :locale_get_path_enabled do
-      Decidim::Env.new("DISABLE_LOCALE_GET_PATH", false).blank?
     end
 
     config_accessor :unsafe_html_blocks do
