@@ -7,14 +7,6 @@ module Decidim
       isolate_namespace Decidim::Pokecode
 
       config.to_prepare do
-        if Decidim::Pokecode.assembly_members_visible_enabled
-          Rails.logger.info "[Decidim::Pokecode] Assembly members visibility override disabled."
-        else
-          Decidim::Assembly.include(Decidim::Pokecode::AssemblyOverride)
-          Decidim::Assemblies::Permissions.include(Decidim::Pokecode::AssembliesPermissionsOverride)
-          Rails.logger.info "[Decidim::Pokecode] Assembly members visibility override enabled."
-        end
-
         # TODO: remove when fixes upstream
         Decidim::Notification.include(Decidim::Pokecode::NotificationOverride)
         Rails.logger.info "[Decidim::Pokecode] Notification override applied."
