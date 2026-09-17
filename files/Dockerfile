@@ -6,6 +6,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y ca-certificates c
     apt-get update && apt-get install -y nodejs \
     build-essential \
     postgresql-client \
+    libvips libvips-tools \
     p7zip \
     libpq-dev && \
     apt-get clean
