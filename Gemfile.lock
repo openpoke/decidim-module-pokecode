@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    decidim-pokecode (0.3.0)
+    decidim-pokecode (0.4.0)
       aws-sdk-s3
       decidim-core (>= 0.32, < 0.33)
       deface (>= 1.5)
@@ -1178,7 +1178,7 @@ CHECKSUMS
   decidim-meetings (0.32.1) sha256=f33611c8f3fc5faa030e6db8f67fad8f0d18ec0b0ca856b4269fec709d18db57
   decidim-pages (0.32.1) sha256=70000c649be680cfcf7db1712c0ba8c6b2b42065f0f186579c14b0d177f04b83
   decidim-participatory_processes (0.32.1) sha256=ea8a71ad02d672f053a73522d1a7608b798827014941de5f58889fd0ead59dd7
-  decidim-pokecode (0.3.0)
+  decidim-pokecode (0.4.0)
   decidim-proposals (0.32.1) sha256=c428aaa125846f0730aea6922f3d273ddf8ca4a697b10969075522c1965b7630
   decidim-surveys (0.32.1) sha256=a266957999c884ad3399fe025537c3bdc16ebda000897609ba8ef0bf6ca16dd5
   decidim-system (0.32.1) sha256=414f151d586ff00c539bd911014da957735abfe27921a4a7eb9bee4915d7da67
