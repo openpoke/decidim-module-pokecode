@@ -7,14 +7,6 @@ module Decidim
       isolate_namespace Decidim::Pokecode
 
       config.to_prepare do
-        if Decidim::Pokecode.assembly_members_visible_enabled
-          Decidim::Assembly.include(Decidim::Pokecode::AssemblyOverride)
-          Decidim::Assemblies::Permissions.include(Decidim::Pokecode::AssembliesPermissionsOverride)
-          Rails.logger.info "[Decidim::Pokecode] Assembly members visibility override enabled."
-        else
-          Rails.logger.info "[Decidim::Pokecode] Assembly members visibility override disabled."
-        end
-
         # TODO: remove when fixes upstream
         Decidim::Notification.include(Decidim::Pokecode::NotificationOverride)
         Rails.logger.info "[Decidim::Pokecode] Notification override applied."
@@ -77,17 +69,6 @@ module Decidim
           else
             Rails.logger.info "[Decidim::Pokecode] Invitations not disabled via mail interceptor."
           end
-        end
-      end
-
-      initializer "pokecode.locales_by_get" do
-        if Decidim::Pokecode.locale_get_path_enabled
-          Decidim::Core::Engine.routes do
-            get "/locale", to: "locales#create", as: :set_locale
-          end
-          Rails.logger.info "[Decidim::Pokecode] Locale setting via GET enabled."
-        else
-          Rails.logger.info "[Decidim::Pokecode] Locale setting via GET disabled."
         end
       end
 

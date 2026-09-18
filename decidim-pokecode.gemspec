@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
     "bug_tracker_uri" => "https://github.com/openpoke/decidim-module-pokecode/issues",
     "source_code_uri" => "https://github.com/openpoke/decidim-module-pokecode"
   }
-  s.required_ruby_version = "~> 3.3"
+  s.required_ruby_version = "~> 3.4"
 
   s.name = "decidim-pokecode"
   s.summary = "A module for deploying and customizing Decidim applications by Pokecode."

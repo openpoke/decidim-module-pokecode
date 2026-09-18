@@ -1,4 +1,4 @@
-FROM ruby:3.3.10 AS builder
+FROM ruby:3.4.7 AS builder
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y ca-certificates curl gnupg && \
     mkdir -p /etc/apt/keyrings && \
@@ -6,6 +6,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y ca-certificates c
     apt-get update && apt-get install -y nodejs \
     build-essential \
     postgresql-client \
+    libvips libvips-tools \
     p7zip \
     libpq-dev && \
     apt-get clean
@@ -80,11 +81,12 @@ RUN mv config/credentials.bak config/credentials 2>/dev/null || true
 RUN rm -rf node_modules packages/*/node_modules tmp/* vendor/bundle test spec app/packs .git
 
 # This image is for production env only
-FROM ruby:3.3.10-slim AS final
+FROM ruby:3.4.7-slim AS final
 
 RUN apt-get update && \
     apt-get install -y postgresql-client \
     imagemagick \
+    libvips libvips-tools \
     curl \
     p7zip \
     supervisor && \

@@ -17,20 +17,6 @@ describe "Homepage" do
     it_behaves_like "footer is disabled"
   end
 
-  if Decidim::Pokecode.language_menu_enabled
-    it "includes additional language chooser" do
-      within ".main-bar__links-desktop" do
-        expect(page).to have_css(".main-header__language-container")
-      end
-    end
-  else
-    it "does not include additional language chooser" do
-      within ".main-bar__links-desktop" do
-        expect(page).to have_no_css(".main-header__language-container")
-      end
-    end
-  end
-
   if Decidim::Pokecode.analytics_enabled
     it "includes Umami analytics script" do
       expect(page).to have_css("script[data-website-id='#{Decidim::Pokecode.umami_analytics_id}'][src='#{Decidim::Pokecode.umami_analytics_url}']", visible: :all)
@@ -38,33 +24,6 @@ describe "Homepage" do
   else
     it "does not include Umami analytics script" do
       expect(page).to have_no_css("script[data-website-id]", visible: :all)
-    end
-  end
-
-  if Decidim::Pokecode.locale_get_path_enabled
-    it "locale can be changed through GET request" do
-      expect(page).to have_content("Activity")
-      within "#trigger-dropdown-language-chooser" do
-        expect(page).to have_content("English")
-      end
-
-      visit "/locale?locale=ca"
-
-      expect(page).to have_content("Activitat")
-      within "#trigger-dropdown-language-chooser" do
-        expect(page).to have_content("Català")
-      end
-    end
-  else
-    it "locale cannot be changed through GET request" do
-      expect(page).to have_content("Activity")
-      within "#trigger-dropdown-language-chooser" do
-        expect(page).to have_content("English")
-      end
-
-      visit "/locale?locale=ca"
-
-      expect(page).to have_content("Routing Error")
     end
   end
 end

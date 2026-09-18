@@ -2,101 +2,73 @@
 
 module Decidim
   module Pokecode
-    include ActiveSupport::Configurable
+    mattr_accessor :health_check_enabled,
+                   default: Decidim::Env.new("DISABLE_HEALTH_CHECK", false).blank?
 
-    config_accessor :health_check_enabled do
-      Decidim::Env.new("DISABLE_HEALTH_CHECK", false).blank?
-    end
+    mattr_accessor :semantic_logger_enabled,
+                   default: Decidim::Env.new("DISABLE_SEMANTIC_LOGGER", false).blank?
 
-    config_accessor :semantic_logger_enabled do
-      Decidim::Env.new("DISABLE_SEMANTIC_LOGGER", false).blank?
-    end
+    mattr_accessor :sidekiq_enabled,
+                   default: Decidim::Env.new("DISABLE_SIDEKIQ", false).blank?
 
-    config_accessor :sidekiq_enabled do
-      Decidim::Env.new("DISABLE_SIDEKIQ", false).blank?
-    end
+    mattr_accessor :queue_adapter,
+                   default: Decidim::Env.new("QUEUE_ADAPTER", Decidim::Env.new("DISABLE_SIDEKIQ", false).blank? ? "sidekiq" : "").value
+    mattr_accessor :sentry_dsn,
+                   default: Decidim::Env.new("SENTRY_DSN", "").value
 
-    config_accessor :queue_adapter do
-      Decidim::Env.new("QUEUE_ADAPTER", Decidim::Env.new("DISABLE_SIDEKIQ", false).blank? ? "sidekiq" : "").value
-    end
+    mattr_accessor :admin_iframe_url,
+                   default: Decidim::Env.new("ADMIN_IFRAME_URL", "").value
 
-    config_accessor :sentry_dsn do
-      Decidim::Env.new("SENTRY_DSN", "").value
-    end
+    mattr_accessor :admin_iframe_title,
+                   default: Decidim::Env.new("ADMIN_IFRAME_TITLE", "Web Stats").value
 
-    config_accessor :admin_iframe_url do
-      Decidim::Env.new("ADMIN_IFRAME_URL", "").value
-    end
+    mattr_accessor :pokecode_footer_enabled,
+                   default: Decidim::Env.new("DISABLE_POKECODE_FOOTER", false).blank?
 
-    config_accessor :admin_iframe_title do
-      Decidim::Env.new("ADMIN_IFRAME_TITLE", "Web Stats").value
-    end
+    mattr_accessor :language_menu_enabled,
+                   default: Decidim::Env.new("DISABLE_LANGUAGE_MENU", false).blank?
 
-    config_accessor :pokecode_footer_enabled do
-      Decidim::Env.new("DISABLE_POKECODE_FOOTER", false).blank?
-    end
+    mattr_accessor :umami_analytics_id,
+                   default: Decidim::Env.new("UMAMI_ANALYTICS_ID", "").value
 
-    config_accessor :language_menu_enabled do
-      Decidim::Env.new("DISABLE_LANGUAGE_MENU", false).blank?
-    end
+    mattr_accessor :umami_analytics_url,
+                   default: Decidim::Env.new("UMAMI_ANALYTICS_URL", "https://analytics.pokecode.net/script.js").value
 
-    config_accessor :assembly_members_visible_enabled do
-      Decidim::Env.new("DISABLE_ASSEMBLY_MEMBERS_VISIBLE", false).blank?
-    end
+    mattr_accessor :rack_attack_skip_param,
+                   default: Decidim::Env.new("RACK_ATTACK_SKIP_PARAM", nil).value
 
-    config_accessor :umami_analytics_id do
-      Decidim::Env.new("UMAMI_ANALYTICS_ID", "").value
-    end
+    mattr_accessor :rack_attack_allowed_ips,
+                   default: Decidim::Env.new("RACK_ATTACK_ALLOWED_IPS", nil).value
 
-    config_accessor :umami_analytics_url do
-      Decidim::Env.new("UMAMI_ANALYTICS_URL", "https://analytics.pokecode.net/script.js").value
-    end
+    mattr_accessor :aws_cdn_host,
+                   default: begin
+                     host = Decidim::Env.new("AWS_CDN_HOST", "").value
+                     host.present? && host.starts_with?("https://") ? host : ""
+                   end
 
-    config_accessor :rack_attack_skip_param do
-      Decidim::Env.new("RACK_ATTACK_SKIP_PARAM", nil).value
-    end
+    mattr_accessor :allowed_recipients,
+                   default: Decidim::Env.new("ALLOWED_RECIPIENTS", "").value
 
-    config_accessor :rack_attack_allowed_ips do
-      Decidim::Env.new("RACK_ATTACK_ALLOWED_IPS", nil).value
-    end
+    mattr_accessor :disable_invitations,
+                   default: Decidim::Env.new("DISABLE_INVITATIONS", false).present?
 
-    config_accessor :aws_cdn_host do
-      host = Decidim::Env.new("AWS_CDN_HOST", "").value
-      host.present? && host.starts_with?("https://") ? host : ""
-    end
+    mattr_accessor :content_security_policies_extra,
+                   default: {
+                     "connect-src" => ENV.fetch("CONTENT_SECURITY_POLICY", "").split,
+                     "img-src" => ENV.fetch("CONTENT_SECURITY_POLICY", "").split,
+                     "default-src" => ENV.fetch("CONTENT_SECURITY_POLICY", "").split,
+                     "script-src" => ENV.fetch("CONTENT_SECURITY_POLICY", "").split,
+                     "style-src" => ENV.fetch("CONTENT_SECURITY_POLICY", "").split,
+                     "font-src" => ENV.fetch("CONTENT_SECURITY_POLICY", "").split,
+                     "frame-src" => ENV.fetch("CONTENT_SECURITY_POLICY", "").split,
+                     "media-src" => ENV.fetch("CONTENT_SECURITY_POLICY", "").split
+                   }
 
-    config_accessor :allowed_recipients do
-      Decidim::Env.new("ALLOWED_RECIPIENTS", "").value
-    end
+    mattr_accessor :email_white_header_enabled,
+                   default: Decidim::Env.new("DISABLE_EMAIL_WHITE_HEADER", false).blank?
 
-    config_accessor :disable_invitations do
-      Decidim::Env.new("DISABLE_INVITATIONS", false).present?
-    end
-
-    config_accessor :content_security_policies_extra do
-      {
-        "connect-src" => ENV.fetch("CONTENT_SECURITY_POLICY", "").split,
-        "img-src" => ENV.fetch("CONTENT_SECURITY_POLICY", "").split,
-        "default-src" => ENV.fetch("CONTENT_SECURITY_POLICY", "").split,
-        "script-src" => ENV.fetch("CONTENT_SECURITY_POLICY", "").split,
-        "style-src" => ENV.fetch("CONTENT_SECURITY_POLICY", "").split,
-        "font-src" => ENV.fetch("CONTENT_SECURITY_POLICY", "").split,
-        "frame-src" => ENV.fetch("CONTENT_SECURITY_POLICY", "").split,
-        "media-src" => ENV.fetch("CONTENT_SECURITY_POLICY", "").split
-      }
-    end
-
-    config_accessor :email_white_header_enabled do
-      Decidim::Env.new("DISABLE_EMAIL_WHITE_HEADER", false).blank?
-    end
-
-    config_accessor :locale_get_path_enabled do
-      Decidim::Env.new("DISABLE_LOCALE_GET_PATH", false).blank?
-    end
-
-    config_accessor :unsafe_html_blocks do
-      Decidim::Env.new("UNSAFE_HTML_BLOCKS", false).present?
-    end
+    mattr_accessor :unsafe_html_blocks,
+                   default: Decidim::Env.new("UNSAFE_HTML_BLOCKS", false).present?
 
     def self.rack_attack_skip
       Pokecode.rack_attack_skip_param || Rails.application.secret_key_base&.first(6)

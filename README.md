@@ -19,7 +19,6 @@ This plugin relies on the command `decidim:upgrade` to make sure common files ar
 | `DISABLE_SEMANTIC_LOGGER` | Disables the gem `rails_semantic_logger` and the configuration for production logging that this gem provides.<br>Note that this feature will override the existing `config/puma.rb` file after a `decidim:upgrade` command. | `false` | |
 | `DISABLE_POKECODE_FOOTER` | Disables the Pokecode footer deface override so the footer stays unchanged. | `false` | |
 | `DISABLE_LANGUAGE_MENU` | Disables the language switcher deface override in the header. | `false` | |
-| `DISABLE_ASSEMBLY_MEMBERS_VISIBLE` | Disables the assembly members visibility feature (public assemblies won't have members page). | `false` | [#9](https://github.com/openpoke/decidim-module-pokecode/pull/9) |
 | `DISABLE_SIDEKIQ` | Disables Sidekiq integration and the `/sidekiq` Web UI endpoint. | `false` | [#11](https://github.com/openpoke/decidim-module-pokecode/pull/11) |
 | `SENTRY_DSN` | Enables Sentry error tracking integration. Provide the DSN URL from your Sentry project. | `""` (disabled) | [#10](https://github.com/openpoke/decidim-module-pokecode/pull/10) |
 | `UMAMI_ANALYTICS_ID` | Enable Umami analytics by setting the website ID provided by your Umami instance. When set together with `UMAMI_ANALYTICS_URL` the analytics script is injected in the page head. | `""` (disabled) | |
@@ -59,6 +58,7 @@ Depending on your Decidim version, choose the corresponding Awesome version to e
 
 | Pokecode version | Compatible Decidim versions |
 |---|---|
+| 0.3.x | 0.32.x |
 | 0.2.x | 0.31.x |
 | 0.1.x | 0.30.x |
 
