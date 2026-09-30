@@ -69,6 +69,10 @@ module Decidim
       Decidim::Env.new("ALLOWED_RECIPIENTS", "").value
     end
 
+    config_accessor :disable_invitations do
+      Decidim::Env.new("DISABLE_INVITATIONS", false).present?
+    end
+
     config_accessor :content_security_policies_extra do
       {
         "connect-src" => ENV.fetch("CONTENT_SECURITY_POLICY", "").split,
@@ -82,6 +86,18 @@ module Decidim
       }
     end
 
+    config_accessor :email_white_header_enabled do
+      Decidim::Env.new("DISABLE_EMAIL_WHITE_HEADER", false).blank?
+    end
+
+    config_accessor :locale_get_path_enabled do
+      Decidim::Env.new("DISABLE_LOCALE_GET_PATH", false).blank?
+    end
+
+    config_accessor :unsafe_html_blocks do
+      Decidim::Env.new("UNSAFE_HTML_BLOCKS", false).present?
+    end
+
     def self.rack_attack_skip
       Pokecode.rack_attack_skip_param || Rails.application.secret_key_base&.first(6)
     end
@@ -92,10 +108,6 @@ module Decidim
 
     def self.allowed_recipients_list
       Pokecode.allowed_recipients&.split(/[,\s]+/)&.reject(&:blank?) || []
-    end
-
-    def self.deface_enabled
-      Pokecode.pokecode_footer_enabled || Decidim::Pokecode.language_menu_enabled
     end
 
     def self.sentry_enabled

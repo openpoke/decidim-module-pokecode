@@ -4,7 +4,7 @@ module Decidim
   module Pokecode
     # Email interceptor that filters outgoing emails based on allowed recipients.
     # Only allows emails to recipients that match the configured allowed list.
-    class MailInterceptor
+    class AllowedRecipientsMailInterceptor
       def self.delivering_email(message)
         return if allowed_recipients_empty?
 

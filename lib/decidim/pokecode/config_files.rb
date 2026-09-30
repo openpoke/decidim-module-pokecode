@@ -13,6 +13,10 @@ module Decidim
       ".ruby-version" => [
         "3.3.10"
       ],
+      ".github/workflows/dependabot.yml" => [
+        "schedule:",
+        "weekly"
+      ],
       ".gitignore" => [
         "mise.toml",
         "/app/views/static/api"

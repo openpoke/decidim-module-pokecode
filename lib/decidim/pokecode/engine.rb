@@ -6,6 +6,91 @@ module Decidim
     class Engine < ::Rails::Engine
       isolate_namespace Decidim::Pokecode
 
+      config.to_prepare do
+        if Decidim::Pokecode.assembly_members_visible_enabled
+          Decidim::Assembly.include(Decidim::Pokecode::AssemblyOverride)
+          Decidim::Assemblies::Permissions.include(Decidim::Pokecode::AssembliesPermissionsOverride)
+          Rails.logger.info "[Decidim::Pokecode] Assembly members visibility override enabled."
+        else
+          Rails.logger.info "[Decidim::Pokecode] Assembly members visibility override disabled."
+        end
+
+        # TODO: remove when fixes upstream
+        Decidim::Notification.include(Decidim::Pokecode::NotificationOverride)
+        Rails.logger.info "[Decidim::Pokecode] Notification override applied."
+
+        if Decidim::Pokecode.analytics_enabled
+          Decidim::ApplicationController.include(Decidim::Pokecode::NeedsAnalyticsCspDirectives)
+          Decidim::Admin::ApplicationController.include(Decidim::Pokecode::NeedsAnalyticsCspDirectives)
+          Rails.logger.info "[Decidim::Pokecode] Analytics override enabled."
+        else
+          Rails.logger.info "[Decidim::Pokecode] Analytics override disabled."
+        end
+
+        if Decidim::Pokecode.active_storage_s3_urls.present?
+          Decidim::ApplicationController.include(Decidim::Pokecode::NeedsStorageCspDirectives)
+          Decidim::Admin::ApplicationController.include(Decidim::Pokecode::NeedsStorageCspDirectives)
+          Rails.logger.info "[Decidim::Pokecode] Active Storage S3 CSP directives override enabled."
+        else
+          Rails.logger.info "[Decidim::Pokecode] Active Storage S3 CSP directives override disabled."
+        end
+
+        if Decidim::Pokecode.aws_cdn_host.present?
+          Aws::S3::Object.include(Decidim::Pokecode::S3ObjectOverride)
+          Rails.logger.info "[Decidim::Pokecode] Active Storage CDN override enabled."
+        else
+          Rails.logger.info "[Decidim::Pokecode] Active Storage CDN override disabled."
+        end
+
+        # Register deface overrides for admin dashboard warnings
+        if Decidim::Pokecode.allowed_recipients_list.any?
+          Deface::Override.new(:virtual_path => "decidim/admin/dashboard/show",
+                               :name => "add-staging-warning",
+                               :insert_before => "div.content",
+                               :partial => "decidim/pokecode/admin/staging_warning")
+          Rails.logger.info "[Decidim::Pokecode] Staging warning deface override registered."
+        end
+
+        if Decidim::Pokecode.disable_invitations
+          Deface::Override.new(:virtual_path => "decidim/admin/dashboard/show",
+                               :name => "add-invitations-disabled-warning",
+                               :insert_before => "div.content",
+                               :partial => "decidim/pokecode/admin/invitations_disabled_warning")
+          Rails.logger.info "[Decidim::Pokecode] Invitations disabled warning deface override registered."
+        end
+
+        Rails.application.config.to_prepare do
+          if Decidim::Pokecode.allowed_recipients_list.any?
+            unless ActionMailer::Base.try(:delivery_interceptors)&.include?(Decidim::Pokecode::AllowedRecipientsMailInterceptor)
+              ActionMailer::Base.register_interceptor(Decidim::Pokecode::AllowedRecipientsMailInterceptor)
+            end
+            Rails.logger.info "[Decidim::Pokecode] Allowed recipients mail interceptor enabled. Allowed recipients: #{Decidim::Pokecode.allowed_recipients_list.join(", ")}"
+          else
+            Rails.logger.info "[Decidim::Pokecode] Allowed recipients mail interceptor disabled."
+          end
+
+          if Decidim::Pokecode.disable_invitations
+            unless ActionMailer::Base.try(:delivery_interceptors)&.include?(Decidim::Pokecode::DisableInvitationsMailInterceptor)
+              ActionMailer::Base.register_interceptor(Decidim::Pokecode::DisableInvitationsMailInterceptor)
+            end
+            Rails.logger.info "[Decidim::Pokecode] Invitations disabled via mail interceptor."
+          else
+            Rails.logger.info "[Decidim::Pokecode] Invitations not disabled via mail interceptor."
+          end
+        end
+      end
+
+      initializer "pokecode.locales_by_get" do
+        if Decidim::Pokecode.locale_get_path_enabled
+          Decidim::Core::Engine.routes do
+            get "/locale", to: "locales#create", as: :set_locale
+          end
+          Rails.logger.info "[Decidim::Pokecode] Locale setting via GET enabled."
+        else
+          Rails.logger.info "[Decidim::Pokecode] Locale setting via GET disabled."
+        end
+      end
+
       initializer "pokecode.sidekiq" do
         if Decidim::Pokecode.sidekiq_enabled
           Decidim::Core::Engine.routes do
@@ -40,39 +125,6 @@ module Decidim
         end
       end
 
-      config.to_prepare do
-        if Decidim::Pokecode.assembly_members_visible_enabled
-          Decidim::Assembly.include(Decidim::Pokecode::AssemblyOverride)
-          Decidim::Assemblies::Permissions.include(Decidim::Pokecode::AssembliesPermissionsOverride)
-          Rails.logger.info "[Decidim::Pokecode] Assembly members visibility override enabled."
-        else
-          Rails.logger.info "[Decidim::Pokecode] Assembly members visibility override disabled."
-        end
-
-        if Decidim::Pokecode.analytics_enabled
-          Decidim::ApplicationController.include(Decidim::Pokecode::NeedsAnalyticsCspDirectives)
-          Decidim::Admin::ApplicationController.include(Decidim::Pokecode::NeedsAnalyticsCspDirectives)
-          Rails.logger.info "[Decidim::Pokecode] Analytics override enabled."
-        else
-          Rails.logger.info "[Decidim::Pokecode] Analytics override disabled."
-        end
-
-        if Decidim::Pokecode.active_storage_s3_urls.present?
-          Decidim::ApplicationController.include(Decidim::Pokecode::NeedsStorageCspDirectives)
-          Decidim::Admin::ApplicationController.include(Decidim::Pokecode::NeedsStorageCspDirectives)
-          Rails.logger.info "[Decidim::Pokecode] Active Storage S3 CSP directives override enabled."
-        else
-          Rails.logger.info "[Decidim::Pokecode] Active Storage S3 CSP directives override disabled."
-        end
-
-        if Decidim::Pokecode.aws_cdn_host.present?
-          Aws::S3::Object.include(Decidim::Pokecode::S3ObjectOverride)
-          Rails.logger.info "[Decidim::Pokecode] Active Storage CDN override enabled."
-        else
-          Rails.logger.info "[Decidim::Pokecode] Active Storage CDN override disabled."
-        end
-      end
-
       initializer "pokecode.zeitwerk_ignore_deface" do
         Rails.autoloaders.main.ignore(Pokecode::Engine.root.join("app/overrides"))
       end
@@ -86,6 +138,7 @@ module Decidim
             # Add data like request headers and IP for users, if applicable;
             # see https://docs.sentry.io/platforms/ruby/data-management/data-collected/ for more info
             config.send_default_pii = true
+            config.include_local_variables = true
           end
           Rails.logger.info "[Decidim::Pokecode] Sentry enabled to DSN #{Decidim::Pokecode.sentry_dsn}."
         else
@@ -129,6 +182,12 @@ module Decidim
           if defined?(SemanticLogger) && Rails.env.production?
             $stdout.sync = true
             config.rails_semantic_logger.add_file_appender = false
+
+            # Remove any existing file appenders
+            SemanticLogger.appenders.each do |appender|
+              SemanticLogger.remove_appender(appender) if appender.is_a?(SemanticLogger::Appender::File)
+            end
+
             config.semantic_logger.add_appender(io: $stdout, formatter: config.rails_semantic_logger.format)
             Rails.logger.info "[Decidim::Pokecode] SemanticLogger logging to STDOUT enabled."
           else
@@ -169,16 +228,6 @@ module Decidim
 
       initializer "pokecode.shakapacker.assets_path" do
         Decidim.register_assets_path File.expand_path("app/packs", root)
-      end
-
-      initializer "pokecode.mail_interceptor" do
-        if Decidim::Pokecode.allowed_recipients_list.any?
-          config.action_mailer.interceptors ||= []
-          config.action_mailer.interceptors << "Decidim::Pokecode::MailInterceptor"
-          Rails.logger.info "[Decidim::Pokecode] Email interceptor enabled. Allowed recipients: #{Decidim::Pokecode.allowed_recipients_list.join(", ")}"
-        else
-          Rails.logger.info "[Decidim::Pokecode] Email interceptor disabled."
-        end
       end
     end
   end

@@ -18,6 +18,7 @@ namespace :pokecode do
         next
       else
         puts "  - Copying configuration file"
+        FileUtils.mkdir_p(full_path.dirname)
         FileUtils.cp(source_path, full_path)
       end
     end

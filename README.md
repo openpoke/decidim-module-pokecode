@@ -26,6 +26,7 @@ This plugin relies on the command `decidim:upgrade` to make sure common files ar
 | `UMAMI_ANALYTICS_URL` | URL to the Umami `script.js` file. Defaults to the hosted Pokecode analytics script. | `"https://analytics.pokecode.net/script.js"`. The host is automatically added to the CSP directives. | |
 | `ADMIN_IFRAME_URL` | Enables the admin iframe feature and embeds the specified URL in the admin dashboard. When set, a new iframe page becomes available at `/admin/iframe`. The host of the iframe is automatically added to the CSP directives. | `""` (disabled) | [#12](https://github.com/openpoke/decidim-module-pokecode/pull/12) |
 | `ADMIN_IFRAME_TITLE` | Customizes the label of the admin iframe menu item in the admin sidebar. | `"Web Stats"` | [#12](https://github.com/openpoke/decidim-module-pokecode/pull/12) |
+| `UNSAFE_HTML_BLOCKS` | Disables HTML sanitization in the HTML content block, allowing raw HTML (including iframes, scripts, etc.) to be rendered as-is. Useful when admin users are fully trusted. | `false` | |
 | `RACK_ATTACK_SKIP_PARAM` | Secret value compared against the `skip_rack_attack` request parameter to bypass Rack::Attack rate limiting (useful for performance testing). If unset, defaults to the first 6 characters of `Rails.application.secret_key_base`. If empty, it will be disabled. | first 6 chars of Rails secret | |
 | `RACK_ATTACK_ALLOWED_IPS` | Comma or space-separated list of IP addresses to safelist from Rack::Attack rate limiting. If not set, no IPs are safelisted by default. | none (empty) | |
 | `HEALTHCHECK_ADDITIONAL_CHECKS` | Additional healthcheck checks to run (space-separated list). Appends to the standard health checks when `health_check` gem is enabled. | `""` (none) | |
@@ -35,6 +36,9 @@ This plugin relies on the command `decidim:upgrade` to make sure common files ar
 | `AWS_FORCE_PATH_STYLE` | Certain providers do not support the bucket name as the subdomain of the AWS endpoint (ie: Contabo). Set to `true` if that's the case. | `false` | |
 | `CONTENT_SECURITY_POLICY` | Sets custom Content Security Policy headers for enhanced security. When set, it is added to the default CSP configuration. | `""` (disabled) | |
 | `ALLOWED_RECIPIENTS` | A list of emails or domains that must match in order to send an email, separated by spaces. For instance `@pokecode.net johnsmith@gmail.com`. Exact email addresses (without a leading `@`) must match the full recipient email, while domain patterns starting with `@` are matched as suffixes of the recipient email. Leave empty to disable any interception. | `""` |
+| `DISABLE_INVITATIONS` | Prevents all invitation emails from being sent by intercepting emails with the `invitation-instructions` header. This is useful for development or testing environments. | `false` | |
+| `DISABLE_EMAIL_WHITE_HEADER` | Disables the white header deface override injected into email and newsletter layouts (`layouts/decidim/mailer` and `layouts/decidim/newsletter_base`). | `false` | |
+| `DISABLE_LOCALE_GET_PATH` | Disables the locale-switching via GET request (`GET /locale`). When enabled, the route is registered as `set_locale` so the locale can be changed with a plain link instead of a form POST. | `false` | |
 
 ## Installation
 
