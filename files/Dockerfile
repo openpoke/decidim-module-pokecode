@@ -85,7 +85,6 @@ FROM ruby:3.4.7-slim AS final
 
 RUN apt-get update && \
     apt-get install -y postgresql-client \
-    imagemagick \
     libvips libvips-tools \
     curl \
     p7zip \

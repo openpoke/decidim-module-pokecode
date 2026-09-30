@@ -9,20 +9,11 @@ checksums = [
   {
     package: "decidim-core",
     files: {
-      "/app/views/layouts/decidim/header/_main.html.erb" => "2808459045fd14b7f8d689fbbd6dfa4e",
       "/app/models/decidim/notification.rb" => "4510aadea1546d3590a768eddf8a172c", # TODO: remove when fixed upstream
       "/lib/tasks/decidim_tasks.rake" => "c9e470d5857eae31fd477e668e0a6f9d",
       "/app/views/layouts/decidim/mailer.html.erb" => "6a08103c75e5db737a38cd365428a177",
       "/app/views/layouts/decidim/newsletter_base.html.erb" => "28111c73d348ec8d1cdc1180d3ff5d21",
-      "/app/controllers/decidim/locales_controller.rb" => "8cdc1208b716ef843ab5da34d74ca9f7",
       "/app/cells/decidim/content_blocks/html_cell.rb" => "67df12cd1caefa3a8ddb7d340dcd057f"
-    }
-  },
-  {
-    package: "decidim-assemblies",
-    files: {
-      "/app/models/decidim/assembly.rb" => "27eaae12c695bcbfdb708f454dfda7c3",
-      "/app/permissions/decidim/assemblies/permissions.rb" => "6d4578e770574c3d3e126e38ca97ce4a"
     }
   },
   {

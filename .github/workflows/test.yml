@@ -98,7 +98,7 @@ jobs:
       DATABASE_HOST: localhost
     steps:
       - run: |
-          sudo apt-get update; sudo apt-get -f install imagemagick 7zip libvips libvips-tools
+          sudo apt-get -y update; sudo apt-get -f install 7zip libvips libvips-tools
 
       - uses: actions/checkout@v4
         with:
