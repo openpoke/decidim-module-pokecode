@@ -48,6 +48,23 @@ module Decidim
       end
     end
 
+    if Decidim::Pokecode.solid_queue_enabled
+      it "loads SolidQueue instead of Sidekiq" do
+        expect(defined?(::SolidQueue)).to be_truthy
+        expect(defined?(::SolidQueueMonitor)).to be_truthy
+        expect(defined?(::Sidekiq)).to be_falsey
+      end
+
+      it "keeps the Decidim session cookie" do
+        expect(Rails.application.config.session_options[:key]).not_to eq("_solid_queue_monitor_session")
+      end
+    else
+      it "loads SolidQueue without the Web UI" do
+        expect(defined?(::SolidQueue)).to be_truthy
+        expect(defined?(::SolidQueueMonitor)).to be_falsey
+      end
+    end
+
     if Decidim::Pokecode.aws_cdn_host.present?
       it "loads Aws::S3" do
         expect(Aws::S3::Object.included_modules).to include(Decidim::Pokecode::S3ObjectOverride)

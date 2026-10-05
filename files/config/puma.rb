@@ -26,6 +26,9 @@ environment ENV.fetch("RAILS_ENV", "development")
 # Specifies the `pidfile` that Puma will use.
 pidfile ENV.fetch("PIDFILE", "tmp/pids/server.pid")
 
+# Run the Solid Queue supervisor inside of Puma for single-server deployments.
+plugin :solid_queue if ENV["SOLID_QUEUE_IN_PUMA"] && ENV["QUEUE_ADAPTER"] == "solid_queue"
+
 if defined?(SemanticLogger)
   on_worker_boot do
     # Re-open appenders after forking the process

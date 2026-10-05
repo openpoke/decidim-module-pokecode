@@ -8,11 +8,12 @@ module Decidim
     mattr_accessor :semantic_logger_enabled,
                    default: Decidim::Env.new("DISABLE_SEMANTIC_LOGGER", false).blank?
 
-    mattr_accessor :sidekiq_enabled,
-                   default: Decidim::Env.new("DISABLE_SIDEKIQ", false).blank?
-
     mattr_accessor :queue_adapter,
                    default: Decidim::Env.new("QUEUE_ADAPTER", Decidim::Env.new("DISABLE_SIDEKIQ", false).blank? ? "sidekiq" : "").value
+
+    mattr_accessor :sidekiq_enabled,
+                   default: Decidim::Env.new("DISABLE_SIDEKIQ", false).blank? && queue_adapter == "sidekiq"
+
     mattr_accessor :sentry_dsn,
                    default: Decidim::Env.new("SENTRY_DSN", "").value
 
@@ -84,6 +85,10 @@ module Decidim
 
     def self.sentry_enabled
       Pokecode.sentry_dsn.present?
+    end
+
+    def self.solid_queue_enabled
+      Pokecode.queue_adapter == "solid_queue"
     end
 
     def self.admin_iframe_enabled

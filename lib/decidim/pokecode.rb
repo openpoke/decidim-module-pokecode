@@ -20,6 +20,10 @@ if Decidim::Pokecode.sidekiq_enabled
   require "sentry-sidekiq" if Decidim::Pokecode.sentry_enabled
 end
 
+# Loaded with any adapter, like in a Rails application, so the Puma plugin and bin/jobs always work
+require "solid_queue"
+require "solid_queue_monitor" if Decidim::Pokecode.solid_queue_enabled
+
 require "decidim/pokecode/admin"
 require "decidim/pokecode/engine"
 require "decidim/pokecode/admin_engine"

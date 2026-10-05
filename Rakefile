@@ -5,6 +5,8 @@ require "decidim/dev/common_rake"
 def install_module(path)
   Dir.chdir(path) do
     system("bundle exec rails pokecode:copy_config_files")
+    system("bundle exec rails decidim_pokecode:install:migrations")
+    system("bundle exec rails db:migrate")
   end
 end
 

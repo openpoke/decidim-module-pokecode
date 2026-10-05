@@ -16,10 +16,13 @@ This plugin relies on the command `decidim:upgrade` to make sure common files ar
 | ENV Variable | Description | Default | PR |
 |---|---|---|---|
 | `DISABLE_HEALTH_CHECK` | Disables the gem `health_check` and the endpoint `/health_check` | `false` | |
-| `DISABLE_SEMANTIC_LOGGER` | Disables the gem `rails_semantic_logger` and the configuration for production logging that this gem provides.<br>Note that this feature will override the existing `config/puma.rb` file after a `decidim:upgrade` command. | `false` | |
+| `DISABLE_SEMANTIC_LOGGER` | Disables the gem `rails_semantic_logger` and the configuration for production logging that this gem provides. | `false` | |
 | `DISABLE_POKECODE_FOOTER` | Disables the Pokecode footer deface override so the footer stays unchanged. | `false` | |
 | `DISABLE_LANGUAGE_MENU` | Disables the language switcher deface override in the header. | `false` | |
 | `DISABLE_SIDEKIQ` | Disables Sidekiq integration and the `/sidekiq` Web UI endpoint. | `false` | [#11](https://github.com/openpoke/decidim-module-pokecode/pull/11) |
+| `QUEUE_ADAPTER` | Active Job backend. `sidekiq` needs Redis; `solid_queue` stores the jobs in the application database (see [Solid Queue](#solid-queue)). Sidekiq is only loaded when the adapter is `sidekiq`. | `sidekiq` (empty when `DISABLE_SIDEKIQ` is set) | |
+| `SOLID_QUEUE_IN_PUMA` | Starts the Solid Queue supervisor (with its worker and dispatcher processes) from the Puma process, so no separate container or supervisord program is needed to perform the jobs. Ignored unless `QUEUE_ADAPTER=solid_queue`. | `""` (disabled) | |
+| `JOB_CONCURRENCY` | Number of Solid Queue worker processes. | `1` | |
 | `SENTRY_DSN` | Enables Sentry error tracking integration. Provide the DSN URL from your Sentry project. | `""` (disabled) | [#10](https://github.com/openpoke/decidim-module-pokecode/pull/10) |
 | `UMAMI_ANALYTICS_ID` | Enable Umami analytics by setting the website ID provided by your Umami instance. When set together with `UMAMI_ANALYTICS_URL` the analytics script is injected in the page head. | `""` (disabled) | |
 | `UMAMI_ANALYTICS_URL` | URL to the Umami `script.js` file. Defaults to the hosted Pokecode analytics script. | `"https://analytics.pokecode.net/script.js"`. The host is automatically added to the CSP directives. | |
@@ -38,6 +41,32 @@ This plugin relies on the command `decidim:upgrade` to make sure common files ar
 | `DISABLE_INVITATIONS` | Prevents all invitation emails from being sent by intercepting emails with the `invitation-instructions` header. This is useful for development or testing environments. | `false` | |
 | `DISABLE_EMAIL_WHITE_HEADER` | Disables the white header deface override injected into email and newsletter layouts (`layouts/decidim/mailer` and `layouts/decidim/newsletter_base`). | `false` | |
 | `DISABLE_LOCALE_GET_PATH` | Disables the locale-switching via GET request (`GET /locale`). When enabled, the route is registered as `set_locale` so the locale can be changed with a plain link instead of a form POST. | `false` | |
+
+## Solid Queue
+
+Instances can run the background jobs on [Solid Queue](https://github.com/rails/solid_queue) instead of Sidekiq, so Redis is not needed. The jobs are stored in the application database.
+
+The command `decidim:upgrade` installs everything that is required: the migration with the Solid Queue tables, `config/queue.yml`, `config/recurring.yml` (the scheduled tasks, same as `config/schedule.yml` for Sidekiq), `bin/jobs` and the `plugin :solid_queue` line in `config/puma.rb`. To install only the migration:
+
+```bash
+bin/rails decidim_pokecode:install:migrations
+bin/rails db:migrate
+```
+
+Then choose the backend with ENV vars:
+
+| Deployment | ENV vars |
+|---|---|
+| Web and jobs in the same container | `QUEUE_ADAPTER=solid_queue` `SOLID_QUEUE_IN_PUMA=1` |
+| Dedicated jobs container | `QUEUE_ADAPTER=solid_queue` in both containers (without `SOLID_QUEUE_IN_PUMA`), and `bin/jobs` as the command of the jobs container |
+
+Notes:
+
+- Set `DISABLE_SIDEKIQ=1` as well, so that `entrypoint.sh` does not start the Sidekiq process.
+- Jobs, queues, workers and failed jobs are listed at `/solid_queue` (admin users only). Failed jobs can be retried or discarded there.
+- Decidim jobs and mail deliveries are retried up to 10 attempts with a growing delay (about 4 hours in total), then they are listed as failed in `/solid_queue`. The scheduled tasks of `config/recurring.yml` are not retried, they run again at their next scheduled time. The same ENV vars as in `config/schedule.yml` disable them (e.g. `EXPORT_OPEN_DATA=disabled`).
+- Keep `RAILS_MAX_THREADS` at 5 or more (the Rails default): each Solid Queue worker needs 5 database connections (3 threads, polling and heartbeat).
+- Jobs are not moved between Redis and the database. Before switching to Solid Queue, check in `/sidekiq` that Enqueued, Scheduled and Retries are empty; before switching back to Sidekiq, check in `/solid_queue` that Ready and Scheduled are empty.
 
 ## Installation
 
@@ -67,6 +96,14 @@ Depending on your Decidim version, choose the corresponding Awesome version to e
 Contributions are welcome if, for some reason you find this module is interesting to you.
 
 We expect the contributions to follow the [Decidim's contribution guide](https://github.com/decidim/decidim/blob/develop/CONTRIBUTING.adoc).
+
+### Testing
+
+```bash
+bundle exec rake test_app
+bundle exec rspec spec
+QUEUE_ADAPTER=solid_queue bundle exec rspec spec
+```
 
 ## Security
 

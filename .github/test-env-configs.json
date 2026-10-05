@@ -106,5 +106,24 @@
     "DISABLE_LOCALE_GET_PATH": "",
     "DISABLE_INVITATIONS": "",
     "UNSAFE_HTML_BLOCKS": ""
+  },
+  {
+    "env-config": "solid-queue",
+    "DISABLE_HEALTH_CHECK": "1",
+    "DISABLE_SEMANTIC_LOGGER": "1",
+    "DISABLE_SIDEKIQ": "",
+    "QUEUE_ADAPTER": "solid_queue",
+    "SENTRY_DSN": "",
+    "ADMIN_IFRAME_URL": "",
+    "UMAMI_ANALYTICS_ID": "",
+    "UMAMI_ANALYTICS_URL": "",
+    "AWS_CDN_HOST": "",
+    "DISABLE_POKECODE_FOOTER": "1",
+    "DISABLE_LANGUAGE_MENU": "1",
+    "ALLOWED_RECIPIENTS": "",
+    "DISABLE_EMAIL_WHITE_HEADER": "",
+    "DISABLE_LOCALE_GET_PATH": "",
+    "DISABLE_INVITATIONS": "",
+    "UNSAFE_HTML_BLOCKS": ""
   }
 ]

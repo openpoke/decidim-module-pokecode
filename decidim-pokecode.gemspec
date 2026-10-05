@@ -32,10 +32,13 @@ Gem::Specification.new do |s|
   s.add_dependency "deface", ">= 1.5"
   s.add_dependency "health_check"
   s.add_dependency "jwt", "~> 3.1.2" # there is a bug with jwt 3.2.0 that affects decidim preventing login
+  s.add_dependency "rails", "~> 8.1.4" # 8.1.4 fixes several Active Record query and connection pool bugs
   s.add_dependency "rails_semantic_logger"
   s.add_dependency "sentry-rails"
   s.add_dependency "sentry-ruby"
   s.add_dependency "sentry-sidekiq"
   s.add_dependency "sidekiq"
   s.add_dependency "sidekiq-cron"
+  s.add_dependency "solid_queue", "~> 1.7"
+  s.add_dependency "solid_queue_monitor", "~> 2.2"
 end

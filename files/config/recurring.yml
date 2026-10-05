@@ -1,0 +1,61 @@
+# Scheduled tasks for Solid Queue. Keep in sync with config/schedule.yml, used by Sidekiq (sidekiq-cron).
+production:
+  clear_solid_queue_finished_jobs:
+    command: "SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"
+    schedule: every hour at minute 12
+
+<% if ENV.fetch("CHANGE_ACTIVE_STEP", "enabled") == "enabled" %>
+  hourly_active_step_job:
+    class: InvokeRakeTaskJob
+    queue: default
+    args: [ { task: "decidim_participatory_processes:change_active_step" } ]
+    schedule: "0 * * * *"
+<% end %>
+
+<% if ENV.fetch("EXPORT_OPEN_DATA", "enabled") == "enabled" %>
+  daily_open_data_job:
+    class: InvokeRakeTaskJob
+    queue: default
+    args: [ { task: "decidim:open_data:export" } ]
+    schedule: "3 3 * * *"
+<% end %>
+
+<% if ENV.fetch("DELETE_DOWNLOAD_YOUR_DATA_FILES", "enabled") == "enabled" %>
+  daily_delete_download_your_data_files_job:
+    class: InvokeRakeTaskJob
+    queue: default
+    args: [ { task: "decidim:delete_download_your_data_files" } ]
+    schedule: "33 4 * * *"
+<% end %>
+
+<% if ENV.fetch("DAILY_NOTIFICATIONS_DIGEST", "enabled") == "enabled" %>
+  daily_notifications_digest_job:
+    class: InvokeRakeTaskJob
+    queue: mailers
+    args: [ { task: "decidim:mailers:notifications_digest_daily" } ]
+    schedule: "5 18 * * *"
+<% end %>
+
+<% if ENV.fetch("SEND_REMINDERS", "enabled") == "enabled" %>
+  daily_reminders_job:
+    class: InvokeRakeTaskJob
+    queue: default
+    args: [ { task: "decidim:reminders:all" } ]
+    schedule: "1 11 * * *"
+<% end %>
+
+<% if ENV.fetch("CLEAN_REGISTRATION_FORMS", "enabled") == "enabled" %>
+  weekly_clean_registration_forms_job:
+    class: InvokeRakeTaskJob
+    queue: default
+    args: [ { task: "decidim_meetings:clean_registration_forms" } ]
+    schedule: "0 3 * * 0"
+<% end %>
+
+<% if ENV.fetch("WEEKLY_NOTIFICATIONS_DIGEST", "enabled") == "enabled" %>
+  weekly_notifications_digest_job:
+    class: InvokeRakeTaskJob
+    queue: mailers
+    args: [ { task: "decidim:mailers:notifications_digest_weekly" } ]
+    schedule: "5 18 * * 0"
+<% end %>

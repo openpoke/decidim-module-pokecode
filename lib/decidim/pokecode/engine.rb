@@ -34,6 +34,14 @@ module Decidim
           Rails.logger.info "[Decidim::Pokecode] Active Storage CDN override disabled."
         end
 
+        if Decidim::Pokecode.solid_queue_enabled
+          Decidim::ApplicationJob.include(Decidim::Pokecode::JobRetries)
+          ActionMailer::MailDeliveryJob.include(Decidim::Pokecode::JobRetries)
+          Rails.logger.info "[Decidim::Pokecode] Job retries for Solid Queue enabled."
+        else
+          Rails.logger.info "[Decidim::Pokecode] Job retries for Solid Queue disabled."
+        end
+
         # Register deface overrides for admin dashboard warnings
         if Decidim::Pokecode.allowed_recipients_list.any?
           Deface::Override.new(:virtual_path => "decidim/admin/dashboard/show",
@@ -86,6 +94,21 @@ module Decidim
           Rails.logger.info "[Decidim::Pokecode] Sidekiq Web UI enabled."
         else
           Rails.logger.info "[Decidim::Pokecode] Sidekiq Web UI disabled."
+        end
+      end
+
+      initializer "pokecode.solid_queue" do
+        if Decidim::Pokecode.solid_queue_enabled
+          # The dashboard is protected by the Decidim session, so the authenticity token can be verified
+          SolidQueueMonitor.csrf_protection_enabled = true
+          Decidim::Core::Engine.routes do
+            authenticate :user, ->(u) { u.admin? } do
+              mount SolidQueueMonitor::Engine => "/solid_queue"
+            end
+          end
+          Rails.logger.info "[Decidim::Pokecode] Solid Queue Web UI enabled."
+        else
+          Rails.logger.info "[Decidim::Pokecode] Solid Queue Web UI disabled."
         end
       end
 

@@ -22,10 +22,25 @@ module Decidim
         "/app/views/static/api"
       ],
       "config/sidekiq.yml" => [
-        '<%= ENV.fetch("SIDEKIQ_CONCURRENCY", 5) %>'
+        '<%= ENV.fetch("SIDEKIQ_CONCURRENCY", 5) %>',
+        "delete_inactive_participants"
       ],
       "config/schedule.yml" => [
-        'class: "InvokeRakeTaskJob"'
+        'class: "InvokeRakeTaskJob"',
+        "Keep in sync with config/recurring.yml"
+      ],
+      "config/queue.yml" => [
+        '<%= ENV.fetch("JOB_CONCURRENCY", 1) %>'
+      ],
+      "config/recurring.yml" => [
+        "clear_solid_queue_finished_jobs",
+        "class: InvokeRakeTaskJob"
+      ],
+      "bin/jobs" => [
+        "SolidQueue::Cli.start"
+      ],
+      "config/puma.rb" => [
+        "plugin :solid_queue"
       ],
       "config/storage.yml" => [
         "public:",
@@ -43,10 +58,6 @@ module Decidim
 
     Pokecode.config_files["Dockerfile"] << "curl -sS http://localhost:3000/health_check | grep success" if Pokecode.health_check_enabled
 
-    if Pokecode.semantic_logger_enabled
-      Pokecode.config_files["config/puma.rb"] = [
-        "SemanticLogger.reopen"
-      ]
-    end
+    Pokecode.config_files["config/puma.rb"] << "SemanticLogger.reopen" if Pokecode.semantic_logger_enabled
   end
 end
