@@ -99,7 +99,6 @@ We expect the contributions to follow the [Decidim's contribution guide](https:/
 ```bash
 bundle exec rake test_app
 bundle exec rspec spec
-QUEUE_ADAPTER="" bundle exec rspec spec
 ```
 
 ## Security
