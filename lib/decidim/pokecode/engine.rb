@@ -80,23 +80,6 @@ module Decidim
         end
       end
 
-      initializer "pokecode.sidekiq" do
-        if Decidim::Pokecode.sidekiq_enabled
-          Decidim::Core::Engine.routes do
-            require "sidekiq/web"
-            require "sidekiq/cron/web"
-            authenticate :user, ->(u) { u.admin? } do
-              mount Sidekiq::Web => "/sidekiq"
-            end
-          end
-          # For queue adapter configuration
-          config.active_job.queue_adapter = :sidekiq
-          Rails.logger.info "[Decidim::Pokecode] Sidekiq Web UI enabled."
-        else
-          Rails.logger.info "[Decidim::Pokecode] Sidekiq Web UI disabled."
-        end
-      end
-
       initializer "pokecode.solid_queue" do
         if Decidim::Pokecode.solid_queue_enabled
           # The dashboard is protected by the Decidim session, so the authenticity token can be verified

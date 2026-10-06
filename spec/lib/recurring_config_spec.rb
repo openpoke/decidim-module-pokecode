@@ -7,8 +7,6 @@ module Decidim
   describe Pokecode do
     let(:tasks) { ActiveSupport::ConfigurationFile.parse(described_class::Engine.root.join("files/config/recurring.yml")).fetch("production") }
     let(:rake_tasks) { tasks.values.select { |options| options["class"] == "InvokeRakeTaskJob" }.map { |options| options["args"].first["task"] } }
-    let(:sidekiq_tasks) { ActiveSupport::ConfigurationFile.parse(described_class::Engine.root.join("files/config/schedule.yml")) }
-    let(:sidekiq_rake_tasks) { sidekiq_tasks.values.map { |options| options["args"]["task"] } }
 
     # Loading the job also loads the rake tasks
     before { InvokeRakeTaskJob.name }
@@ -30,10 +28,6 @@ module Decidim
       rake_tasks.each do |name|
         expect(Rake::Task.task_defined?(name)).to be(true), "#{name} is not defined"
       end
-    end
-
-    it "schedules the same rake tasks for Sidekiq and Solid Queue" do
-      expect(sidekiq_rake_tasks).to match_array(rake_tasks)
     end
 
     it "can disable a recurring task with an ENV var" do

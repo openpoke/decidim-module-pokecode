@@ -19,9 +19,8 @@ This plugin relies on the command `decidim:upgrade` to make sure common files ar
 | `DISABLE_SEMANTIC_LOGGER` | Disables the gem `rails_semantic_logger` and the configuration for production logging that this gem provides. | `false` | |
 | `DISABLE_POKECODE_FOOTER` | Disables the Pokecode footer deface override so the footer stays unchanged. | `false` | |
 | `DISABLE_LANGUAGE_MENU` | Disables the language switcher deface override in the header. | `false` | |
-| `DISABLE_SIDEKIQ` | Disables Sidekiq integration and the `/sidekiq` Web UI endpoint. | `false` | [#11](https://github.com/openpoke/decidim-module-pokecode/pull/11) |
-| `QUEUE_ADAPTER` | Active Job backend. `sidekiq` needs Redis; `solid_queue` stores the jobs in the application database (see [Solid Queue](#solid-queue)). Sidekiq is only loaded when the adapter is `sidekiq`. | `sidekiq` (empty when `DISABLE_SIDEKIQ` is set) | |
-| `SOLID_QUEUE_IN_PUMA` | Starts the Solid Queue supervisor (with its worker and dispatcher processes) from the Puma process, so no separate container or supervisord program is needed to perform the jobs. Ignored unless `QUEUE_ADAPTER=solid_queue`. | `""` (disabled) | |
+| `QUEUE_ADAPTER` | Active Job backend. `solid_queue` stores the jobs in the application database (see [Background jobs](#background-jobs)). Any other Active Job adapter name (e.g. `async`) is set as is; an empty value keeps the Rails default and loads no queue backend. | `solid_queue` | |
+| `SOLID_QUEUE_IN_PUMA` | Runs the Solid Queue supervisor (worker, dispatcher and scheduler) inside the Puma process, so the jobs run in the web container without a separate process or container. Set it to `false` when the jobs run in a dedicated container with `bin/jobs`. | `true` | |
 | `JOB_CONCURRENCY` | Number of Solid Queue worker processes. | `1` | |
 | `SENTRY_DSN` | Enables Sentry error tracking integration. Provide the DSN URL from your Sentry project. | `""` (disabled) | [#10](https://github.com/openpoke/decidim-module-pokecode/pull/10) |
 | `UMAMI_ANALYTICS_ID` | Enable Umami analytics by setting the website ID provided by your Umami instance. When set together with `UMAMI_ANALYTICS_URL` the analytics script is injected in the page head. | `""` (disabled) | |
@@ -42,31 +41,29 @@ This plugin relies on the command `decidim:upgrade` to make sure common files ar
 | `DISABLE_EMAIL_WHITE_HEADER` | Disables the white header deface override injected into email and newsletter layouts (`layouts/decidim/mailer` and `layouts/decidim/newsletter_base`). | `false` | |
 | `DISABLE_LOCALE_GET_PATH` | Disables the locale-switching via GET request (`GET /locale`). When enabled, the route is registered as `set_locale` so the locale can be changed with a plain link instead of a form POST. | `false` | |
 
-## Solid Queue
+## Background jobs
 
-Instances can run the background jobs on [Solid Queue](https://github.com/rails/solid_queue) instead of Sidekiq, so Redis is not needed. The jobs are stored in the application database.
+Background jobs run on [Solid Queue](https://github.com/rails/solid_queue): they are stored in the application database and processed inside the Puma process, so no Redis and no extra process are needed.
 
-The command `decidim:upgrade` installs everything that is required: the migration with the Solid Queue tables, `config/queue.yml`, `config/recurring.yml` (the scheduled tasks, same as `config/schedule.yml` for Sidekiq), `bin/jobs` and the `plugin :solid_queue` line in `config/puma.rb`. To install only the migration:
+The command `decidim:upgrade` installs everything that is required: the migrations with the Solid Queue tables (new ones come through `solid_queue:update`), `config/queue.yml`, `config/recurring.yml` (the scheduled tasks), `bin/jobs` and the `plugin :solid_queue` line in `config/puma.rb`. To install only the migrations:
 
 ```bash
 bin/rails decidim_pokecode:install:migrations
+bin/rails solid_queue:update
 bin/rails db:migrate
 ```
 
-Then choose the backend with ENV vars:
-
 | Deployment | ENV vars |
 |---|---|
-| Web and jobs in the same container | `QUEUE_ADAPTER=solid_queue` `SOLID_QUEUE_IN_PUMA=1` |
-| Dedicated jobs container | `QUEUE_ADAPTER=solid_queue` in both containers (without `SOLID_QUEUE_IN_PUMA`), and `bin/jobs` as the command of the jobs container |
+| Web and jobs in the same container (default) | none |
+| Dedicated jobs container | `SOLID_QUEUE_IN_PUMA=false` in the web container, `bin/jobs` as the command of the jobs container |
 
 Notes:
 
-- Set `DISABLE_SIDEKIQ=1` as well, so that `entrypoint.sh` does not start the Sidekiq process.
 - Jobs, queues, workers and failed jobs are listed at `/solid_queue` (admin users only). Failed jobs can be retried or discarded there.
-- Decidim jobs and mail deliveries are retried up to 10 attempts with a growing delay (about 4 hours in total), then they are listed as failed in `/solid_queue`. The scheduled tasks of `config/recurring.yml` are not retried, they run again at their next scheduled time. The same ENV vars as in `config/schedule.yml` disable them (e.g. `EXPORT_OPEN_DATA=disabled`).
+- Decidim jobs and mail deliveries are retried up to 10 attempts with a growing delay (about 4 hours in total), then they are listed as failed in `/solid_queue`. The scheduled tasks of `config/recurring.yml` are not retried, they run again at their next scheduled time. They can be disabled with ENV vars (e.g. `EXPORT_OPEN_DATA=disabled`, see the file).
 - Keep `RAILS_MAX_THREADS` at 5 or more (the Rails default): each Solid Queue worker needs 5 database connections (3 threads, polling and heartbeat).
-- Jobs are not moved between Redis and the database. Before switching to Solid Queue, check in `/sidekiq` that Enqueued, Scheduled and Retries are empty; before switching back to Sidekiq, check in `/solid_queue` that Ready and Scheduled are empty.
+- When switching from another backend, let it process its pending jobs first: they are not moved to the database.
 
 ## Installation
 
@@ -102,7 +99,7 @@ We expect the contributions to follow the [Decidim's contribution guide](https:/
 ```bash
 bundle exec rake test_app
 bundle exec rspec spec
-QUEUE_ADAPTER=solid_queue bundle exec rspec spec
+QUEUE_ADAPTER="" bundle exec rspec spec
 ```
 
 ## Security

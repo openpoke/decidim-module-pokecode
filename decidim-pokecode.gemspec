@@ -36,9 +36,6 @@ Gem::Specification.new do |s|
   s.add_dependency "rails_semantic_logger"
   s.add_dependency "sentry-rails"
   s.add_dependency "sentry-ruby"
-  s.add_dependency "sentry-sidekiq"
-  s.add_dependency "sidekiq"
-  s.add_dependency "sidekiq-cron"
   s.add_dependency "solid_queue", "~> 1.7"
   s.add_dependency "solid_queue_monitor", "~> 2.2"
 end

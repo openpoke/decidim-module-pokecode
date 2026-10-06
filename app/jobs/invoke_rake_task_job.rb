@@ -5,7 +5,7 @@ Rails.application.load_tasks
 
 class InvokeRakeTaskJob < ApplicationJob
   def perform(args)
-    # sidekiq-cron sends string keys, Solid Queue recurring tasks send symbol keys
+    # Recurring tasks send symbol keys, perform_later with a plain hash sends strings
     args = args.with_indifferent_access
     Rake::Task[args[:task]].reenable
     Rake::Task[args[:task]].invoke(args[:args])

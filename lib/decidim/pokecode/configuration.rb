@@ -8,11 +8,9 @@ module Decidim
     mattr_accessor :semantic_logger_enabled,
                    default: Decidim::Env.new("DISABLE_SEMANTIC_LOGGER", false).blank?
 
+    # Active Job backend. An empty value leaves the Rails default adapter and loads no queue backend.
     mattr_accessor :queue_adapter,
-                   default: Decidim::Env.new("QUEUE_ADAPTER", Decidim::Env.new("DISABLE_SIDEKIQ", false).blank? ? "sidekiq" : "").value
-
-    mattr_accessor :sidekiq_enabled,
-                   default: Decidim::Env.new("DISABLE_SIDEKIQ", false).blank? && queue_adapter == "sidekiq"
+                   default: ENV.fetch("QUEUE_ADAPTER", "solid_queue")
 
     mattr_accessor :sentry_dsn,
                    default: Decidim::Env.new("SENTRY_DSN", "").value

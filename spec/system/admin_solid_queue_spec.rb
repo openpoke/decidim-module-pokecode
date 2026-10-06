@@ -38,12 +38,6 @@ describe "Admin" do
       visit "/solid_queue"
       expect(page).to have_current_path("/#{I18n.locale}/users/sign_in")
     end
-
-    it "does not mount Sidekiq Web UI" do
-      login_as admin, scope: :user
-      visit "/sidekiq"
-      expect(page).to have_content("The page you are looking for cannot be found")
-    end
   else
     it "denies access to /solid_queue for all users" do
       login_as admin, scope: :user

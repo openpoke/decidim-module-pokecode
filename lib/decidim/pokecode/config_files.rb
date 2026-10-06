@@ -21,14 +21,6 @@ module Decidim
         "mise.toml",
         "/app/views/static/api"
       ],
-      "config/sidekiq.yml" => [
-        '<%= ENV.fetch("SIDEKIQ_CONCURRENCY", 5) %>',
-        "delete_inactive_participants"
-      ],
-      "config/schedule.yml" => [
-        'class: "InvokeRakeTaskJob"',
-        "Keep in sync with config/recurring.yml"
-      ],
       "config/queue.yml" => [
         '<%= ENV.fetch("JOB_CONCURRENCY", 1) %>'
       ],

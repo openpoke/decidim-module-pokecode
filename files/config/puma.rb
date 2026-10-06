@@ -26,8 +26,9 @@ environment ENV.fetch("RAILS_ENV", "development")
 # Specifies the `pidfile` that Puma will use.
 pidfile ENV.fetch("PIDFILE", "tmp/pids/server.pid")
 
-# Run the Solid Queue supervisor inside of Puma for single-server deployments.
-plugin :solid_queue if ENV["SOLID_QUEUE_IN_PUMA"] && ENV["QUEUE_ADAPTER"] == "solid_queue"
+# Run the Solid Queue supervisor inside of Puma. Set SOLID_QUEUE_IN_PUMA=false when the jobs run in a dedicated container (bin/jobs).
+solid_queue_in_puma = %w(1 true yes).include?(ENV.fetch("SOLID_QUEUE_IN_PUMA", "true").downcase)
+plugin :solid_queue if solid_queue_in_puma && ENV.fetch("QUEUE_ADAPTER", "solid_queue") == "solid_queue"
 
 if defined?(SemanticLogger)
   on_worker_boot do
