@@ -20,8 +20,8 @@ This plugin relies on the command `decidim:upgrade` to make sure common files ar
 | `DISABLE_POKECODE_FOOTER` | Disables the Pokecode footer deface override so the footer stays unchanged. | `false` | |
 | `DISABLE_LANGUAGE_MENU` | Disables the language switcher deface override in the header. | `false` | |
 | `QUEUE_ADAPTER` | Active Job backend. `solid_queue` stores the jobs in the application database (see [Background jobs](#background-jobs)). Any other Active Job adapter name (e.g. `async`) is set as is; an empty value keeps the Rails default and loads no queue backend. | `solid_queue` | |
-| `SOLID_QUEUE_IN_PUMA` | Runs the Solid Queue supervisor (worker, dispatcher and scheduler) inside the Puma process, so the jobs run in the web container without a separate process or container. Set it to `false` when the jobs run in a dedicated container with `bin/jobs`. | `true` | |
-| `JOB_CONCURRENCY` | Number of Solid Queue worker processes. | `1` | |
+| `SOLID_QUEUE_IN_PUMA` | Runs the Solid Queue supervisor (worker, dispatcher and scheduler) under Puma's management, so jobs run in the web container without a separate jobs container. Set it to `false` when jobs run in a dedicated container with `bin/jobs`. | `true` | |
+| `JOB_CONCURRENCY` | Number of Solid Queue worker processes per supervisor. Each worker process is configured with 3 threads. | `1` | |
 | `SENTRY_DSN` | Enables Sentry error tracking integration. Provide the DSN URL from your Sentry project. | `""` (disabled) | [#10](https://github.com/openpoke/decidim-module-pokecode/pull/10) |
 | `UMAMI_ANALYTICS_ID` | Enable Umami analytics by setting the website ID provided by your Umami instance. When set together with `UMAMI_ANALYTICS_URL` the analytics script is injected in the page head. | `""` (disabled) | |
 | `UMAMI_ANALYTICS_URL` | URL to the Umami `script.js` file. Defaults to the hosted Pokecode analytics script. | `"https://analytics.pokecode.net/script.js"`. The host is automatically added to the CSP directives. | |
@@ -43,7 +43,7 @@ This plugin relies on the command `decidim:upgrade` to make sure common files ar
 
 ## Background jobs
 
-Background jobs run on [Solid Queue](https://github.com/rails/solid_queue): they are stored in the application database and processed inside the Puma process, so no Redis and no extra process are needed.
+Background jobs run on [Solid Queue](https://github.com/rails/solid_queue) and are stored in the application database, so no Redis is needed. By default, the Solid Queue supervisor runs in a separate process managed by the Puma plugin, in the same web container.
 
 The command `decidim:upgrade` installs everything that is required: the migrations with the Solid Queue tables (new ones come through `solid_queue:update`), `config/queue.yml`, `config/recurring.yml` (the scheduled tasks), `bin/jobs` and the `plugin :solid_queue` line in `config/puma.rb`. To install only the migrations:
 
@@ -60,6 +60,8 @@ bin/rails db:migrate
 
 Notes:
 
+- `WEB_CONCURRENCY` controls Puma web workers; it does not change Solid Queue concurrency. `JOB_CONCURRENCY` controls the number of Solid Queue worker processes, each with 3 threads. The default is one worker process, so it can run up to 3 jobs concurrently.
+- When `SOLID_QUEUE_IN_PUMA` is enabled, each Puma instance starts its own Solid Queue supervisor. Scaling the web deployment to multiple instances therefore scales job processing too. Set `SOLID_QUEUE_IN_PUMA=false` on web instances when running a separate jobs container.
 - Jobs, queues, workers and failed jobs are listed at `/solid_queue` (admin users only). Failed jobs can be retried or discarded there.
 - Decidim jobs and mail deliveries are retried up to 10 attempts with a growing delay (about 4 hours in total), then they are listed as failed in `/solid_queue`. The scheduled tasks of `config/recurring.yml` are not retried, they run again at their next scheduled time. They can be disabled with ENV vars (e.g. `EXPORT_OPEN_DATA=disabled`, see the file).
 - Keep `RAILS_MAX_THREADS` at 5 or more (the Rails default): each Solid Queue worker needs 5 database connections (3 threads, polling and heartbeat).
