@@ -116,6 +116,15 @@ module Decidim
         Rails.autoloaders.main.ignore(Pokecode::Engine.root.join("app/overrides"))
       end
 
+      initializer "pokecode.ignore_comments_seed" do
+        # TODO: Remove this workaround when https://github.com/decidim/decidim/issues/17795 is fixed.
+        comments_seed_file = File.join(
+          Gem.loaded_specs.fetch("decidim-comments").full_gem_path,
+          "app/models/decidim/comments/seed.rb"
+        )
+        Rails.autoloaders.main.ignore(comments_seed_file)
+      end
+
       initializer "pokecode.sentry" do
         if Decidim::Pokecode.sentry_enabled
           Sentry.init do |config|
@@ -168,7 +177,6 @@ module Decidim
         if ENV["RAILS_LOG_TO_STDOUT"].present?
           if defined?(SemanticLogger) && Rails.env.production?
             $stdout.sync = true
-            config.rails_semantic_logger.add_file_appender = false
 
             # Remove any existing file appenders
             SemanticLogger.appenders.each do |appender|
