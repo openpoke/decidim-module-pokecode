@@ -31,7 +31,7 @@ solid_queue_in_puma = %w(1 true yes).include?(ENV.fetch("SOLID_QUEUE_IN_PUMA", "
 plugin :solid_queue if solid_queue_in_puma && ENV.fetch("QUEUE_ADAPTER", "solid_queue") == "solid_queue"
 
 if defined?(SemanticLogger)
-  on_worker_boot do
+  before_worker_boot do
     # Re-open appenders after forking the process
     SemanticLogger.reopen
   end
