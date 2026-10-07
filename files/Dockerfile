@@ -5,6 +5,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y ca-certificates c
     curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
     apt-get update && apt-get install -y nodejs \
     build-essential \
+    libclang-dev \
     postgresql-client \
     libvips libvips-tools \
     p7zip \
