@@ -67,6 +67,38 @@ Notes:
 - Keep `RAILS_MAX_THREADS` at 5 or more (the Rails default): each Solid Queue worker needs 5 database connections (3 threads, polling and heartbeat).
 - When switching from another backend, let it process its pending jobs first: they are not moved to the database.
 
+### Docker deployments
+
+Use the same application Dockerfile and image in both deployment layouts; no separate jobs image is required.
+
+**Single container (default):** the image's default command starts Puma. With `SOLID_QUEUE_IN_PUMA=true` (the default), Puma also manages the Solid Queue supervisor in the same container. Publish port `3000` and configure `JOB_CONCURRENCY` as needed.
+
+**Separate web and jobs containers:** build the image once, run it for the web service with `SOLID_QUEUE_IN_PUMA=false`, and run the same image for jobs with `bin/jobs`. For example:
+
+```yaml
+services:
+  web:
+    build: .
+    image: decidim-app:latest
+    env_file: .env
+    environment:
+      SOLID_QUEUE_IN_PUMA: "false"
+    ports:
+      - "3000:3000"
+
+  jobs:
+    image: decidim-app:latest
+    env_file: .env
+    environment:
+      SOLID_QUEUE_IN_PUMA: "false"
+      SKIP_MIGRATIONS: "true"
+    command: ["bin/jobs"]
+    healthcheck:
+      disable: true
+```
+
+The jobs container uses the same database and other application settings as the web container. `SKIP_MIGRATIONS=true` avoids running the image entrypoint's migration step a second time; run migrations once as part of deployment. The Dockerfile health check targets the web endpoint, so it is disabled for the jobs service. Scale the web service to adjust web capacity with `WEB_CONCURRENCY`; scale the jobs service or set `JOB_CONCURRENCY` to adjust job capacity.
+
 ## Installation
 
 Add this line to your application's Gemfile:
