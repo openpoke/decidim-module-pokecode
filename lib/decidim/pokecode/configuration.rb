@@ -70,7 +70,7 @@ module Decidim
                    default: Decidim::Env.new("UNSAFE_HTML_BLOCKS", false).present?
 
     def self.rack_attack_skip
-      Pokecode.rack_attack_skip_param || Rails.application.secret_key_base&.first(6)
+      Pokecode.rack_attack_skip_param.presence
     end
 
     def self.rack_attack_ips
