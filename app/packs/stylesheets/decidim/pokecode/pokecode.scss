@@ -1,21 +1,4 @@
 /* css for decidim_Pokecode */
-// Upper menu
-.main-bar__links-desktop {
-  @media (min-width: 768px) {
-    [data-target*="dropdown"] {
-      @apply block;
-
-      div {
-        @apply block text-secondary text-sm text-center;
-
-        svg {
-          @apply inline-block;
-        }
-      }
-    }
-  }
-}
-
 // Pokecode logos
 .footer-logos {
   @apply block;

@@ -26,4 +26,14 @@ describe "Homepage" do
       expect(page).to have_no_css("script[data-website-id]", visible: :all)
     end
   end
+
+  context "when on a large viewport" do
+    it "displays the header menu trigger as flex" do
+      trigger = find_by_id("main-dropdown-summary-desktop")
+      display = page.evaluate_script("window.getComputedStyle(arguments[0]).display", trigger.native)
+
+      expect(trigger).to have_content("Menu")
+      expect(display).to eq("flex")
+    end
+  end
 end
