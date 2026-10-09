@@ -8,11 +8,10 @@ module Decidim
     mattr_accessor :semantic_logger_enabled,
                    default: Decidim::Env.new("DISABLE_SEMANTIC_LOGGER", false).blank?
 
-    mattr_accessor :sidekiq_enabled,
-                   default: Decidim::Env.new("DISABLE_SIDEKIQ", false).blank?
-
+    # Active Job backend. An empty value leaves the Rails default adapter and loads no queue backend.
     mattr_accessor :queue_adapter,
-                   default: Decidim::Env.new("QUEUE_ADAPTER", Decidim::Env.new("DISABLE_SIDEKIQ", false).blank? ? "sidekiq" : "").value
+                   default: ENV.fetch("QUEUE_ADAPTER", "solid_queue")
+
     mattr_accessor :sentry_dsn,
                    default: Decidim::Env.new("SENTRY_DSN", "").value
 
@@ -68,7 +67,7 @@ module Decidim
                    default: Decidim::Env.new("UNSAFE_HTML_BLOCKS", false).present?
 
     def self.rack_attack_skip
-      Pokecode.rack_attack_skip_param || Rails.application.secret_key_base&.first(6)
+      Pokecode.rack_attack_skip_param.presence
     end
 
     def self.rack_attack_ips
@@ -81,6 +80,10 @@ module Decidim
 
     def self.sentry_enabled
       Pokecode.sentry_dsn.present?
+    end
+
+    def self.solid_queue_enabled
+      Pokecode.queue_adapter == "solid_queue"
     end
 
     def self.admin_iframe_enabled

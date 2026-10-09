@@ -38,13 +38,19 @@ module Decidim
       end
     end
 
-    if Decidim::Pokecode.sidekiq_enabled
-      it "loads Sidekiq" do
-        expect(defined?(Sidekiq)).to be_truthy
+    if Decidim::Pokecode.solid_queue_enabled
+      it "loads SolidQueue and its Web UI" do
+        expect(defined?(::SolidQueue)).to be_truthy
+        expect(defined?(::SolidQueueMonitor)).to be_truthy
+      end
+
+      it "keeps the Decidim session cookie" do
+        expect(Rails.application.config.session_options[:key]).not_to eq("_solid_queue_monitor_session")
       end
     else
-      it "does not load Sidekiq" do
-        expect(defined?(Sidekiq)).to be_falsey
+      it "loads SolidQueue without the Web UI" do
+        expect(defined?(::SolidQueue)).to be_truthy
+        expect(defined?(::SolidQueueMonitor)).to be_falsey
       end
     end
 

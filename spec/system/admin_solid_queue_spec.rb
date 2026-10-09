@@ -19,28 +19,29 @@ describe "Admin" do
     switch_to_host(organization.host)
   end
 
-  if Decidim::Pokecode.sidekiq_enabled
-    it "mounts Sidekiq Web UI at /sidekiq for admin users" do
+  if Decidim::Pokecode.solid_queue_enabled
+    it "mounts Solid Queue Web UI at /solid_queue for admin users" do
       login_as admin, scope: :user
-      visit "/sidekiq"
-      expect(page).to have_current_path("/sidekiq")
+      visit "/solid_queue"
+      expect(page).to have_current_path("/solid_queue")
+      expect(page).to have_content("Solid Queue Monitor")
     end
 
-    it "denies access to /sidekiq for non-admin users" do
+    it "denies access to /solid_queue for non-admin users" do
       login_as user, scope: :user
       allow(Capybara).to receive(:raise_server_errors).and_return(false)
-      visit "/sidekiq"
+      visit "/solid_queue"
       expect(page).to have_content("The page you are looking for cannot be found")
     end
 
-    it "denies access to /sidekiq for unauthenticated users" do
-      visit "/sidekiq"
+    it "denies access to /solid_queue for unauthenticated users" do
+      visit "/solid_queue"
       expect(page).to have_current_path("/#{I18n.locale}/users/sign_in")
     end
   else
-    it "denies access to /sidekiq for all users" do
+    it "denies access to /solid_queue for all users" do
       login_as admin, scope: :user
-      visit "/sidekiq"
+      visit "/solid_queue"
       expect(page).to have_content("The page you are looking for cannot be found")
     end
   end

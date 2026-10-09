@@ -23,4 +23,12 @@ namespace :pokecode do
       end
     end
   end
+
+  desc "Copies the module migrations to the host application."
+  task :install_migrations do
+    ENV["FROM"] = "decidim_pokecode"
+    # decidim:upgrade has already invoked this task for the core modules
+    Rake::Task["railties:install:migrations"].reenable
+    Rake::Task["railties:install:migrations"].invoke
+  end
 end

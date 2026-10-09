@@ -13,10 +13,9 @@ describe "Rack::Attack" do
       allow(Decidim::Pokecode).to receive(:rack_attack_allowed_ips).and_return(allowed_ips)
     end
 
-    it "defaults to first 6 characters of Rails secret when env var not set" do
+    it "disables the secret-param bypass when no value is configured" do
       expect(Decidim::Pokecode.rack_attack_ips).to be_an(Array)
-      expect(Decidim::Pokecode.rack_attack_skip).to include(Rails.application.secret_key_base&.first(6))
-      expect(Rack::Attack.safelists.keys).to include("bypass with secret param")
+      expect(Decidim::Pokecode.rack_attack_skip).to be_nil
     end
 
     context "when RACK_ATTACK_ALLOWED_IPS is set" do
@@ -24,7 +23,6 @@ describe "Rack::Attack" do
 
       it "returns the allowed IPs as an array" do
         expect(Decidim::Pokecode.rack_attack_ips).to eq(["10.0.0.1/24", "11.10.0.1", "1.1.1.1"])
-        expect(Rack::Attack.safelists.keys).to include("bypass with secret param")
       end
     end
 
@@ -33,7 +31,6 @@ describe "Rack::Attack" do
 
       it "returns the skip param" do
         expect(Decidim::Pokecode.rack_attack_skip).to eq("my-secret-param")
-        expect(Rack::Attack.safelists.keys).to include("bypass with secret param")
       end
     end
   end

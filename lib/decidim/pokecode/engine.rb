@@ -34,6 +34,14 @@ module Decidim
           Rails.logger.info "[Decidim::Pokecode] Active Storage CDN override disabled."
         end
 
+        if Decidim::Pokecode.solid_queue_enabled
+          Decidim::ApplicationJob.include(Decidim::Pokecode::JobRetries)
+          ActionMailer::MailDeliveryJob.include(Decidim::Pokecode::JobRetries)
+          Rails.logger.info "[Decidim::Pokecode] Job retries for Solid Queue enabled."
+        else
+          Rails.logger.info "[Decidim::Pokecode] Job retries for Solid Queue disabled."
+        end
+
         # Register deface overrides for admin dashboard warnings
         if Decidim::Pokecode.allowed_recipients_list.any?
           Deface::Override.new(:virtual_path => "decidim/admin/dashboard/show",
@@ -72,20 +80,18 @@ module Decidim
         end
       end
 
-      initializer "pokecode.sidekiq" do
-        if Decidim::Pokecode.sidekiq_enabled
+      initializer "pokecode.solid_queue" do
+        if Decidim::Pokecode.solid_queue_enabled
+          # The dashboard is protected by the Decidim session, so the authenticity token can be verified
+          SolidQueueMonitor.csrf_protection_enabled = true
           Decidim::Core::Engine.routes do
-            require "sidekiq/web"
-            require "sidekiq/cron/web"
             authenticate :user, ->(u) { u.admin? } do
-              mount Sidekiq::Web => "/sidekiq"
+              mount SolidQueueMonitor::Engine => "/solid_queue"
             end
           end
-          # For queue adapter configuration
-          config.active_job.queue_adapter = :sidekiq
-          Rails.logger.info "[Decidim::Pokecode] Sidekiq Web UI enabled."
+          Rails.logger.info "[Decidim::Pokecode] Solid Queue Web UI enabled."
         else
-          Rails.logger.info "[Decidim::Pokecode] Sidekiq Web UI disabled."
+          Rails.logger.info "[Decidim::Pokecode] Solid Queue Web UI disabled."
         end
       end
 
@@ -108,6 +114,15 @@ module Decidim
 
       initializer "pokecode.zeitwerk_ignore_deface" do
         Rails.autoloaders.main.ignore(Pokecode::Engine.root.join("app/overrides"))
+      end
+
+      initializer "pokecode.ignore_comments_seed" do
+        # TODO: Remove this workaround when https://github.com/decidim/decidim/issues/17795 is fixed.
+        comments_seed_file = File.join(
+          Gem.loaded_specs.fetch("decidim-comments").full_gem_path,
+          "app/models/decidim/comments/seed.rb"
+        )
+        Rails.autoloaders.main.ignore(comments_seed_file)
       end
 
       initializer "pokecode.sentry" do
@@ -162,7 +177,6 @@ module Decidim
         if ENV["RAILS_LOG_TO_STDOUT"].present?
           if defined?(SemanticLogger) && Rails.env.production?
             $stdout.sync = true
-            config.rails_semantic_logger.add_file_appender = false
 
             # Remove any existing file appenders
             SemanticLogger.appenders.each do |appender|
