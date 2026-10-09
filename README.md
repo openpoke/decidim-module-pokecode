@@ -18,7 +18,6 @@ This plugin relies on the command `decidim:upgrade` to make sure common files ar
 | `DISABLE_HEALTH_CHECK` | Disables the gem `health_check` and the endpoint `/health_check` | `false` | |
 | `DISABLE_SEMANTIC_LOGGER` | Disables the gem `rails_semantic_logger` and the configuration for production logging that this gem provides. | `false` | |
 | `DISABLE_POKECODE_FOOTER` | Disables the Pokecode footer deface override so the footer stays unchanged. | `false` | |
-| `DISABLE_LANGUAGE_MENU` | Disables the language switcher deface override in the header. | `false` | |
 | `QUEUE_ADAPTER` | Active Job backend. `solid_queue` stores the jobs in the application database (see [Background jobs](#background-jobs)). Any other Active Job adapter name (e.g. `async`) is set as is; an empty value keeps the Rails default and loads no queue backend. | `solid_queue` | |
 | `SOLID_QUEUE_IN_PUMA` | Runs the Solid Queue supervisor (worker, dispatcher and scheduler) under Puma's management, so jobs run in the web container without a separate jobs container. Set it to `false` when jobs run in a dedicated container with `bin/jobs`. | `true` | |
 | `JOB_CONCURRENCY` | Number of Solid Queue worker processes per supervisor. Each worker process is configured with 3 threads. | `1` | |

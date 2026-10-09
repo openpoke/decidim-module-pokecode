@@ -24,9 +24,6 @@ module Decidim
     mattr_accessor :pokecode_footer_enabled,
                    default: Decidim::Env.new("DISABLE_POKECODE_FOOTER", false).blank?
 
-    mattr_accessor :language_menu_enabled,
-                   default: Decidim::Env.new("DISABLE_LANGUAGE_MENU", false).blank?
-
     mattr_accessor :umami_analytics_id,
                    default: Decidim::Env.new("UMAMI_ANALYTICS_ID", "").value
 
