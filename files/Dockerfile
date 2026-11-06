@@ -1,4 +1,4 @@
-FROM ruby:3.3.10 AS builder
+FROM ruby:3.3.11 AS builder
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y ca-certificates curl gnupg && \
     mkdir -p /etc/apt/keyrings && \
@@ -80,7 +80,7 @@ RUN mv config/credentials.bak config/credentials 2>/dev/null || true
 RUN rm -rf node_modules packages/*/node_modules tmp/* vendor/bundle test spec app/packs .git
 
 # This image is for production env only
-FROM ruby:3.3.10-slim AS final
+FROM ruby:3.3.11-slim AS final
 
 RUN apt-get update && \
     apt-get install -y postgresql-client \
