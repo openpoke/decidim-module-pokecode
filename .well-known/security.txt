@@ -1,0 +1,4 @@
+Contact: https://github.com/openpoke/decidim-module-pokecode/security/advisories/new
+Expires: 2027-12-31T23:59:59.000Z
+Preferred-Languages: en
+Canonical: https://github.com/openpoke/decidim-module-pokecode/blob/main/.well-known/security.txt
