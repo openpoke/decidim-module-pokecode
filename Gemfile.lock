@@ -1,8 +1,19 @@
+GIT
+  remote: https://github.com/mainio/decidim-module-antivirus
+  revision: af4cdcf72a6e287ae0a6bced5e342ef425bf1fe8
+  branch: main
+  specs:
+    decidim-antivirus (0.32.0)
+      decidim-core (~> 0.32.0)
+      ratonvirus (~> 0.6.0)
+      ratonvirus-clamby (~> 0.6.0)
+
 PATH
   remote: .
   specs:
     decidim-pokecode (0.4.0)
       aws-sdk-s3
+      decidim-antivirus (>= 0.32, < 0.33)
       decidim-core (>= 0.32, < 0.33)
       deface (>= 1.5)
       health_check
@@ -171,6 +182,7 @@ GEM
     childprocess (5.1.0)
       logger (~> 1.5)
     chunky_png (1.4.0)
+    clamby (1.6.11)
     cmdparse (3.0.7)
     commonmarker (2.10.0)
       rb_sys (~> 0.9)
@@ -812,6 +824,11 @@ GEM
       activerecord (>= 7.2)
       activesupport (>= 7.2)
       i18n
+    ratonvirus (0.6.0)
+      activesupport (~> 8.0)
+    ratonvirus-clamby (0.6.0)
+      clamby (~> 1.6)
+      ratonvirus (~> 0.6.0)
     rb-fsevent (0.11.2)
     rb-inotify (0.11.1)
       ffi (~> 1.0)
@@ -1089,6 +1106,7 @@ DEPENDENCIES
   brakeman
   byebug (~> 11.0)
   decidim (>= 0.32, < 0.33)
+  decidim-antivirus!
   decidim-dev (>= 0.32, < 0.33)
   decidim-initiatives (>= 0.32, < 0.33)
   decidim-pokecode!
@@ -1142,6 +1160,7 @@ CHECKSUMS
   chartkick (5.2.1) sha256=2848d7de87189f30f28d077eb0bbdebc8a1f0f6f81de1ded95008fe564369949
   childprocess (5.1.0) sha256=9a8d484be2fd4096a0e90a0cd3e449a05bc3aa33f8ac9e4d6dcef6ac1455b6ec
   chunky_png (1.4.0) sha256=89d5b31b55c0cf4da3cf89a2b4ebc3178d8abe8cbaf116a1dba95668502fdcfe
+  clamby (1.6.11) sha256=f93283c5a7db5ff531170636b84526796ad9adcbe378b5c6548b24d859e928fe
   cmdparse (3.0.7) sha256=f7c5cace10bec6abf853370ae095e4b97a84ed9d847b3fb38f41cc4fbc950739
   commonmarker (2.10.0) sha256=1884529957bf59bcd4f19fcc29e931f2042760ced273353e8010a20fe4ae68cb
   commonmarker (2.10.0-aarch64-linux) sha256=eeb167dea203dee066eb0dd99b3fd2deb526c8b5e7297ad385f7a5d60f869478
@@ -1164,6 +1183,7 @@ CHECKSUMS
   decidim (0.32.1) sha256=cfd80d6295ea5664007c04a1de0bc37fd98839e11fafdeeec557cfe15fa4a627
   decidim-accountability (0.32.1) sha256=7f8c8c58c12ffae9580635ae9261bd49734de36832f8d35e2c9bbfafc4ef4859
   decidim-admin (0.32.1) sha256=9e7e3d4e28175601150045117f5bb2ce21160a81e11d1418858184b89020f4b9
+  decidim-antivirus (0.32.0)
   decidim-api (0.32.1) sha256=cbfd5b378e657d1aca653812647c576a178d1be3bd2d4a77fe6431daf097df32
   decidim-assemblies (0.32.1) sha256=bd77aa011c6b4c93091643ff8ed1de7669b1a7b681aa1059bfc9a9042316c102
   decidim-blogs (0.32.1) sha256=d61fac2ca671280fa654c697e252a503648aaaeea82020d452f259a854513d2f
@@ -1349,6 +1369,8 @@ CHECKSUMS
   rake (13.4.2) sha256=cb825b2bd5f1f8e91ca37bddb4b9aaf345551b4731da62949be002fa89283701
   rake-compiler-dock (1.12.0) sha256=f13205c2738f3d2053afcd03491a9e4541b22a59a0bfc53fc8bc883bd8188023
   ransack (4.4.1) sha256=6aeaac36fc19088570e10da1044e6cfd88c740e20f871b84566fd30e32b7a63d
+  ratonvirus (0.6.0) sha256=fa3ac09cef0cdec2216bbdbb6246d69b0a50f33a0f3e97d784b18dc8036c5fc6
+  ratonvirus-clamby (0.6.0) sha256=88e0288db8c07d1e14d891009db4a57ad49ada8549298cd1cb8fca8590bd9403
   rb-fsevent (0.11.2) sha256=43900b972e7301d6570f64b850a5aa67833ee7d87b458ee92805d56b7318aefe
   rb-inotify (0.11.1) sha256=a0a700441239b0ff18eb65e3866236cd78613d6b9f78fea1f9ac47a85e47be6e
   rb_sys (0.9.130) sha256=7d486d99c1da02635515deaf9860fc5aea90bb4ab2589b2deec7fdc7d3548615

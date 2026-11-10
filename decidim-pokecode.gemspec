@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
   end
 
   s.add_dependency "aws-sdk-s3"
+  s.add_dependency "decidim-antivirus", Decidim::Pokecode::COMPAT_DECIDIM_VERSION
   s.add_dependency "decidim-core", Decidim::Pokecode::COMPAT_DECIDIM_VERSION
   s.add_dependency "deface", ">= 1.5"
   s.add_dependency "health_check"

@@ -11,6 +11,7 @@ base_path = "../" if File.basename(__dir__) == "development_app"
 require_relative "#{base_path}lib/decidim/pokecode/version"
 
 gem "decidim", Decidim::Pokecode::COMPAT_DECIDIM_VERSION
+gem "decidim-antivirus", git: "https://github.com/mainio/decidim-module-antivirus", branch: "main"
 gem "decidim-pokecode", path: "."
 
 gem "bootsnap"

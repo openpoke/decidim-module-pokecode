@@ -84,13 +84,14 @@ RUN rm -rf node_modules packages/*/node_modules tmp/* vendor/bundle test spec ap
 FROM ruby:3.4.7-slim AS final
 
 RUN apt-get update && \
-    apt-get install -y postgresql-client \
+    apt-get install -y --no-install-recommends postgresql-client \
     imagemagick \
     libvips libvips-tools \
     curl \
     p7zip \
+    clamdscan \
     supervisor && \
-    apt-get clean
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 3000
 
