@@ -1,11 +1,13 @@
-FROM ruby:3.3.10 AS builder
+FROM ruby:3.4.7 AS builder
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y ca-certificates curl gnupg && \
     mkdir -p /etc/apt/keyrings && \
     curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
     apt-get update && apt-get install -y nodejs \
     build-essential \
+    libclang-dev \
     postgresql-client \
+    libvips libvips-tools \
     p7zip \
     libpq-dev && \
     apt-get clean
@@ -52,20 +54,10 @@ COPY ./config.ru /app/config.ru
 COPY ./Rakefile /app/Rakefile
 COPY ./postcss.config.js /app/postcss.config.js
 
-# Compile assets with Webpacker or Sprockets
-#
-# Notes:
-#   1. Executing "assets:precompile" runs "webpacker:compile", too
-#   2. For an app using encrypted credentials, Rails raises a `MissingKeyError`
-#      if the master key is missing. Because on CI there is no master key,
-#      we hide the credentials while compiling assets (by renaming them before and after)
-#
-RUN mv config/credentials.yml.enc config/credentials.yml.enc.bak 2>/dev/null || true
-RUN mv config/credentials config/credentials.bak 2>/dev/null || true
-
+# Compile assets with Webpacker or Sprockets. Executing "assets:precompile"
+# also runs "webpacker:compile".
 RUN RAILS_ENV=production \
     SECRET_KEY_BASE=dummy \
-    RAILS_MASTER_KEY=0b809804a9de874fb0627b6cf5b6cada \
     DB_ADAPTER=nulldb \
     bin/rails assets:precompile
 
@@ -74,20 +66,16 @@ RUN SECRET_KEY_BASE=dummy \
     RAILS_ENV=production \
     bin/rails decidim_api:generate_docs
 
-RUN mv config/credentials.yml.enc.bak config/credentials.yml.enc 2>/dev/null || true
-RUN mv config/credentials.bak config/credentials 2>/dev/null || true
-
 RUN rm -rf node_modules packages/*/node_modules tmp/* vendor/bundle test spec app/packs .git
 
 # This image is for production env only
-FROM ruby:3.3.10-slim AS final
+FROM ruby:3.4.7-slim AS final
 
 RUN apt-get update && \
     apt-get install -y postgresql-client \
-    imagemagick \
+    libvips libvips-tools \
     curl \
-    p7zip \
-    supervisor && \
+    p7zip && \
     apt-get clean
 
 EXPOSE 3000
@@ -105,13 +93,13 @@ RUN addgroup --system --gid 1000 app && \
 
 WORKDIR /app
 COPY ./entrypoint.sh /app/entrypoint.sh
-COPY ./supervisord.conf /etc/supervisord.conf
 COPY --from=builder --chown=app:app /usr/local/bundle/ /usr/local/bundle/
 COPY --from=builder --chown=app:app /app /app
+RUN mkdir -p /app/tmp/pids && chown app:app /app/tmp /app/tmp/pids
 
 USER app
 HEALTHCHECK --interval=1m --timeout=5s --start-period=30s \
     CMD (curl -sS http://localhost:3000/health_check | grep success) || exit 1
 
 ENTRYPOINT ["/app/entrypoint.sh"]
-CMD ["/usr/bin/supervisord"]
+CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]

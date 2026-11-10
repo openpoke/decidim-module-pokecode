@@ -12,6 +12,8 @@ namespace :decidim do
     :"decidim:upgrade:shakapacker",
     # We will generate the api docs in the Dockerfile build step
     # :"decidim_api:generate_docs",
+    :"pokecode:install_migrations",
+    :"solid_queue:update",
     :"pokecode:copy_config_files"
   ]
 end

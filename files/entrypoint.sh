@@ -29,6 +29,9 @@ fi
 export RUN_RAILS
 export RUN_SIDEKIQ
 
+# Puma's configured PID file is under tmp/pids, which is removed during image cleanup.
+mkdir -p tmp/pids
+
 # Check all the gems are installed or fails.
 bundle check
 if [ $? -ne 0 ]; then
