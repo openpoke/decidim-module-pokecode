@@ -84,6 +84,7 @@ FROM ruby:3.3.11-slim AS final
 
 RUN apt-get update && \
     apt-get install -y postgresql-client \
+    libicu76 \
     imagemagick \
     curl \
     p7zip \
