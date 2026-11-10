@@ -66,6 +66,10 @@ module Decidim
     mattr_accessor :unsafe_html_blocks,
                    default: Decidim::Env.new("UNSAFE_HTML_BLOCKS", false).present?
 
+    config_accessor :force_default_locale do
+      Decidim::Env.new("FORCE_DEFAULT_LOCALE", false).present?
+    end
+
     def self.rack_attack_skip
       Pokecode.rack_attack_skip_param.presence
     end
@@ -99,6 +103,10 @@ module Decidim
       urls << Pokecode.aws_cdn_host if Pokecode.aws_cdn_host.present?
       urls << ActiveStorage::Blob.service.bucket.url if defined?(ActiveStorage::Service::S3Service) && ActiveStorage::Blob.service.is_a?(ActiveStorage::Service::S3Service)
       urls
+    end
+
+    def self.force_default_locale_enabled
+      Pokecode.force_default_locale.present?
     end
   end
 end
