@@ -8,6 +8,7 @@ def install_module(path)
     system("bundle exec rails decidim_pokecode:install:migrations")
     system("bundle exec rails solid_queue:update")
     system("bundle exec rails db:migrate")
+    system("bundle exec rails data:migrate")
   end
 end
 

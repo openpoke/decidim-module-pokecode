@@ -50,6 +50,7 @@ The command `decidim:upgrade` installs everything that is required: the migratio
 bin/rails decidim_pokecode:install:migrations
 bin/rails solid_queue:update
 bin/rails db:migrate
+bin/rails data:migrate
 ```
 
 | Deployment | ENV vars |
