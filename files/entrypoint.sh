@@ -45,8 +45,10 @@ fi
 if [ -z "$SKIP_MIGRATIONS" ]; then
 	bundle exec rails db:migrate
 	echo "✅ Migrations are all up"
+	bundle exec rails data:migrate
+	echo "✅ Data migrations are all up"
 else
-	echo "⚠️ Skipping migrations"
+	echo "⚠️ Skipping schema and data migrations"
 fi
 
 echo "🚀 $@"
