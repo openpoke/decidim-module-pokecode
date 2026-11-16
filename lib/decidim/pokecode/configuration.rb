@@ -134,7 +134,7 @@ module Decidim
     end
 
     def self.force_default_locale_enabled
-      Pokecode.force_default_locale.present?
+      Pokecode.force_default_locale.in?(Decidim.available_locales)
     end
   end
 end
