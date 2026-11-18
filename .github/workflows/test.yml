@@ -120,17 +120,6 @@ jobs:
         env:
           BUNDLE_GEMFILE: ../../Gemfile
 
-      - uses: nanasess/setup-chromedriver@v2
-        with:
-          chromedriver-version: 126.0.6478.182
-
-      - name: Remove Chrome
-        run: sudo apt remove google-chrome-stable
-
-      - uses: browser-actions/setup-chrome@v1
-        with:
-          chrome-version: 126.0.6478.182
-
       - name: Set environment variables from config
         run: |
           cat .github/test-env-configs.json | jq -r --arg config "${{ matrix.env-config }}" '.[] | select(.["env-config"] == $config) | to_entries | .[] | select(.key != "env-config") | "\(.key)=\(.value)"' >> $GITHUB_ENV
