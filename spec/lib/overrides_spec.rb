@@ -11,7 +11,7 @@ checksums = [
     files: {
       "/app/models/decidim/notification.rb" => "4510aadea1546d3590a768eddf8a172c", # TODO: remove when fixed upstream
       "/lib/tasks/decidim_tasks.rake" => "c9e470d5857eae31fd477e668e0a6f9d",
-      "/app/views/layouts/decidim/mailer.html.erb" => "6a08103c75e5db737a38cd365428a177",
+      "/app/views/layouts/decidim/mailer.html.erb" => "916a7ede54078548dc78c4be9a8ae192",
       "/app/views/layouts/decidim/newsletter_base.html.erb" => "28111c73d348ec8d1cdc1180d3ff5d21",
       "/app/cells/decidim/content_blocks/html_cell.rb" => "67df12cd1caefa3a8ddb7d340dcd057f"
     }
@@ -32,7 +32,7 @@ checksums = [
 
 describe "Overriden files", type: :view do
   checksums.each do |item|
-    spec = Gem::Specification.find_by_name(item[:package])
+    spec = Gem::Specification.find_by_name(item[:package]) # rubocop:disable RSpec/LeakyLocalVariable
     item[:files].each do |file, signature|
       it "#{spec.gem_dir}#{file} matches checksum" do
         expect(md5("#{spec.gem_dir}#{file}")).to eq(signature)
