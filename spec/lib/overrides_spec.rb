@@ -25,14 +25,14 @@ checksums = [
   {
     package: "aws-sdk-s3",
     files: {
-      "/lib/aws-sdk-s3/customizations/object.rb" => "916a7ede54078548dc78c4be9a8ae192"
+      "/lib/aws-sdk-s3/customizations/object.rb" => "6028eb1988609943ac71797f63798fb6"
     }
   }
 ]
 
 describe "Overriden files", type: :view do
   checksums.each do |item|
-    spec = Gem::Specification.find_by_name(item[:package])
+    spec = Gem::Specification.find_by_name(item[:package]) # rubocop:disable RSpec/LeakyLocalVariable
     item[:files].each do |file, signature|
       it "#{spec.gem_dir}#{file} matches checksum" do
         expect(md5("#{spec.gem_dir}#{file}")).to eq(signature)
