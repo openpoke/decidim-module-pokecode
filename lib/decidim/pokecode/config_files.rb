@@ -36,6 +36,7 @@ module Decidim
         "curl -fsSL https://deb.nodesource.com/setup_22.x",
         "npm install yarn -g",
         "bundle config set --deployment true",
+        "libicu76",
         "bundle config set --local without 'development test'",
         "rm -rf node_modules packages/*/node_modules tmp/* vendor/bundle test spec app/packs .git"
       ]
