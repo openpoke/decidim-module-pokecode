@@ -78,6 +78,14 @@ module Decidim
             Rails.logger.info "[Decidim::Pokecode] Invitations not disabled via mail interceptor."
           end
         end
+
+        if Decidim::Pokecode.force_default_locale_enabled
+          Decidim::ApplicationController.include(Decidim::Pokecode::ForceDefaultLocale)
+          Decidim::Admin::ApplicationController.include(Decidim::Pokecode::ForceDefaultLocale)
+          Rails.logger.info "[Decidim::Pokecode] Force default locale enabled."
+        else
+          Rails.logger.info "[Decidim::Pokecode] Force default locale disabled."
+        end
       end
 
       initializer "pokecode.locales_by_get" do

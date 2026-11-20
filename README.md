@@ -39,6 +39,7 @@ This plugin relies on the command `decidim:upgrade` to make sure common files ar
 | `DISABLE_INVITATIONS` | Prevents all invitation emails from being sent by intercepting emails with the `invitation-instructions` header. This is useful for development or testing environments. | `false` | |
 | `DISABLE_EMAIL_WHITE_HEADER` | Disables the white header deface override injected into email and newsletter layouts (`layouts/decidim/mailer` and `layouts/decidim/newsletter_base`). | `false` | |
 | `DISABLE_LOCALE_GET_PATH` | Disables the locale-switching via GET request (`GET /locale`). When enabled, the route is registered as `set_locale` so the locale can be changed with a plain link instead of a form POST. | `false` | |
+| `FORCE_DEFAULT_LOCALE` | Forces the use of the default locale even though the user's browser might have other locales, but keeps the user-defined behaviour| `true` | |
 
 ## Installation
 

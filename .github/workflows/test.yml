@@ -11,7 +11,7 @@ env:
   CI: 1
   SIMPLECOV: 1
   NODE_VERSION: 22.14.0
-  RUBY_VERSION: 3.3.11
+  RUBY_VERSION: 3.3.14
   DISPLAY: ":99"
   RUBYOPT: '-W:no-deprecated'
   RAILS_ENV: test
@@ -116,17 +116,6 @@ jobs:
         working-directory: ./spec/decidim_dummy_app/
         env:
           BUNDLE_GEMFILE: ../../Gemfile
-
-      - uses: nanasess/setup-chromedriver@v2
-        with:
-          chromedriver-version: 126.0.6478.182
-
-      - name: Remove Chrome
-        run: sudo apt remove google-chrome-stable
-
-      - uses: browser-actions/setup-chrome@v1
-        with:
-          chrome-version: 126.0.6478.182
 
       - name: Set environment variables from config
         run: |
