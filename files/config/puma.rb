@@ -30,13 +30,6 @@ pidfile ENV.fetch("PIDFILE", "tmp/pids/server.pid")
 solid_queue_in_puma = %w(1 true yes).include?(ENV.fetch("SOLID_QUEUE_IN_PUMA", "true").downcase)
 plugin :solid_queue if solid_queue_in_puma && ENV.fetch("QUEUE_ADAPTER", "solid_queue") == "solid_queue"
 
-if ENV.fetch("RAILS_ENV", "development") == "production" && ENV.fetch("WEB_CONCURRENCY", "2").to_i.positive?
-  on_worker_boot do
-    # Re-open appenders after forking the process
-    SemanticLogger.reopen if defined?(SemanticLogger)
-  end
-end
-
 if ENV.fetch("RAILS_ENV") == "production"
   workers ENV.fetch("WEB_CONCURRENCY", 2)
 
