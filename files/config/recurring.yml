@@ -5,10 +5,26 @@ production:
     schedule: every hour at minute 12
 
 <% if ENV.fetch("CHANGE_ACTIVE_STEP", "enabled") == "enabled" %>
-  hourly_active_step_job:
+  active_step_job:
     class: InvokeRakeTaskJob
     queue: default
     args: [ { task: "decidim_participatory_processes:change_active_step" } ]
+    schedule: "*/15 * * * *"
+<% end %>
+
+<% if ENV.fetch("DELETE_INACTIVE_PARTICIPANTS", "") == "enabled" %>
+  daily_delete_inactive_participants_job:
+    class: InvokeRakeTaskJob
+    queue: default
+    args: [ { task: "decidim:participants:delete_inactive_participants" } ]
+    schedule: "0 0 * * *"
+<% end %>
+
+<% if ENV.fetch("CLEAN_UNATTACHED_UPLOADS", "enabled") == "enabled" %>
+  hourly_attachments_cleanup_job:
+    class: InvokeRakeTaskJob
+    queue: default
+    args: [ { task: "decidim:attachments_cleanup" } ]
     schedule: "0 * * * *"
 <% end %>
 
