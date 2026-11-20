@@ -24,7 +24,7 @@ production:
   hourly_attachments_cleanup_job:
     class: InvokeRakeTaskJob
     queue: default
-    args: [ { task: "decidim:attachments_cleanup" } ]
+    args: [ { task: "decidim:upgrade:attachments_cleanup" } ]
     schedule: "0 * * * *"
 <% end %>
 
