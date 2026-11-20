@@ -39,6 +39,9 @@ module Decidim
         "force_path_style:",
         "request_checksum_calculation:"
       ],
+      "entrypoint.sh" => [
+        "SOLID_QUEUE_IN_PUMA"
+      ],
       "Dockerfile" => [
         "curl -fsSL https://deb.nodesource.com/setup_22.x",
         "npm install yarn -g",
