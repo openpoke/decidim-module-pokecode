@@ -66,9 +66,8 @@ module Decidim
     mattr_accessor :unsafe_html_blocks,
                    default: Decidim::Env.new("UNSAFE_HTML_BLOCKS", false).present?
 
-    config_accessor :force_default_locale do
-      Decidim::Env.new("FORCE_DEFAULT_LOCALE", false).present?
-    end
+    mattr_accessor :force_default_locale,
+                   default: Decidim::Env.new("FORCE_DEFAULT_LOCALE", false).present?
 
     def self.rack_attack_skip
       Pokecode.rack_attack_skip_param.presence

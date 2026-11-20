@@ -11,7 +11,7 @@ module Decidim
 
     Pokecode.config_files = {
       ".ruby-version" => [
-        "3.4.7"
+        "3.4.13"
       ],
       ".github/workflows/dependabot.yml" => [
         "schedule:",
