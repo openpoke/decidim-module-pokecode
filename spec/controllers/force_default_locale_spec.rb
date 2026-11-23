@@ -47,7 +47,11 @@ module Decidim::Pokecode
     end
 
     describe "the inherited locale detection" do
-      let(:controller_class) { Class.new(Decidim::ApplicationController) }
+      let(:controller_class) do
+        Class.new(ApplicationController) do
+          include Decidim::LocaleSwitcher
+        end
+      end
 
       it "uses the browser locale when no other locale is set" do
         allow(controller).to receive(:extract_locale_from_accept_language_header).and_return(:fr)
